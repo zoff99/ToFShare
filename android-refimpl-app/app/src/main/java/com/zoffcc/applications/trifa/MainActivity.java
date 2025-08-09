@@ -234,6 +234,7 @@ import static com.zoffcc.applications.trifa.TrifaToxService.orma;
 import static com.zoffcc.applications.trifa.TrifaToxService.resend_old_messages;
 import static com.zoffcc.applications.trifa.TrifaToxService.resend_v3_messages;
 import static com.zoffcc.applications.trifa.TrifaToxService.vfs;
+import static com.zoffcc.applications.trifa.TrifaToxService.wakeup_tox_thread;
 
 /*
 
@@ -3220,6 +3221,7 @@ public class MainActivity extends AppCompatActivity
         Log.i(TAG, "onResume");
         super.onResume();
         global_showing_mainview = true;
+        wakeup_tox_thread();
 
         /*
          // **************************************

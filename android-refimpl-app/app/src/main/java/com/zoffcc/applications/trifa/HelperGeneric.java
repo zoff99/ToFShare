@@ -143,6 +143,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.global_last_activity_fo
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_connection_status;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_last_went_online_timestamp;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_anygroupview;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_mainview;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_messageview;
 import static com.zoffcc.applications.trifa.ToxVars.TOXAV_OPTIONS_OPTION.TOXAV_CLIENT_VIDEO_CAPTURE_DELAY_MS;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_CAPABILITY_MSGV2;
@@ -3092,22 +3093,21 @@ public class HelperGeneric
         if ((last_log_battery_savings_criteria_ts + 60000) < System.currentTimeMillis())
         {
             last_log_battery_savings_criteria_ts = System.currentTimeMillis();
-            Log.i(TAG, "battery_saving_can_sleep:global_self_connection_status:" + global_self_connection_status +
-                       " global_showing_messageview=" + global_showing_messageview + " global_showing_anygroupview=" +
-                       global_showing_anygroupview + " Callstate.state=" + Callstate.state +
-                       " Callstate.audio_group_active=" + Callstate.audio_group_active +
+            // @formatter:off
+            Log.i(TAG, "battery_saving_can_sleep:" +
+                       "global_self_connection_status:" + global_self_connection_status +
+                       " global_showing_messageview=" + global_showing_messageview +
+                       " global_showing_mainview=" + global_showing_mainview +
                        " global_self_last_went_online_timestamp=" + global_self_last_went_online_timestamp +
-                       " global_self_last_went_online_timestamp2=" +
-                       (System.currentTimeMillis() - global_self_last_went_online_timestamp) +
+                       " global_self_last_went_online_timestamp2=" + (System.currentTimeMillis() - global_self_last_went_online_timestamp) +
                        " global_last_activity_for_battery_savings_ts=" + global_last_activity_for_battery_savings_ts +
-                       " global_last_activity_for_battery_savings_ts2=" +
-                       (System.currentTimeMillis() - global_last_activity_for_battery_savings_ts) +
-                       " SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE=" +
-                       SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE + " System.currentTimeMillis()=" +
+                       " global_last_activity_for_battery_savings_ts2=" + (System.currentTimeMillis() - global_last_activity_for_battery_savings_ts) +
+                       " SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE=" + SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE + " System.currentTimeMillis()=" +
                        System.currentTimeMillis());
+            // @formatter:on
         }
 
-        if (!global_showing_messageview)
+        if ((!global_showing_messageview) && (!global_showing_mainview))
         {
             if (global_self_last_went_online_timestamp != -1)
             {
@@ -3117,6 +3117,7 @@ public class HelperGeneric
                     if ((global_last_activity_for_battery_savings_ts +
                          SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE * 1000) < System.currentTimeMillis())
                     {
+                        Log.i(TAG, "battery_saving_can_sleep:------ TRUE ------");
                         return true;
                     }
                 }

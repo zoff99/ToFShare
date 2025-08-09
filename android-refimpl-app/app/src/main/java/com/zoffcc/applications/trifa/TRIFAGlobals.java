@@ -62,8 +62,8 @@ public class TRIFAGlobals
     static boolean HAVE_INTERNET_CONNECTIVITY = true;
     final static int TOX_BOOTSTRAP_AGAIN_AFTER_OFFLINE_MILLIS =
             1000 * 60 * 2; // bootstrap again after 2 minutes offline
-    final static int SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE = 60 * 3; // 3 minutes
-    static long BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS = 15 * 1000 * 60; // 15 minutes default
+    final static int SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE = 60 * 5; // 5 minutes
+    static long BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS = 120 * 1000 * 60; // 120 minutes default
     static int BATTERY_OPTIMIZATION_LAST_SLEEP1 = -1;
     static int BATTERY_OPTIMIZATION_LAST_SLEEP2 = -1;
     static int BATTERY_OPTIMIZATION_LAST_SLEEP3 = -1;
