@@ -45,7 +45,6 @@ import androidx.annotation.Nullable;
 import static com.zoffcc.applications.trifa.HelperFriend.main_get_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_by_public_key__wrapper;
 import static com.zoffcc.applications.trifa.HelperRelay.get_pushurl_for_friend;
-import static com.zoffcc.applications.trifa.HelperRelay.get_relay_for_friend;
 import static com.zoffcc.applications.trifa.Identicon.create_avatar_identicon_for_pubkey;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FRIEND_AVATAR_FILENAME;
@@ -227,58 +226,26 @@ public class FriendSelectSingleAdapter extends ArrayAdapter<FriendSelectSingle>
             f_status_icon.setVisibility(View.VISIBLE);
             f_relay_icon.setVisibility(View.INVISIBLE);
 
-            String relay_ = get_relay_for_friend(fl.tox_public_key_string);
+            // friend has no relay
+            // Log.d(TAG, "004");
 
-            if (relay_ != null) // friend HAS a relay
+            String get_pushurl_for_friend = get_pushurl_for_friend(fl.tox_public_key_string);
+
+            if ((get_pushurl_for_friend != null) && (get_pushurl_for_friend.length() > "https:".length()))
             {
-                FriendList relay_fl = main_get_friend(tox_friend_by_public_key__wrapper(relay_));
-
-                if (relay_fl != null)
-                {
-                    if (fl.TOX_CONNECTION_real == 0)
-                    {
-                        f_status_icon.setImageResource(R.drawable.circle_red);
-                    }
-                    else
-                    {
-                        f_status_icon.setImageResource(R.drawable.circle_green);
-                    }
-
-                    if (relay_fl.TOX_CONNECTION_real == 0)
-                    {
-                        f_relay_icon.setImageResource(R.drawable.circle_red);
-                    }
-                    else
-                    {
-                        f_relay_icon.setImageResource(R.drawable.circle_green);
-                    }
-
-                    f_status_icon.setVisibility(View.VISIBLE);
-                    f_relay_icon.setVisibility(View.VISIBLE);
-                }
+                // friend has push support
+                f_relay_icon.setImageResource(R.drawable.circle_orange);
+                f_relay_icon.setVisibility(View.VISIBLE);
             }
-            else // friend has no relay
+            else
             {
-                // Log.d(TAG, "004");
-
-                String get_pushurl_for_friend = get_pushurl_for_friend(fl.tox_public_key_string);
-
-                if ((get_pushurl_for_friend != null) && (get_pushurl_for_friend.length() > "https:".length()))
+                if (fl.TOX_CONNECTION == 0)
                 {
-                    // friend has push support
-                    f_relay_icon.setImageResource(R.drawable.circle_orange);
-                    f_relay_icon.setVisibility(View.VISIBLE);
+                    f_status_icon.setImageResource(R.drawable.circle_red);
                 }
                 else
                 {
-                    if (fl.TOX_CONNECTION == 0)
-                    {
-                        f_status_icon.setImageResource(R.drawable.circle_red);
-                    }
-                    else
-                    {
-                        f_status_icon.setImageResource(R.drawable.circle_green);
-                    }
+                    f_status_icon.setImageResource(R.drawable.circle_green);
                 }
             }
 

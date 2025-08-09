@@ -83,7 +83,6 @@ import static com.zoffcc.applications.trifa.HelperGeneric.vfs__unmount;
 import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_messageid;
 import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_no_read_recvedts;
 import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_resend_count;
-import static com.zoffcc.applications.trifa.HelperRelay.get_relay_for_friend;
 import static com.zoffcc.applications.trifa.HelperRelay.is_any_relay;
 import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notification_cancel;
 import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notification_change;
@@ -545,47 +544,6 @@ public class TrifaToxService extends Service
             try_update_friend_in_friendlist(friends[fc]);
         }
         // --- load and update all friends ---
-
-        // now run thru the list again to account for relays ----------------
-
-        for (fc = 0; fc < friends.length; fc++)
-        {
-            try
-            {
-                List<com.zoffcc.applications.sorm.FriendList> fl = orma.selectFromFriendList().tox_public_key_stringEq(
-                        tox_friend_get_public_key__wrapper(friends[fc])).toList();
-
-                if (fl.size() > 0)
-                {
-                    final FriendList f = (FriendList) fl.get(0);
-                    if (!is_any_relay(f.tox_public_key_string))
-                    {
-                        final int status_new = tox_friend_get_connection_status(friends[fc]);
-                        final String friends_relay = HelperRelay.get_relay_for_friend(f.tox_public_key_string);
-                        if (friends_relay != null)
-                        {
-                            int combined_connection_status_ = get_combined_connection_status(f.tox_public_key_string,
-                                                                                             status_new);
-
-                            // Log.i(TAG, "non_relay_status:FWR:" + friends[fc] + " pk=" +
-                            //           get_friend_name_from_pubkey(f.tox_public_key_string) + " status=" + status_new +
-                            //           " combined_connection_status_=" + combined_connection_status_);
-
-                            f.TOX_CONNECTION = combined_connection_status_;
-                            f.TOX_CONNECTION_on_off = get_toxconnection_wrapper(f.TOX_CONNECTION);
-                            update_friend_in_db_connection_status(f);
-                            try_update_friend_in_friendlist(friends[fc]);
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-            }
-        }
-        // now run thru the list again to account for relays ----------------
-
-
     }
 
     static void try_update_friend_in_friendlist(long friendnum)
@@ -2141,16 +2099,6 @@ public class TrifaToxService extends Service
                         int res = tox_util_friend_resend_message_v2(
                                 tox_friend_by_public_key__wrapper(m_resend_v2.tox_friendpubkey),
                                 msg_text_buffer_resend_v2, raw_data_length);
-
-
-                        String relay = get_relay_for_friend(m_resend_v2.tox_friendpubkey);
-                        if (relay != null)
-                        {
-                            int res_relay = tox_util_friend_resend_message_v2(tox_friend_by_public_key__wrapper(relay),
-                                                                              msg_text_buffer_resend_v2,
-                                                                              raw_data_length);
-
-                        }
                     }
 
                     cur_resend_count_per_iteration++;

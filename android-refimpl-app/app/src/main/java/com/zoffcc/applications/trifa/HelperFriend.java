@@ -704,9 +704,6 @@ public class HelperFriend
                     if (as_friends_relay)
                     {
                         // add relay for friend to DB
-                        // Log.d(TAG, "add_friend_to_system:add_or_update_friend_relay");
-                        HelperRelay.add_or_update_friend_relay(friend_public_key, owner_public_key);
-                        add_all_friends_clear_wrapper(10);
                     }
 
                     return;
@@ -756,10 +753,6 @@ public class HelperFriend
                 if (as_friends_relay)
                 {
                     // add relay for friend to DB
-                    // Log.d(TAG, "add_friend_to_system:add_or_update_friend_relay");
-                    HelperRelay.add_or_update_friend_relay(friend_public_key, owner_public_key);
-                    // update friendlist on screen
-                    add_all_friends_clear_wrapper(10);
                 }
                 else
                 {
@@ -1183,23 +1176,6 @@ public class HelperFriend
         {
             // send message receipt v2
             MainActivity.tox_util_friend_send_msg_receipt_v2(friend_number, t_sec_receipt, msg_id_buffer);
-
-            try
-            {
-                String relay_for_friend = HelperRelay.get_relay_for_friend(
-                        tox_friend_get_public_key__wrapper(friend_number));
-
-                if (relay_for_friend != null)
-                {
-                    // if friend has a relay, send the "msg receipt" also to the relay. just to be sure.
-                    MainActivity.tox_util_friend_send_msg_receipt_v2(
-                            tox_friend_by_public_key__wrapper(relay_for_friend), t_sec_receipt, msg_id_buffer);
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
         }
         else if (msg_type == 2)
         {
@@ -1232,30 +1208,6 @@ public class HelperFriend
 
                                     // Log.i(TAG, "send_friend_msg_receipt_v2_wrapper:ACK:1:res=" + res + " f=" +
                                     //           get_friend_name_from_num(friend_number));
-
-                                    try
-                                    {
-                                        String relay_for_friend = HelperRelay.get_relay_for_friend(
-                                                tox_friend_get_public_key__wrapper(friend_number));
-
-                                        if (relay_for_friend != null)
-                                        {
-                                            // if friend has a relay, send the "msg receipt" also to the relay. just to be sure.
-                                            int res_relay = MainActivity.tox_util_friend_send_msg_receipt_v2(
-                                                    tox_friend_by_public_key__wrapper(relay_for_friend), t_sec_receipt,
-                                                    msg_id_buffer);
-
-                                            // Log.i(TAG,
-                                            //      "send_friend_msg_receipt_v2_wrapper:ACK:2:res_relay=" + res_relay +
-                                            //      " f=" + get_friend_name_from_num(
-                                            //              tox_friend_by_public_key__wrapper(relay_for_friend)));
-
-                                        }
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        e.printStackTrace();
-                                    }
                                 }
                                 catch (Exception e)
                                 {

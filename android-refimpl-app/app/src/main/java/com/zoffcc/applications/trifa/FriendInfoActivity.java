@@ -51,10 +51,8 @@ import static com.zoffcc.applications.trifa.HelperGeneric.get_vfs_image_filename
 import static com.zoffcc.applications.trifa.HelperGeneric.is_nightmode_active;
 import static com.zoffcc.applications.trifa.HelperGeneric.put_vfs_image_on_imageview_real;
 import static com.zoffcc.applications.trifa.HelperRelay.get_pushurl_for_friend;
-import static com.zoffcc.applications.trifa.HelperRelay.get_relay_for_friend;
 import static com.zoffcc.applications.trifa.HelperRelay.is_valid_pushurl_for_friend_with_whitelist;
 import static com.zoffcc.applications.trifa.HelperRelay.remove_friend_pushurl_in_db;
-import static com.zoffcc.applications.trifa.HelperRelay.remove_friend_relay_in_db;
 import static com.zoffcc.applications.trifa.Identicon.create_avatar_identicon_for_pubkey;
 import static com.zoffcc.applications.trifa.MainActivity.friend_list_fragment;
 import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
@@ -161,7 +159,7 @@ public class FriendInfoActivity extends AppCompatActivity
                 get_friend_capabilities_from_pubkey(friend_pubkey))) +
                                             msgv3_single_cap);
 
-        String friend_relay_pubkey = get_relay_for_friend(friend_pubkey);
+        String friend_relay_pubkey = null;
 
         fi_relay_pubkey_textview.setText("");
 
@@ -172,44 +170,6 @@ public class FriendInfoActivity extends AppCompatActivity
                 fi_relay_text.setVisibility(View.GONE);
                 fi_relay_pubkey_textview.setVisibility(View.GONE);
                 remove_friend_relay_button.setVisibility(View.GONE);
-            }
-            else
-            {
-                fi_relay_text.setVisibility(View.VISIBLE);
-                fi_relay_pubkey_textview.setVisibility(View.VISIBLE);
-                fi_relay_pubkey_textview.setText(friend_relay_pubkey);
-
-                remove_friend_relay_button.setText("remove Friends Relay");
-                remove_friend_relay_button.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        try
-                        {
-                            remove_friend_relay_in_db(friend_pubkey);
-                            remove_friend_relay_button.setVisibility(View.GONE);
-                            fi_relay_text.setVisibility(View.GONE);
-                            fi_relay_pubkey_textview.setVisibility(View.GONE);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-                        // update friendlist on screen
-                        try
-                        {
-                            friend_list_fragment.add_all_friends_clear(0);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
-                remove_friend_relay_button.setVisibility(View.VISIBLE);
             }
         }
         catch (Exception e)

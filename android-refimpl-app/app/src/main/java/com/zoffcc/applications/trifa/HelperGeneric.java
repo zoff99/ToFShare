@@ -2122,47 +2122,7 @@ public class HelperGeneric
 
     static int get_combined_connection_status(String friend_pubkey, int a_TOX_CONNECTION)
     {
-        int ret = TOX_CONNECTION_NONE.value;
-
-        if (HelperRelay.is_any_relay(friend_pubkey))
-        {
-            ret = a_TOX_CONNECTION;
-        }
-        else
-        {
-            String relay_ = HelperRelay.get_relay_for_friend(friend_pubkey);
-
-            if (relay_ == null)
-            {
-                // friend has no relay
-                ret = a_TOX_CONNECTION;
-            }
-            else
-            {
-                // friend with relay
-                if (a_TOX_CONNECTION != TOX_CONNECTION_NONE.value)
-                {
-                    ret = a_TOX_CONNECTION;
-                }
-                else
-                {
-                    int friend_con_status = orma.selectFromFriendList().tox_public_key_stringEq(friend_pubkey).get(
-                            0).TOX_CONNECTION_real;
-                    int relay_con_status = orma.selectFromFriendList().tox_public_key_stringEq(relay_).get(
-                            0).TOX_CONNECTION_real;
-
-                    if ((friend_con_status != TOX_CONNECTION_NONE.value) ||
-                        (relay_con_status != TOX_CONNECTION_NONE.value))
-                    {
-                        // if one of them is online, return combined "online" as status
-                        // TODO: do not always return TCP, make this better
-                        ret = TOX_CONNECTION_TCP.value;
-                    }
-                }
-            }
-        }
-
-        return ret;
+        return a_TOX_CONNECTION;
     }
 
     /*************************************************************************/
@@ -2234,19 +2194,7 @@ public class HelperGeneric
         // Log.d(TAG, "tox_friend_send_message_wrapper:f conn" + f.TOX_CONNECTION_real);
         if (f.TOX_CONNECTION_real == TOX_CONNECTION_NONE.value)
         {
-            String relay_pubkey = HelperRelay.get_relay_for_friend(f.tox_public_key_string);
-
-            if (relay_pubkey != null)
-            {
-                // friend has a relay
-                friendnum_to_use = tox_friend_by_public_key__wrapper(relay_pubkey);
-                msgv1 = false;
-                // Log.d(TAG, "tox_friend_send_message_wrapper:friendnum_to_use=" + friendnum_to_use);
-            }
-            else // if friend is NOT online and does not have a relay, try if he has a push url
-            {
-                need_call_push_url = true;
-            }
+            need_call_push_url = true;
         }
 
         if (msgv1)

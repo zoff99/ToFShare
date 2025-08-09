@@ -161,7 +161,6 @@ import static com.zoffcc.applications.trifa.HelperRelay.get_own_relay_connection
 import static com.zoffcc.applications.trifa.HelperRelay.have_own_relay;
 import static com.zoffcc.applications.trifa.HelperRelay.is_any_relay;
 import static com.zoffcc.applications.trifa.HelperRelay.own_push_token_load;
-import static com.zoffcc.applications.trifa.HelperRelay.send_pushtoken_to_relay;
 import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notification_change_wrapper;
 import static com.zoffcc.applications.trifa.MessageListActivity.ml_friend_typing;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.AVATAR_INCOMING_MAX_BYTE_SIZE;
@@ -3871,8 +3870,6 @@ public class MainActivity extends AppCompatActivity
                                         // now send token to all friends
                                         send_pushurl_to_all_friends();
                                     }
-                                    // now send token to my relay
-                                    send_pushtoken_to_relay();
                                 }
                                 catch (Exception e)
                                 {
@@ -4719,38 +4716,6 @@ public class MainActivity extends AppCompatActivity
                 if (f.TOX_CONNECTION_real == TOX_CONNECTION_NONE.value)
                 {
                     // ******** friend just came online ********
-                    if (have_own_relay())
-                    {
-                        if (!is_any_relay(f.tox_public_key_string))
-                        {
-                            HelperRelay.send_relay_pubkey_to_friend(HelperRelay.get_own_relay_pubkey(),
-                                                                    f.tox_public_key_string);
-
-                            HelperRelay.send_friend_pubkey_to_relay(HelperRelay.get_own_relay_pubkey(),
-                                                                    f.tox_public_key_string);
-                        }
-                        else
-                        {
-                            if (HelperRelay.is_own_relay(f.tox_public_key_string))
-                            {
-                                HelperRelay.invite_to_all_conferences_own_relay(HelperRelay.get_own_relay_pubkey());
-                                HelperRelay.send_all_friend_pubkeys_to_relay(HelperRelay.get_own_relay_pubkey());
-                            }
-                        }
-
-                        if (HelperRelay.is_own_relay(f.tox_public_key_string))
-                        {
-                            send_pushtoken_to_relay();
-                        }
-                    }
-                }
-            }
-
-            if (f.TOX_CONNECTION_real != a_TOX_CONNECTION)
-            {
-                if (f.TOX_CONNECTION_real == TOX_CONNECTION_NONE.value)
-                {
-                    // ******** friend just came online ********
                     // resend latest msgV3 message that was not "read"
                     try
                     {
@@ -4827,34 +4792,6 @@ public class MainActivity extends AppCompatActivity
                 f.TOX_CONNECTION_real = a_TOX_CONNECTION;
                 f.TOX_CONNECTION_on_off_real = HelperGeneric.get_toxconnection_wrapper(f.TOX_CONNECTION);
                 HelperFriend.update_friend_in_db_connection_status_real(f);
-            }
-
-            if (is_any_relay(f.tox_public_key_string))
-            {
-                if (!HelperRelay.is_own_relay(f.tox_public_key_string))
-                {
-                    FriendList f_real = HelperRelay.get_friend_for_relay(f.tox_public_key_string);
-
-                    if (f_real != null)
-                    {
-                        HelperGeneric.update_friend_connection_status_helper(a_TOX_CONNECTION, f_real, true);
-                    }
-                }
-                else // is own relay
-                {
-                    if (a_TOX_CONNECTION == 2)
-                    {
-                        draw_main_top_icon(top_imageview, context_s, Color.parseColor("#04b431"), false);
-                    }
-                    else if (a_TOX_CONNECTION == 1)
-                    {
-                        draw_main_top_icon(top_imageview, context_s, Color.parseColor("#ffce00"), false);
-                    }
-                    else
-                    {
-                        draw_main_top_icon(top_imageview, context_s, Color.parseColor("#ff0000"), false);
-                    }
-                }
             }
 
             HelperGeneric.update_friend_connection_status_helper(a_TOX_CONNECTION, f, false);
@@ -4941,48 +4878,6 @@ public class MainActivity extends AppCompatActivity
             if (m_try < 1)
             {
                 // HINT: it must be an ACK send from a friends toxproxy to singal the receipt of the message on behalf of the friend
-
-                if (is_any_relay(HelperFriend.tox_friend_get_public_key__wrapper(friend_number)))
-                {
-                    FriendList friend_of_relay = HelperRelay.get_friend_for_relay(
-                            HelperFriend.tox_friend_get_public_key__wrapper(friend_number));
-
-                    if (friend_of_relay != null)
-                    {
-
-                        Message m = (Message) orma.selectFromMessage().msg_id_hashEq(
-                                message_id_hash_as_hex_string).tox_friendpubkeyEq(
-                                friend_of_relay.tox_public_key_string).directionEq(1).readEq(false).toList().get(0);
-
-                        if (m != null)
-                        {
-                            // Log.i(TAG, "receipt_message_v2_cb:msgid_via_relay found");
-                            Runnable myRunnable = new Runnable()
-                            {
-                                @Override
-                                public void run()
-                                {
-                                    try
-                                    {
-                                        set_message_msg_at_relay_from_id(m.id, true);
-                                        m.msg_at_relay = true;
-                                        HelperMessage.update_single_message(m, true);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            };
-
-                            if (main_handler_s != null)
-                            {
-                                main_handler_s.post(myRunnable);
-                            }
-                        }
-                    }
-                }
-
                 return;
             }
 

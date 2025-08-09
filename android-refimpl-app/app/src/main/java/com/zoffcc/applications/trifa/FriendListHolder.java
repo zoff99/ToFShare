@@ -56,10 +56,6 @@ import static com.zoffcc.applications.trifa.HelperGeneric.is_nightmode_active;
 import static com.zoffcc.applications.trifa.HelperGeneric.long_date_time_format;
 import static com.zoffcc.applications.trifa.HelperGeneric.update_savedata_file_wrapper;
 import static com.zoffcc.applications.trifa.HelperRelay.get_pushurl_for_friend;
-import static com.zoffcc.applications.trifa.HelperRelay.get_relay_for_friend;
-import static com.zoffcc.applications.trifa.HelperRelay.send_all_friend_pubkeys_to_relay;
-import static com.zoffcc.applications.trifa.HelperRelay.send_relay_pubkey_to_all_friends;
-import static com.zoffcc.applications.trifa.HelperRelay.set_friend_as_own_relay_in_db;
 import static com.zoffcc.applications.trifa.Identicon.create_avatar_identicon_for_pubkey;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__show_friendnumber_on_friendlist;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;
@@ -404,57 +400,25 @@ public class FriendListHolder extends RecyclerView.ViewHolder implements View.On
         f_status_icon.setVisibility(View.VISIBLE);
         f_relay_icon.setVisibility(View.INVISIBLE);
 
-        String relay_ = get_relay_for_friend(fl.tox_public_key_string);
+        // friend has no relay
+        // Log.d(TAG, "004");
 
-        if (relay_ != null) // friend HAS a relay
+        String get_pushurl_for_friend = get_pushurl_for_friend(fl.tox_public_key_string);
+
+        if ((get_pushurl_for_friend != null) && (get_pushurl_for_friend.length() > "https:".length()))
         {
-            FriendList relay_fl = main_get_friend(tox_friend_by_public_key__wrapper(relay_));
-
-            if (relay_fl != null)
-            {
-                if (fl.TOX_CONNECTION_real == 0)
-                {
-                    f_status_icon.setImageResource(R.drawable.circle_red);
-                }
-                else
-                {
-                    f_status_icon.setImageResource(R.drawable.circle_green);
-                }
-
-                if (relay_fl.TOX_CONNECTION_real == 0)
-                {
-                    f_relay_icon.setImageResource(R.drawable.circle_red);
-                }
-                else
-                {
-                    f_relay_icon.setImageResource(R.drawable.circle_green);
-                }
-
-                f_status_icon.setVisibility(View.VISIBLE);
-                f_relay_icon.setVisibility(View.VISIBLE);
-            }
+            // friend has push support
+            f_relay_icon.setImageResource(R.drawable.circle_orange);
+            f_relay_icon.setVisibility(View.VISIBLE);
         }
-        else // friend has no relay
+
+        if (fl.TOX_CONNECTION == 0)
         {
-            // Log.d(TAG, "004");
-
-            String get_pushurl_for_friend = get_pushurl_for_friend(fl.tox_public_key_string);
-
-            if ((get_pushurl_for_friend != null) && (get_pushurl_for_friend.length() > "https:".length()))
-            {
-                // friend has push support
-                f_relay_icon.setImageResource(R.drawable.circle_orange);
-                f_relay_icon.setVisibility(View.VISIBLE);
-            }
-
-            if (fl.TOX_CONNECTION == 0)
-            {
-                f_status_icon.setImageResource(R.drawable.circle_red);
-            }
-            else
-            {
-                f_status_icon.setImageResource(R.drawable.circle_green);
-            }
+            f_status_icon.setImageResource(R.drawable.circle_red);
+        }
+        else
+        {
+            f_status_icon.setImageResource(R.drawable.circle_green);
         }
 
         if (fl.TOX_USER_STATUS == 0)
@@ -742,69 +706,6 @@ public class FriendListHolder extends RecyclerView.ViewHolder implements View.On
 
                             Log.i(TAG, "onMenuItemClick:7");
                             // load all friends into data list ---
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                            Log.i(TAG, "onMenuItemClick:8:EE:" + e.getMessage());
-                        }
-                    }
-                };
-                // TODO: use own handler
-                if (view.getHandler() != null)
-                {
-                    view.getHandler().post(myRunnable);
-                }
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    public void show_confirm_addrelay_dialog(final View view, final FriendList f2)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-        builder.setTitle("add as Relay?");
-        builder.setMessage("Do you want to add this Friend as your Relay?");
-
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                Runnable myRunnable = new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        try
-                        {
-                            // long friend_num_temp = tox_friend_by_public_key__wrapper(f2.tox_public_key_string);
-                            if (set_friend_as_own_relay_in_db(f2.tox_public_key_string))
-                            {
-                                // load all friends into data list ---
-                                Log.i(TAG, "onMenuItemClick:6");
-                                try
-                                {
-                                    if (friend_list_fragment != null)
-                                    {
-                                        // reload friendlist
-                                        friend_list_fragment.add_all_friends_clear(0);
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    e.printStackTrace();
-                                }
-
-                                Log.i(TAG, "onMenuItemClick:7");
-                                // load all friends into data list ---
-                            }
-
-                            send_all_friend_pubkeys_to_relay(f2.tox_public_key_string);
-                            send_relay_pubkey_to_all_friends(f2.tox_public_key_string);
                         }
                         catch (Exception e)
                         {

@@ -85,7 +85,6 @@ import static com.zoffcc.applications.trifa.HelperRelay.have_own_relay;
 import static com.zoffcc.applications.trifa.HelperRelay.own_push_token_load;
 import static com.zoffcc.applications.trifa.HelperRelay.push_token_to_push_url;
 import static com.zoffcc.applications.trifa.HelperRelay.remove_own_pushurl_in_db;
-import static com.zoffcc.applications.trifa.HelperRelay.remove_own_relay_in_db;
 import static com.zoffcc.applications.trifa.Identicon.IDENTICON_ROWS;
 import static com.zoffcc.applications.trifa.MainActivity.clipboard;
 import static com.zoffcc.applications.trifa.MainActivity.friend_list_fragment;
@@ -243,83 +242,23 @@ public class ProfileActivity extends AppCompatActivity
 
         my_relay_toxid_text.setVisibility(View.GONE);
 
-        if (have_own_relay())
+        remove_own_relay_button.setVisibility(View.INVISIBLE);
+        try
         {
-            my_relay_toxid_text.setVisibility(View.VISIBLE);
-
-            remove_own_relay_button.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    try
-                    {
-                        remove_own_relay_in_db();
-
-                        // load all friends into data list ---
-                        Log.i(TAG, "onMenuItemClick:6");
-                        try
-                        {
-                            if (friend_list_fragment != null)
-                            {
-                                // reload friendlist
-                                friend_list_fragment.add_all_friends_clear(0);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-                        my_relay_toxid_textview.setVisibility(View.INVISIBLE);
-                        remove_own_relay_button.setVisibility(View.INVISIBLE);
-
-                        try
-                        {
-                            remove_own_relay_button.setVisibility(View.GONE);
-                        }
-                        catch (Exception e1)
-                        {
-                        }
-
-                        try
-                        {
-                            my_relay_toxid_textview.setVisibility(View.GONE);
-                        }
-                        catch (Exception e1)
-                        {
-                        }
-
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            my_relay_toxid_textview.setText(get_own_relay_pubkey());
-            my_relay_toxid_textview.setVisibility(View.VISIBLE);
+            remove_own_relay_button.setVisibility(View.GONE);
         }
-        else
+        catch (Exception e1)
         {
-            remove_own_relay_button.setVisibility(View.INVISIBLE);
-            try
-            {
-                remove_own_relay_button.setVisibility(View.GONE);
-            }
-            catch (Exception e1)
-            {
-            }
+        }
 
-            my_relay_toxid_textview.setText("--");
-            my_relay_toxid_textview.setVisibility(View.INVISIBLE);
-            try
-            {
-                my_relay_toxid_textview.setVisibility(View.GONE);
-            }
-            catch (Exception e1)
-            {
-            }
+        my_relay_toxid_textview.setText("--");
+        my_relay_toxid_textview.setVisibility(View.INVISIBLE);
+        try
+        {
+            my_relay_toxid_textview.setVisibility(View.GONE);
+        }
+        catch (Exception e1)
+        {
         }
 
         remove_own_pushurl_button.setVisibility(View.GONE);
