@@ -243,13 +243,13 @@
 
         <receiver android:name=".MyExternReceiver" android:enabled="true" android:exported="true">
             <intent-filter>
-                <action android:name="com.zoffcc.applications.trifa.EXTERN_RECV" />
+                <action android:name="com.zoffcc.applications.tofshare.EXTERN_RECV" />
             </intent-filter>
         </receiver>
 
         <receiver android:name=".MyTokenReceiver" android:enabled="true" android:exported="true">
             <intent-filter>
-                <action android:name="com.zoffcc.applications.trifa.TOKEN_CHANGED" />
+                <action android:name="com.zoffcc.applications.tofshare.TOKEN_CHANGED" />
             </intent-filter>
         </receiver>
 

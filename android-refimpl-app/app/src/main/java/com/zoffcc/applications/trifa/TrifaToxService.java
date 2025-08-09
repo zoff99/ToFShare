@@ -885,7 +885,7 @@ public class TrifaToxService extends Service
                 // --------------- bootstrap ---------------
 
                 long tox_iteration_interval_ms = tox_iteration_interval();
-                Log.i(TAG, "tox_iteration_interval_ms=" + tox_iteration_interval_ms);
+                // Log.i(TAG, "tox_iteration_interval_ms=" + tox_iteration_interval_ms);
 
                 MainActivity.tox_iterate();
 
@@ -1124,7 +1124,7 @@ public class TrifaToxService extends Service
                         e.printStackTrace();
                     }
 
-                    Log.i(TAG, "tox_iteration_interval_ms==" + tox_iteration_interval_ms + "ms");
+                    // Log.i(TAG, "tox_iteration_interval_ms==" + tox_iteration_interval_ms + "ms");
                     MainActivity.tox_iterate();
 
                     if (global_last_activity_outgoung_ft_ts > -1)

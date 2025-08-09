@@ -31,8 +31,6 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
 
-import com.zoffcc.applications.trifa.R;
-
 import androidx.core.app.NotificationCompat;
 
 import static com.zoffcc.applications.trifa.TrifaToxService.trifa_service_thread;

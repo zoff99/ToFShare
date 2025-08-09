@@ -311,6 +311,13 @@ dependencies {
     //
     //
     //
+    //
+    //
+    //
+    implementation 'com.github.UnifiedPush:android-connector:2.5.0'
+    //
+    //
+    //
     //noinspection KtxExtensionAvailable
     implementation 'androidx.collection:collection:1.4.5'
     //noinspection KtxExtensionAvailable

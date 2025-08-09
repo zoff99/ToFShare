@@ -95,6 +95,8 @@ import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.Message;
 import com.zoffcc.applications.sorm.OrmaDatabase;
 
+import org.unifiedpush.android.connector.UnifiedPush;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -1661,7 +1663,72 @@ public class MainActivity extends AppCompatActivity
         ////// WATCHDOG //////
         */
 
+        registerAppWithDialog(this, "com.zoffcc.applications.push_tofshare");
+
         Log.i(TAG, "M:STARTUP:-- DONE --");
+    }
+
+    private static void registerAppWithDialog(Context context, String slug)
+    {
+
+        List<String> distributors = UnifiedPush.getDistributors(context, new ArrayList<>());
+        if (distributors.size() == 1 || !UnifiedPush.getDistributor(context).isEmpty())
+        {
+            try
+            {
+                String available_dist = "";
+                for (int i = 0; i < distributors.size(); i++)
+                {
+                    available_dist = available_dist + distributors.get(i) + "\n";
+                }
+                Log.i(TAG, "PUSH:UnifiedPush:dists1=" + available_dist);
+            }
+            catch (Exception ignored)
+            {
+            }
+
+            if (distributors.size() == 1)
+            {
+                UnifiedPush.saveDistributor(context, distributors.get(0));
+            }
+            else
+            {
+                UnifiedPush.saveDistributor(context, UnifiedPush.getDistributor(context));
+            }
+            UnifiedPush.registerApp(context, slug, new ArrayList<>(), "");
+            return;
+        }
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        if (distributors.size() == 0)
+        {
+            Toast.makeText(context, "No UnifiedPush Distributors found", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            try
+            {
+                String available_dist = "";
+                for (int i = 0; i < distributors.size(); i++)
+                {
+                    available_dist = available_dist + distributors.get(i) + "\n";
+                }
+                Log.i(TAG, "PUSH:UnifiedPush:dists2=" + available_dist);
+            }
+            catch (Exception ignored)
+            {
+            }
+
+            alert.setTitle("select_distributors");
+            String[] distributorsStr = distributors.toArray(new String[0]);
+            alert.setSingleChoiceItems(distributorsStr, -1, (dialog, item) -> {
+                String distributor = distributorsStr[item];
+                UnifiedPush.saveDistributor(context, distributor);
+                UnifiedPush.registerApp(context, slug, new ArrayList<>(), "");
+                dialog.dismiss();
+            });
+        }
+        alert.show();
     }
 
     void upgrade_db_schema_do(int old_version, int new_version)
