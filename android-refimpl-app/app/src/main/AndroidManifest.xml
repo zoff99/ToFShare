@@ -39,13 +39,16 @@
     <application
         android:name=".MainApplication"
         android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher4"
         android:roundIcon="@mipmap/ic_launcher4_round"
         android:label="ToFShare"
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="false"
         android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup,android:label">
+        tools:replace="android:allowBackup,android:fullBackupContent,android:label"
+        tools:ignore="DataExtractionRules">
 
         <activity
             android:name=".StartMainActivityWrapper"
