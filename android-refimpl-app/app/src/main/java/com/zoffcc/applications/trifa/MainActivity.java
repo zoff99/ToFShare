@@ -1382,8 +1382,7 @@ public class MainActivity extends AppCompatActivity
                 R.string.MainActivity_maint).withIcon(GoogleMaterial.Icon.gmd_build);
         PrimaryDrawerItem item5 = new PrimaryDrawerItem().withIdentifier(5).withName(
                 R.string.MainActivity_about).withIcon(GoogleMaterial.Icon.gmd_info);
-        PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier(6).withName(
-                R.string.MainActivity_join_trifa_groupchat).withIcon(GoogleMaterial.Icon.gmd_info);
+        PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier(6).withName("-----");
         PrimaryDrawerItem item7 = new PrimaryDrawerItem().withIdentifier(7).withName(
                 R.string.MainActivity_exit).withIcon(GoogleMaterial.Icon.gmd_exit_to_app);
         final Drawable d1 = new IconicsDrawable(this).icon(FontAwesome.Icon.faw_lock).color(
@@ -1507,14 +1506,6 @@ public class MainActivity extends AppCompatActivity
                         }
                         else if (position == 8)
                         {
-                            // Join TRIfA public NGC group chat
-                            try
-                            {
-                            }
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
                         }
                         else if (position == 10)
                         {
@@ -6606,37 +6597,6 @@ public class MainActivity extends AppCompatActivity
             native_lib_loaded = false;
             Log.i(TAG, "loadLibrary jni-c-toxcore failed!");
             e.printStackTrace();
-        }
-
-        try
-        {
-            System.loadLibrary("native-audio-jni");
-            native_audio_lib_loaded = true;
-            Log.i(TAG, "successfully loaded native-audio-jni library");
-        }
-        catch (java.lang.UnsatisfiedLinkError e)
-        {
-            native_audio_lib_loaded = false;
-            Log.i(TAG, "loadLibrary native-audio-jni failed!");
-            e.printStackTrace();
-
-            final Thread t = new Thread()
-            {
-                @Override
-                public void run()
-                {
-                    try
-                    {
-                        Thread.sleep(6 * 1000);
-                        display_toast("loadLibrary native-audio-jni failed!", false, 5000);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.i(TAG, "loadLibrary native-audio-jni failed: toast failed to show");
-                    }
-                }
-            };
-            t.start();
         }
     }
 
