@@ -38,8 +38,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.zoffcc.applications.logging.Logging;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,7 +46,7 @@ import java.util.Locale;
 import static com.zoffcc.applications.trifa.HelperGeneric.reset_audio_mode;
 
 
-public class CrashActivity extends AppCompatActivity implements Logging.AsyncResponse
+public class CrashActivity extends AppCompatActivity
 {
     static final String TAG = "trifa.CrashActy";
 

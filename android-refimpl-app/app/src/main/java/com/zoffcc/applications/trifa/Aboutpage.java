@@ -33,8 +33,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.zoffcc.applications.logging.Logging;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,7 +46,7 @@ import static com.zoffcc.applications.trifa.HelperGeneric.dp2px;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_trifa_build_str;
 import static com.zoffcc.applications.trifa.MainActivity.main_activity_s;
 
-public class Aboutpage extends AppCompatActivity implements Logging.AsyncResponse
+public class Aboutpage extends AppCompatActivity
 {
     private static final String TAG = "trifa.Aboutpage";
     ProgressDialog progressDialog2 = null;

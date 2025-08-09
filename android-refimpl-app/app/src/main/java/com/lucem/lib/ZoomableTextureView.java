@@ -31,7 +31,7 @@ import android.view.ScaleGestureDetector;
 import android.view.TextureView;
 import android.view.View;
 
-import com.zoffcc.applications.trifa.R;
+import com.zoffcc.applications.tofshare.R;
 
 public class ZoomableTextureView extends TextureView
 {

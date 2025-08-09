@@ -66,6 +66,7 @@ import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.zoffcc.applications.sorm.Filetransfer;
 import com.zoffcc.applications.sorm.Message;
+import com.zoffcc.applications.tofshare.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -82,11 +83,6 @@ import androidx.core.content.ContextCompat;
 import androidx.documentfile.provider.DocumentFile;
 
 import static android.widget.Toast.LENGTH_LONG;
-import static com.zoffcc.applications.nativeaudio.NativeAudio.set_aec_active;
-import static com.zoffcc.applications.nativeaudio.NativeAudio.set_audio_aec_delay;
-import static com.zoffcc.applications.trifa.CallingActivity.initializeScreenshotSecurity;
-import static com.zoffcc.applications.trifa.CallingActivity.set_debug_text;
-import static com.zoffcc.applications.trifa.CallingActivity.update_top_text_line;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.copy_outgoing_file_to_sdcard_dir;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.insert_into_filetransfer_db;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.update_filetransfer_db_full;
@@ -620,7 +616,7 @@ public class MessageListActivity extends AppCompatActivity
         if (PREF__window_security)
         {
             // prevent screenshots and also dont show the window content in recent activity screen
-            initializeScreenshotSecurity(this);
+            // initializeScreenshotSecurity(this);
         }
 
         final long fn = friendnum;
@@ -1687,23 +1683,6 @@ public class MessageListActivity extends AppCompatActivity
 
         if (requestCode == CallingWaitingActivity_ID)
         {
-            Log.i(TAG, "friend_to_call:CallingWaitingActivity_ID returned");
-            if (resultCode == Activity.RESULT_OK)
-            {
-                Log.i(TAG, "friend_to_call came online, call him now ...");
-                try
-                {
-                    friendnum = tox_friend_by_public_key__wrapper(data.getStringExtra("friendnum_pk"));
-                    Log.i(TAG, "friend_to_call:friendnum=" + friendnum + " friendnum_prev=" + friendnum_prev + " pk=" +
-                               data.getStringExtra("friendnum_pk"));
-                    friendnum_prev = friendnum;
-                    start_call_to_friend_real(null);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
         }
         else if (requestCode == MEDIAPICK_ID_001 && resultCode == Activity.RESULT_OK)
         {
@@ -1942,227 +1921,6 @@ public class MessageListActivity extends AppCompatActivity
         }
     }
 
-    public void start_audio_call_to_friend(View view)
-    {
-        Log.i(TAG, "start_call_to_friend_real:audio_only");
-        Callstate.audio_call = true;
-        set_debug_text("_AUDIO_");
-
-        Log.i(TAG, "toxav_call:Callstate.audio_call = true");
-        start_call_to_friend(view);
-    }
-
-    public void start_call_to_friend(View view)
-    {
-        if (is_friend_online_real(friendnum) == 0)
-        {
-            final long fn = friendnum;
-            final String calling_friend_pk = tox_friend_get_public_key__wrapper(fn);
-            Intent intent = new Intent(context_s, CallingWaitingActivity.class);
-            intent.putExtra("calling_friend_pk", calling_friend_pk);
-            startActivityForResult(intent, CallingWaitingActivity_ID);
-        }
-        else
-        {
-            start_call_to_friend_real(view);
-        }
-    }
-
-    public void start_call_to_friend_real(View view)
-    {
-        Log.i(TAG, "start_call_to_friend_real");
-
-        if (!is_tox_started)
-        {
-            Log.i(TAG, "TOX:offline");
-            return;
-        }
-
-        Log.i(TAG, "start_call_to_friend_real:friendnum=" + friendnum);
-
-        if (is_friend_online(friendnum) == 0)
-        {
-            Log.i(TAG, "TOX:friend offline");
-            try
-            {
-                Toast.makeText(this, "Friend not online", Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            return;
-        }
-
-        final long fn = friendnum;
-
-        // these 2 bitrate values are very strange!! sometimes no video!!
-        final int f_audio_enabled = 1;
-        final int f_video_enabled = 1;
-
-        Runnable myRunnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                try
-                {
-                    Log.i(TAG, "CALL:start:(2.0):Callstate.state=" + Callstate.state);
-
-                    if (Callstate.state == 0)
-                    {
-                        Log.i(TAG, "CALL:start:(2.1):show activity");
-                        if (PREF__use_software_aec)
-                        {
-                            set_aec_active(0); // --ACTIVE--
-                        }
-                        else
-                        {
-                            set_aec_active(0);
-                        }
-
-                        Callstate.state = 1;
-                        Callstate.accepted_call = 1; // we started the call, so it's already accepted on our side
-                        Callstate.call_first_video_frame_received = -1;
-                        Callstate.call_start_timestamp = -1;
-                        Log.i(TAG, "friend_pubkey:set:004");
-                        Callstate.friend_pubkey = tox_friend_get_public_key__wrapper(fn);
-                        Callstate.camera_opened = false;
-                        Callstate.audio_speaker = true;
-                        Callstate.other_audio_enabled = 1;
-                        Callstate.other_video_enabled = 1;
-                        Callstate.my_audio_enabled = 1;
-                        Callstate.my_video_enabled = 1;
-                        MainActivity.set_av_call_status(Callstate.state);
-                        clear_audio_play_buffers();
-                        try
-                        {
-                            set_audio_aec_delay(PREF__X_eac_delay_ms);
-                        }
-                        catch (Exception e)
-                        {
-                        }
-                        Intent intent = new Intent(context_s, CallingActivity.class);
-                        Callstate.friend_alias_name = get_friend_name_from_pubkey(Callstate.friend_pubkey);
-
-                        Thread t = new Thread()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                Log.i(TAG, "wating for camera open");
-
-                                try
-                                {
-                                    Thread.sleep(20);
-                                }
-                                catch (Exception e)
-                                {
-                                    e.printStackTrace();
-                                }
-
-                                boolean waiting = true;
-                                int i = 0;
-                                while (waiting)
-                                {
-                                    i++;
-                                    if (Callstate.camera_opened)
-                                    {
-                                        Log.i(TAG, "Callstate.camera_opened" + Callstate.camera_opened);
-                                        waiting = false;
-                                    }
-
-                                    if (i > 80)
-                                    {
-                                        waiting = false;
-                                    }
-
-                                    try
-                                    {
-                                        Thread.sleep(200); // wait a bit
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                try
-                                {
-                                    CallingActivity.top_text_line_str2 = "0s";
-                                    update_top_text_line();
-                                    Log.i(TAG, "CALL_OUT:001:friendnum=" + fn + " f_audio_enabled=" + f_audio_enabled +
-                                               " f_video_enabled=" + f_video_enabled);
-
-                                    Callstate.audio_bitrate = GLOBAL_AUDIO_BITRATE;
-                                    Callstate.video_bitrate = GLOBAL_VIDEO_BITRATE;
-                                    VIDEO_FRAME_RATE_OUTGOING = 0;
-                                    last_video_frame_sent = -1;
-                                    VIDEO_FRAME_RATE_INCOMING = 0;
-                                    last_video_frame_received = -1;
-                                    count_video_frame_received = 0;
-                                    count_video_frame_sent = 0;
-
-                                    if (Callstate.audio_call)
-                                    {
-                                        int res1 = MainActivity.toxav_call(fn, GLOBAL_AUDIO_BITRATE, 0);
-                                        if (res1 != 1)
-                                        {
-                                            Log.i(TAG, "toxav_call:audio_call:RES=" + res1);
-                                            try
-                                            {
-                                                Toast.makeText(context_s, "Call Start ERROR", LENGTH_LONG).show();
-                                            }
-                                            catch (Exception e)
-                                            {
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        int res2 = MainActivity.toxav_call(fn, GLOBAL_AUDIO_BITRATE,
-                                                                           GLOBAL_VIDEO_BITRATE);
-                                        if (res2 != 1)
-                                        {
-                                            Log.i(TAG, "toxav_call:video_call:RES=" + res2);
-                                            try
-                                            {
-                                                Toast.makeText(context_s, "Call Start ERROR", LENGTH_LONG).show();
-                                            }
-                                            catch (Exception e)
-                                            {
-                                            }
-                                        }
-                                    }
-                                    Log.i(TAG, "CALL_OUT:002");
-                                }
-                                catch (Exception e)
-                                {
-                                    Log.i(TAG, "CALL_OUT:EE1:" + e.getMessage());
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-                        t.start();
-
-                        Callstate.other_audio_enabled = f_audio_enabled;
-                        Callstate.other_video_enabled = f_video_enabled;
-                        Callstate.call_init_timestamp = System.currentTimeMillis();
-                        main_activity_s.startActivityForResult(intent, CallingActivity_ID);
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    Log.i(TAG, "CALL:start:(2):EE:" + e.getMessage());
-                }
-            }
-        };
-
-        if (main_handler_s != null)
-        {
-            main_handler_s.post(myRunnable);
-        }
-    }
 
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access

@@ -24,7 +24,6 @@ import android.provider.CallLog;
 import android.telecom.Call;
 import android.util.Log;
 
-import static com.zoffcc.applications.trifa.CallingActivity.set_debug_text;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.GLOBAL_AUDIO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.GLOBAL_VIDEO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.VIDEO_CODEC_H265;
@@ -78,7 +77,6 @@ public class Callstate
     {
         Callstate.state = 0;
         audio_call = false;
-        set_debug_text("VIDEO");
         Callstate.call_first_video_frame_received = -1;
         Callstate.call_first_audio_frame_received = -1;
         Callstate.call_start_timestamp = -1;

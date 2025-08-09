@@ -29,6 +29,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
 
+import com.zoffcc.applications.tofshare.R;
+
 import java.util.HashSet;
 
 import androidx.core.app.NotificationCompat;
