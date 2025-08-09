@@ -5031,14 +5031,6 @@ public class MainActivity extends AppCompatActivity
         {
             if (data[0] == (byte) CONTROL_PROXY_MESSAGE_TYPE_PROXY_PUBKEY_FOR_FRIEND.value)
             {
-                if (length == (TOX_PUBLIC_KEY_SIZE + 1))
-                {
-                    // Log.i(TAG, "friend_lossless_packet_cb:recevied CONTROL_PROXY_MESSAGE_TYPE_PROXY_PUBKEY_FOR_FRIEND");
-                    String relay_pubkey = bytes_to_hex(data).substring(2);
-                    // Log.i(TAG, "friend_lossless_packet_cb:recevied pubkey:" + relay_pubkey);
-                    HelperFriend.add_friend_to_system(relay_pubkey.toUpperCase(), true,
-                                                      HelperFriend.tox_friend_get_public_key__wrapper(friend_number));
-                }
             }
             else if (data[0] == (byte) CONTROL_PROXY_MESSAGE_TYPE_PUSH_URL_FOR_FRIEND.value)
             {
