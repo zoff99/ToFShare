@@ -442,7 +442,7 @@ public class MainActivity extends AppCompatActivity
     static String[] PREF__toxirc_muted_peers = {};
     static boolean PREF__hide_setup_push_tip = false;
     static boolean PREF__show_friendnumber_on_friendlist = false;
-    static int PREF__dark_mode_pref = 0;
+    static int PREF__dark_mode_pref = 1;
     static boolean PREF__allow_push_server_ntfy = true;
     static boolean PREF__messageview_paging = true;
     static int PREF__message_paging_num_msgs_per_page = 50;
@@ -3604,11 +3604,11 @@ public class MainActivity extends AppCompatActivity
 
         try
         {
-            PREF__dark_mode_pref = Integer.parseInt(settings.getString("dark_mode_pref", "" + 0));
+            PREF__dark_mode_pref = Integer.parseInt(settings.getString("dark_mode_pref", "" + 1));
         }
         catch (Exception e)
         {
-            PREF__dark_mode_pref = 0;
+            PREF__dark_mode_pref = 1;
         }
 
         if (PREF__dark_mode_pref == 0)

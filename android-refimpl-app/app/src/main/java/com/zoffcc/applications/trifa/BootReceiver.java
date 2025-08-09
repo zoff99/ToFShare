@@ -40,7 +40,7 @@ public class BootReceiver extends BroadcastReceiver
             try
             {
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-                boolean start_on_boot = settings.getBoolean("start_on_boot", false);
+                boolean start_on_boot = settings.getBoolean("start_on_boot", true);
 
                 if (start_on_boot)
                 {
