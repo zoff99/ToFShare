@@ -46,7 +46,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static com.zoffcc.applications.trifa.CombinedFriendsAndConferences.COMBINED_IS_FRIEND;
 import static com.zoffcc.applications.trifa.FriendListFragment.fl_loading_progressbar;
-import static com.zoffcc.applications.trifa.HelperConference.add_conference_wrapper;
 import static com.zoffcc.applications.trifa.HelperFriend.delete_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.delete_friend_all_files;
 import static com.zoffcc.applications.trifa.HelperFriend.delete_friend_all_filetransfers;

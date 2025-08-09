@@ -52,8 +52,6 @@ import info.guardianproject.iocipher.VirtualFileSystem;
 import static com.zoffcc.applications.trifa.BootstrapNodeEntryDB.get_tcprelay_nodelist_from_db;
 import static com.zoffcc.applications.trifa.BootstrapNodeEntryDB.get_udp_nodelist_from_db;
 import static com.zoffcc.applications.trifa.CombinedFriendsAndConferences.COMBINED_IS_FRIEND;
-import static com.zoffcc.applications.trifa.HelperConference.new_or_updated_conference;
-import static com.zoffcc.applications.trifa.HelperConference.set_all_conferences_inactive;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.set_all_filetransfers_inactive;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.start_outgoing_ft;
 import static com.zoffcc.applications.trifa.HelperFriend.add_friend_real;
@@ -238,7 +236,6 @@ public class TrifaToxService extends Service
                     public void run()
                     {
                         Log.i(TAG, "stop_me:005:tox_thread_starting_up=" + tox_thread_starting_up);
-                        set_aec_active(0);
                         long i = 0;
                         while (is_tox_started)
                         {
@@ -298,42 +295,6 @@ public class TrifaToxService extends Service
                         }
 
                         Log.i(TAG, "stop_me:007");
-
-                        try
-                        {
-                            unregisterReceiver(receiver1);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-                        try
-                        {
-                            unregisterReceiver(receiver2);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-                        try
-                        {
-                            unregisterReceiver(receiver3);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-                        try
-                        {
-                            unregisterReceiver(receiver4);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
 
                         Log.i(TAG, "stop_me:008");
                         tox_notification_cancel(static_context);
@@ -439,8 +400,6 @@ public class TrifaToxService extends Service
                 tox_notification_change_wrapper(0, ""); // set to offline
                 Log.i(TAG, "stop_tox_fg:008");
                 set_all_friends_offline();
-                Log.i(TAG, "set_all_conferences_inactive:003");
-                set_all_conferences_inactive();
 
                 // so that the app knows we went offline
                 global_self_connection_status = TOX_CONNECTION_NONE.value;
@@ -662,129 +621,6 @@ public class TrifaToxService extends Service
         }
     }
 
-    void load_and_add_all_conferences()
-    {
-        long num_conferences = tox_conference_get_chatlist_size();
-        Log.i(TAG, "load conferences at startup: num=" + num_conferences);
-
-        long[] conference_numbers = tox_conference_get_chatlist();
-        ByteBuffer cookie_buf3 = ByteBuffer.allocateDirect(CONFERENCE_ID_LENGTH * 2);
-
-        int conf_ = 0;
-        for (conf_ = 0; conf_ < num_conferences; conf_++)
-        {
-            cookie_buf3.clear();
-            if (tox_conference_get_id(conference_numbers[conf_], cookie_buf3) == 0)
-            {
-                byte[] cookie_buffer = new byte[CONFERENCE_ID_LENGTH];
-                cookie_buf3.get(cookie_buffer, 0, CONFERENCE_ID_LENGTH);
-                String conference_identifier = bytes_to_hex(cookie_buffer);
-                // Log.i(TAG, "load conference num=" + conference_numbers[conf_] + " cookie=" + conference_identifier +
-                //           " offset=" + cookie_buf3.arrayOffset());
-
-                // final ConferenceDB conf2 = orma.selectFromConferenceDB().toList().get(0);
-                //Log.i(TAG,
-                //      "conference 0 in db:" + conf2.conference_identifier + " " + conf2.tox_conference_number + " " +
-                //      conf2.name);
-
-                new_or_updated_conference(conference_numbers[conf_], tox_friend_get_public_key__wrapper(0),
-                                          conference_identifier, tox_conference_get_type(
-                                conference_numbers[conf_])); // rejoin a saved conference
-
-                //if (tox_conference_get_type(conference_numbers[conf_]) == TOX_CONFERENCE_TYPE_AV.value)
-                //{
-                //    // TODO: this returns error. check it
-                //    long result = toxav_groupchat_disable_av(conference_numbers[conf_]);
-                //    Log.i(TAG, "load conference num=" + conference_numbers[conf_] + " toxav_groupchat_disable_av res=" +
-                //               result);
-                //}
-
-                try
-                {
-                    if (conference_message_list_activity != null)
-                    {
-                        if (conference_message_list_activity.get_current_conf_id().equals(conference_identifier))
-                        {
-                            conference_message_list_activity.set_conference_connection_status_icon();
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                try
-                {
-                    if (conference_audio_activity != null)
-                    {
-                        if (conference_audio_activity.get_current_conf_id().equals(conference_identifier))
-                        {
-                            conference_audio_activity.set_conference_connection_status_icon();
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-    }
-
-    void load_and_add_all_groups()
-    {
-        long num_groups = tox_group_get_number_groups();
-        Log.i(TAG, "load groups at startup: num=" + num_groups);
-
-        long[] group_numbers = tox_group_get_grouplist();
-        ByteBuffer groupid_buf3 = ByteBuffer.allocateDirect(GROUP_ID_LENGTH * 2);
-
-        int conf_ = 0;
-        for (conf_ = 0; conf_ < num_groups; conf_++)
-        {
-            groupid_buf3.clear();
-
-            if (tox_group_get_chat_id(group_numbers[conf_], groupid_buf3) == 0)
-            {
-                byte[] groupid_buffer = new byte[GROUP_ID_LENGTH];
-                groupid_buf3.get(groupid_buffer, 0, GROUP_ID_LENGTH);
-                String group_identifier = bytes_to_hex(groupid_buffer);
-                int is_connected = tox_group_is_connected(conf_);
-                Log.i(TAG, "load group num=" + group_numbers[conf_] + " connected=" + is_connected);
-
-                new_or_updated_group(group_numbers[conf_], tox_friend_get_public_key__wrapper(0), group_identifier,
-                                     tox_group_get_privacy_state(group_numbers[conf_]));
-
-                String group_name = tox_group_get_name(group_numbers[conf_]);
-                if (group_name == null)
-                {
-                    group_name = "";
-                }
-                update_group_in_db_name(group_identifier, group_name);
-
-                final int new_privacy_state = tox_group_get_privacy_state(group_numbers[conf_]);
-                update_group_in_db_privacy_state(group_identifier, new_privacy_state);
-
-                try
-                {
-                    if (group_message_list_activity != null)
-                    {
-                        if (group_message_list_activity.get_current_group_id().equals(group_identifier))
-                        {
-                            group_message_list_activity.set_group_connection_status_icon();
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     static void write_debug_file(String filename)
     {
         if (DEBUG_BATTERY_OPTIMIZATION_LOGGING)
@@ -859,7 +695,6 @@ public class TrifaToxService extends Service
                 {
                     Log.i(TAG, "set_all_conferences_inactive:004");
                     set_all_friends_offline();
-                    set_all_conferences_inactive();
                     set_all_filetransfers_inactive();
                     MainActivity.init_tox_callbacks();
                     HelperGeneric.update_savedata_file_wrapper();
@@ -1157,22 +992,6 @@ public class TrifaToxService extends Service
                     }
                 }
 
-                try
-                {
-                    load_and_add_all_conferences();
-                }
-                catch (Exception e)
-                {
-                }
-
-                try
-                {
-                    load_and_add_all_groups();
-                }
-                catch (Exception e)
-                {
-                }
-
                 global_self_last_went_offline_timestamp = System.currentTimeMillis();
                 Log.i(TAG, "global_self_last_went_offline_timestamp[2]=" + global_self_last_went_offline_timestamp +
                            " HAVE_INTERNET_CONNECTIVITY=" + HAVE_INTERNET_CONNECTIVITY);
@@ -1338,7 +1157,6 @@ public class TrifaToxService extends Service
                                     if ((!global_showing_messageview) && (!global_showing_anygroupview))
                                     {
                                         set_all_friends_offline();
-                                        set_all_conferences_inactive();
                                     }
                                 }
                                 // so that the app knows we went offline
@@ -1380,7 +1198,6 @@ public class TrifaToxService extends Service
                                     if ((!global_showing_messageview) && (!global_showing_anygroupview))
                                     {
                                         set_all_friends_offline();
-                                        set_all_conferences_inactive();
                                     }
                                 }
                                 // so that the app knows we went offline
@@ -1425,7 +1242,6 @@ public class TrifaToxService extends Service
                                     if ((!global_showing_messageview) && (!global_showing_anygroupview))
                                     {
                                         set_all_friends_offline();
-                                        set_all_conferences_inactive();
                                     }
                                 }
                                 // so that the app knows we went offline
@@ -1479,22 +1295,6 @@ public class TrifaToxService extends Service
                                 try
                                 {
                                     load_and_add_all_friends();
-                                }
-                                catch (Exception e)
-                                {
-                                }
-                                // load conferences again
-                                try
-                                {
-                                    load_and_add_all_conferences();
-                                }
-                                catch (Exception e)
-                                {
-                                }
-                                // load groups again
-                                try
-                                {
-                                    load_and_add_all_groups();
                                 }
                                 catch (Exception e)
                                 {
@@ -1711,15 +1511,6 @@ public class TrifaToxService extends Service
                 try
                 {
                     Thread.sleep(100); // wait a bit, for "something" to finish up in the native code
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                try
-                {
-                    NativeAudio.shutdownEngine();
                 }
                 catch (Exception e)
                 {

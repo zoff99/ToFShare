@@ -6,6 +6,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.zoffcc.applications.tofshare.R;
+
 public class ConversationDateHeader extends HeaderViewHolder
 {
     private static final String TAG = "trifa.ConversDateHdr";

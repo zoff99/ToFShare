@@ -29,6 +29,8 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.zoffcc.applications.tofshare.R;
+
 import androidx.core.app.NotificationCompat;
 
 import static android.content.Context.NOTIFICATION_SERVICE;

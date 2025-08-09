@@ -43,6 +43,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.zoffcc.applications.sorm.Filetransfer;
 import com.zoffcc.applications.sorm.Message;
+import com.zoffcc.applications.tofshare.R;
 
 import static com.zoffcc.applications.trifa.HelperFiletransfer.remove_ft_from_cache;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;

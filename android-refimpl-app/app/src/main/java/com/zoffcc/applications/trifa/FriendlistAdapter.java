@@ -29,6 +29,7 @@ import com.l4digital.fastscroll.FastScroller;
 import com.zoffcc.applications.sorm.ConferenceDB;
 import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.GroupDB;
+import com.zoffcc.applications.tofshare.R;
 
 import java.util.Iterator;
 import java.util.List;
@@ -74,32 +75,6 @@ public class FriendlistAdapter extends RecyclerView.Adapter implements FastScrol
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_entry, parent, false);
                 }
                 return new FriendListHolder(view, this.context);
-
-            case CombinedFriendsAndConferences_model.ITEM_IS_GROUP:
-                if (PREF__compact_friendlist)
-                {
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_conf_entry_compact,
-                                                                            parent, false);
-                }
-                else
-                {
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_conf_entry, parent,
-                                                                            false);
-                }
-                return new GroupListHolder(view, this.context);
-
-            case CombinedFriendsAndConferences_model.ITEM_IS_CONFERENCE:
-                if (PREF__compact_friendlist)
-                {
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_conf_entry_compact,
-                                                                            parent, false);
-                }
-                else
-                {
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_conf_entry, parent,
-                                                                            false);
-                }
-                return new ConferenceListHolder(view, this.context);
         }
 
         // TODO: should never get here!?
@@ -144,14 +119,6 @@ public class FriendlistAdapter extends RecyclerView.Adapter implements FastScrol
                 case CombinedFriendsAndConferences_model.ITEM_IS_FRIEND:
                     // Log.i(TAG, "onBindViewHolder:ITEM_IS_FRIEND");
                     ((FriendListHolder) holder).bindFriendList(fl2.friend_item);
-                    break;
-                case CombinedFriendsAndConferences_model.ITEM_IS_CONFERENCE:
-                    // Log.i(TAG, "onBindViewHolder:ITEM_IS_CONFERENCE");
-                    ((ConferenceListHolder) holder).bindFriendList(fl2.conference_item);
-                    break;
-                case CombinedFriendsAndConferences_model.ITEM_IS_GROUP:
-                    // Log.i(TAG, "onBindViewHolder:ITEM_IS_GROUP");
-                    ((GroupListHolder) holder).bindFriendList(fl2.group_item);
                     break;
             }
         }

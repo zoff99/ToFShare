@@ -28,10 +28,6 @@ import android.view.MenuItem;
 import androidx.appcompat.view.ActionMode;
 import androidx.core.view.MenuItemCompat;
 
-import static com.zoffcc.applications.trifa.HelperConference.copy_selected_conference_messages;
-import static com.zoffcc.applications.trifa.HelperConference.copy_selected_group_messages;
-import static com.zoffcc.applications.trifa.HelperConference.delete_selected_conference_messages;
-import static com.zoffcc.applications.trifa.HelperConference.delete_selected_group_messages;
 import static com.zoffcc.applications.trifa.HelperMessage.copy_selected_messages;
 import static com.zoffcc.applications.trifa.HelperMessage.delete_selected_messages;
 import static com.zoffcc.applications.trifa.HelperMessage.save_selected_messages;

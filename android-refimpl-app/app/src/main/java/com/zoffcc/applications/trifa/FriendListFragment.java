@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import com.zoffcc.applications.sorm.ConferenceDB;
 import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.GroupDB;
+import com.zoffcc.applications.tofshare.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -341,24 +342,6 @@ public class FriendListFragment extends Fragment
         try
         {
             FriendListHolder.remove_progress_dialog();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        try
-        {
-            ConferenceListHolder.remove_progress_dialog();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        try
-        {
-            GroupListHolder.remove_progress_dialog();
         }
         catch (Exception e)
         {
