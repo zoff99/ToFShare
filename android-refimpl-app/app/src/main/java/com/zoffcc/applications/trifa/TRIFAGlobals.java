@@ -21,8 +21,6 @@ package com.zoffcc.applications.trifa;
 
 import android.graphics.Color;
 
-import com.zoffcc.applications.sorm.BootstrapNodeEntryDB;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,24 +96,6 @@ public class TRIFAGlobals
     public static final long UINT64_MAX_JAVA = 0xffffffffffffffffL; // 0xffffffffffffffff == UINT64_MAX
      */
 
-    // ----------
-    // https://toxme.io/u/echobot
-    //  echobot@toxme.io
-    final static String ECHOBOT_TOXID = "76518406F6A9F2217E8DC487CC783C25CC16A15EB36FF32E335A235342C48A39218F515C39A6";
-    final static String ECHOBOT_INIT_NAME = "Echobot";
-    final static String ECHOBOT_INIT_STATUSMSG = "A tiny bot to test Tox audio and video.";
-    //
-    final static String TOXIRC_TOKTOK_CONFID = "836eaf5f6af15a9608feb231e48112f074b7625c054446163a4d8311a5abbb19";
-    final static String TOXIRC_PUBKEY = "A922A51E1C91205B9F7992E2273107D47C72E8AE909C61C28A77A4A2A115431B";
-    //
-    final static String TOXIRC_TOKTOK_GROUPID = "fcd19cef34d5fcc970562c849808c370fb6c54fbc1a1c74d9691582ed597dd61";
-    final static String TOXIRC_NGC_PUBKEY = "7C6F258261CB4BB3A1ADD7756728558926E8BD794E340FC1DED13343726FDB75";
-    final static String TOXIRC_TOKTOK_IRC_USER_PUBKEY = "05D78D2393A4DFB689912C567341EC5B1B2E1591B1FE14B46CBD31899F6F5";
-    //
-    final static String TOX_TRIFA_PUBLIC_GROUPID = "154b3973bd0e66304fd6179a8a54759073649e09e6e368f0334fc6ed666ab762";
-    // ----------
-
-    final static boolean ADD_BOTS_ON_STARTUP = true;
     final static boolean DELETE_SQL_AND_VFS_ON_ERROR = false; // true -> will delete all data on any ERROR with SQL and VFS !!!
 
     final static String VFS_TMP_FILE_DIR = "/tempdir/files/";

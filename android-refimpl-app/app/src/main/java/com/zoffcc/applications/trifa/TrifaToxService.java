@@ -59,15 +59,12 @@ import static com.zoffcc.applications.trifa.HelperFriend.friend_call_push_url;
 import static com.zoffcc.applications.trifa.HelperFriend.get_friend_msgv3_capability;
 import static com.zoffcc.applications.trifa.HelperFriend.is_friend_online;
 import static com.zoffcc.applications.trifa.HelperFriend.is_friend_online_real;
-import static com.zoffcc.applications.trifa.HelperFriend.main_get_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.set_all_friends_offline;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_by_public_key__wrapper;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_get_public_key__wrapper;
-import static com.zoffcc.applications.trifa.HelperFriend.update_friend_in_db_connection_status;
 import static com.zoffcc.applications.trifa.HelperGeneric.IPisValid;
 import static com.zoffcc.applications.trifa.HelperGeneric.battery_saving_can_sleep;
 import static com.zoffcc.applications.trifa.HelperGeneric.bootstrap_single_wrapper;
-import static com.zoffcc.applications.trifa.HelperGeneric.bytes_to_hex;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_combined_connection_status;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_toxconnection_wrapper;
@@ -83,7 +80,6 @@ import static com.zoffcc.applications.trifa.HelperGeneric.vfs__unmount;
 import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_messageid;
 import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_no_read_recvedts;
 import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_resend_count;
-import static com.zoffcc.applications.trifa.HelperRelay.is_any_relay;
 import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notification_cancel;
 import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notification_change;
 import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notification_change_wrapper;
@@ -101,17 +97,7 @@ import static com.zoffcc.applications.trifa.MainActivity.cache_pubkey_fnum;
 import static com.zoffcc.applications.trifa.MainActivity.context_s;
 import static com.zoffcc.applications.trifa.MainActivity.get_my_toxid;
 import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
-import static com.zoffcc.applications.trifa.MainActivity.tox_conference_get_chatlist;
-import static com.zoffcc.applications.trifa.MainActivity.tox_conference_get_chatlist_size;
-import static com.zoffcc.applications.trifa.MainActivity.tox_conference_get_id;
-import static com.zoffcc.applications.trifa.MainActivity.tox_conference_get_type;
 import static com.zoffcc.applications.trifa.MainActivity.tox_friend_get_connection_status;
-import static com.zoffcc.applications.trifa.MainActivity.tox_group_get_chat_id;
-import static com.zoffcc.applications.trifa.MainActivity.tox_group_get_grouplist;
-import static com.zoffcc.applications.trifa.MainActivity.tox_group_get_name;
-import static com.zoffcc.applications.trifa.MainActivity.tox_group_get_number_groups;
-import static com.zoffcc.applications.trifa.MainActivity.tox_group_get_privacy_state;
-import static com.zoffcc.applications.trifa.MainActivity.tox_group_is_connected;
 import static com.zoffcc.applications.trifa.MainActivity.tox_iteration_interval;
 import static com.zoffcc.applications.trifa.MainActivity.tox_self_capabilites;
 import static com.zoffcc.applications.trifa.MainActivity.tox_self_get_capabilities;
@@ -124,16 +110,10 @@ import static com.zoffcc.applications.trifa.MainActivity.tox_self_set_name;
 import static com.zoffcc.applications.trifa.MainActivity.tox_self_set_status_message;
 import static com.zoffcc.applications.trifa.MainActivity.tox_service_fg;
 import static com.zoffcc.applications.trifa.MainActivity.tox_util_friend_resend_message_v2;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.ADD_BOTS_ON_STARTUP;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.BATTERY_OPTIMIZATION_LAST_SLEEP1;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.BATTERY_OPTIMIZATION_LAST_SLEEP2;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.BATTERY_OPTIMIZATION_LAST_SLEEP3;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.CONFERENCE_ID_LENGTH;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.ECHOBOT_INIT_NAME;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.ECHOBOT_INIT_STATUSMSG;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.ECHOBOT_TOXID;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.GROUP_ID_LENGTH;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.HAVE_INTERNET_CONNECTIVITY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.MAX_TEXTMSG_RESEND_COUNT_OLDMSG_VERSION;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.PREF_KEY_CUSTOM_BOOTSTRAP_TCP_IP;
@@ -909,46 +889,6 @@ public class TrifaToxService extends Service
                 Log.i(TAG, "tox_iteration_interval_ms=" + tox_iteration_interval_ms);
 
                 MainActivity.tox_iterate();
-
-                if (ADD_BOTS_ON_STARTUP)
-                {
-                    boolean need_add_bots = true;
-
-                    try
-                    {
-                        if (get_g_opts("ADD_BOTS_ON_STARTUP_done") != null)
-                        {
-                            if (get_g_opts("ADD_BOTS_ON_STARTUP_done").equals("true"))
-                            {
-                                need_add_bots = false;
-                                Log.i(TAG, "need_add_bots=false");
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                    if (need_add_bots)
-                    {
-                        Log.i(TAG, "need_add_bots:start");
-                        add_friend_real(ECHOBOT_TOXID);
-                        set_g_opts("ADD_BOTS_ON_STARTUP_done", "true");
-
-                        FriendList f_echobot = main_get_friend(ECHOBOT_TOXID.substring(0, 32 * 2).toUpperCase());
-                        if (f_echobot != null)
-                        {
-                            f_echobot.status_message = ECHOBOT_INIT_STATUSMSG;
-                            f_echobot.name = ECHOBOT_INIT_NAME;
-                            HelperFriend.update_friend_in_db_name(f_echobot);
-                            HelperFriend.update_friend_in_db_status_message(f_echobot);
-                            HelperFriend.update_single_friend_in_friendlist_view(f_echobot);
-                        }
-
-                        Log.i(TAG, "need_add_bots=true (INSERT)");
-                    }
-                }
 
                 global_self_last_went_offline_timestamp = System.currentTimeMillis();
                 Log.i(TAG, "global_self_last_went_offline_timestamp[2]=" + global_self_last_went_offline_timestamp +
