@@ -32,6 +32,8 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.zoffcc.applications.tofshare.R;
+
 import androidx.core.app.NotificationCompat;
 
 import static com.zoffcc.applications.trifa.HelperGeneric.set_g_opts;

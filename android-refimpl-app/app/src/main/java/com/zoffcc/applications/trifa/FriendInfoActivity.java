@@ -36,6 +36,7 @@ import android.widget.TextView;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.zoffcc.applications.sorm.FriendList;
+import com.zoffcc.applications.tofshare.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

@@ -36,6 +36,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.zoffcc.applications.tofshare.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

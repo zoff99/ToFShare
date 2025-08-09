@@ -41,6 +41,7 @@ import com.luseen.autolinklibrary.EmojiTextViewLinks;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.zoffcc.applications.sorm.Message;
+import com.zoffcc.applications.tofshare.R;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;

@@ -33,6 +33,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.zoffcc.applications.tofshare.BuildConfig;
+import com.zoffcc.applications.tofshare.R;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -81,8 +84,8 @@ public class Aboutpage extends AppCompatActivity
 
             aboutPage.setDescription(getString(R.string.Aboutpage_5a) + "\n" + getString(R.string.Aboutpage_5b) + " " +
                                      MainActivity.versionName + "\n\n" +
-                                     "Build: " + get_trifa_build_str()  + "\n" +
-                                     "BuildType: " + BuildConfig.BUILD_TYPE  + "\n" +
+                                     "Build: " + get_trifa_build_str() + "\n" +
+                                     "BuildType: " + BuildConfig.BUILD_TYPE + "\n" +
                                      "TRIfA commit hash: " + BuildConfig.GitHash +
                                      "\n" + "JNI commit hash: " + MainActivity.getNativeLibGITHASH() + "\n" +
                                      "c-toxcore commit hash: " + MainActivity.getNativeLibTOXGITHASH() + "\n" +
@@ -316,47 +319,5 @@ public class Aboutpage extends AppCompatActivity
             e.printStackTrace();
             Log.i(TAG, "onCreate:EE2:" + e.getMessage());
         }
-    }
-
-
-    @Override
-    public void processFinish(String output_part1)
-    {
-        String output = output_part1 + System.getProperty("line.separator") + System.getProperty("line.separator") +
-                        "LastStackTrace:" + System.getProperty("line.separator") +
-                        MainApplication.last_stack_trace_as_string;
-        MainApplication.last_stack_trace_as_string = ""; // reset last stacktrace
-
-        // String DATA_DEBUG_DIR = new File(getExternalFilesDir(null).getAbsolutePath() + "/crashes").toString();
-        String DATA_DEBUG_DIR = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                                         "/trifa/crashes").toString();
-
-        String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-        String full_file_name = DATA_DEBUG_DIR + "/crash_" + date + ".txt";
-        String full_file_name_suppl = DATA_DEBUG_DIR + "/crash_single.txt";
-        String feedback_text = "If there is no file attached, please attach:\n" + full_file_name +
-                               "\nto this email.";
-
-        Logging.writeToFile(output, Aboutpage.this, full_file_name);
-
-        try
-        {
-            new Handler().post(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    progressDialog2.dismiss();
-                }
-            });
-        }
-        catch (Exception ee)
-        {
-        }
-
-        main_activity_s.sendEmailWithAttachment(this, "feedback@zanavi.cc", getString(R.string.Aboutpage_0) + " (a:" +
-                                                                            android.os.Build.VERSION.SDK + ")",
-                                                feedback_text, full_file_name,
-                                                full_file_name_suppl);
     }
 }

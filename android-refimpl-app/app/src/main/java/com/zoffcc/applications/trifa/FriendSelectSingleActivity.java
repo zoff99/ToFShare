@@ -30,6 +30,7 @@ import android.widget.ListView;
 
 import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.GroupDB;
+import com.zoffcc.applications.tofshare.R;
 
 import java.security.acl.Group;
 import java.util.ArrayList;

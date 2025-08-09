@@ -2931,9 +2931,6 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(intent, AddFriendActivity_ID);
                 break;
             case R.id.item_create_group_private:
-                final Intent intent2 = new Intent(this, AddPrivateGroupActivity.class);
-                startActivityForResult(intent2, AddPrivateGroupActivity_ID);
-                break;
             case R.id.item_create_group_public:
                 break;
             case R.id.item_join_group_public:
