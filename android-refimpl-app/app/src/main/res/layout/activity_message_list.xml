@@ -98,9 +98,9 @@
             android:layout_margin="15dp"
             android:layout_weight="0"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:onClick="start_audio_call_to_friend"
+            android:clickable="false"
             android:padding="7dp"
+            android:visibility="gone"
             android:scaleType="centerInside"
             android:src="@drawable/circle_orange" />
 
@@ -112,8 +112,8 @@
             android:layout_margin="7dp"
             android:layout_weight="0"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:onClick="start_call_to_friend"
+            android:clickable="false"
+            android:visibility="gone"
             android:padding="7dp"
             android:scaleType="centerInside"
             android:src="@drawable/circle_orange" />

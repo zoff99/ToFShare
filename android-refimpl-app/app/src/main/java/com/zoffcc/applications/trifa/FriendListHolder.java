@@ -864,62 +864,6 @@ public class FriendListHolder extends RecyclerView.ViewHolder implements View.On
                         v.getContext().startActivity(intent);
                         // show friend info page -----------------
                         break;
-
-                    case R.id.item_create_conference:
-                        int res_conf_new = tox_conference_new();
-                        if (res_conf_new >= 0)
-                        {
-                            cache_confid_confnum.clear();
-
-                            // conference was created, now invite the selected friend
-                            long friend_num_temp_safety2 = tox_friend_by_public_key__wrapper(f2.tox_public_key_string);
-                            if (friend_num_temp_safety2 > 0)
-                            {
-                                int res_conf_invite = tox_conference_invite(friend_num_temp_safety2, res_conf_new);
-                                if (res_conf_invite < 1)
-                                {
-                                    Log.d(TAG, "onMenuItemClick:info:tox_conference_invite:ERR:" + res_conf_invite);
-                                }
-                                else
-                                {
-                                    // invite also my ToxProxy -------------
-                                    if (have_own_relay())
-                                    {
-                                    }
-                                    // invite also my ToxProxy -------------
-                                    HelperGeneric.update_savedata_file_wrapper();
-                                }
-                            }
-                        }
-                        break;
-                    case R.id.item_create_av_conference:
-                        long res_conf_av_new = toxav_add_av_groupchat();
-                        if (res_conf_av_new >= 0)
-                        {
-                            update_savedata_file_wrapper();
-                            // conference was created, now invite the selected friend
-                            long friend_num_temp_safety2 = tox_friend_by_public_key__wrapper(f2.tox_public_key_string);
-                            if (friend_num_temp_safety2 > 0)
-                            {
-                                int res_conf_invite = tox_conference_invite(friend_num_temp_safety2, res_conf_av_new);
-                                if (res_conf_invite < 1)
-                                {
-                                    Log.d(TAG, "onMenuItemClick:info:AV:tox_conference_invite:ERR:" + res_conf_invite);
-                                }
-                                else
-                                {
-                                    HelperGeneric.update_savedata_file_wrapper();
-                                }
-                            }
-                        }
-                        break;
-                    case R.id.item_add_toxproxy:
-                        if (!have_own_relay())
-                        {
-                            show_confirm_addrelay_dialog(v, f2);
-                            // add as ToxProxy relay -----------------
-                        }
-                        break;
                     case R.id.item_dummy01:
                         break;
                     case R.id.item_delete:
@@ -933,15 +877,6 @@ public class FriendListHolder extends RecyclerView.ViewHolder implements View.On
         });
 
         menu.inflate(R.menu.menu_friendlist_item);
-        MenuItem add_toxproxy_item = menu.getMenu().findItem(R.id.item_add_toxproxy);
-        if (have_own_relay())
-        {
-            add_toxproxy_item.setVisible(false);
-        }
-        else
-        {
-            add_toxproxy_item.setVisible(true);
-        }
         menu.show();
 
         return true;
