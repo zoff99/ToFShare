@@ -10,7 +10,7 @@
             android:title="Dark Mode" />
 
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="start_on_boot"
             android:summary="@string/pref_description_start_on_boot"
             android:title="@string/pref_title_start_on_boot" />
@@ -124,6 +124,25 @@
             android:title="@string/pref_title_custom_bootstrap_nodes" />
     </PreferenceCategory>
 
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="X_battery_saving_mode"
+        android:summary="@string/pref_description_X_battery_saving_mode_new"
+        android:title="@string/pref_title_X_battery_saving_mode_new" />
+
+    <ListPreference
+        android:defaultValue="120"
+        android:dependency="X_battery_saving_mode"
+        android:entries="@array/X_battery_saving_timeout_titles"
+        android:entryValues="@array/X_battery_saving_timeout_values"
+        android:key="X_battery_saving_timeout"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="@string/pref_description_X_battery_saving_timeout"
+        android:title="@string/pref_title_X_battery_saving_timeout" />
+
+
     <PreferenceCategory android:title="! unsafe !">
 
         <SwitchPreference
@@ -134,25 +153,4 @@
 
     </PreferenceCategory>
 
-
-    <PreferenceCategory android:title="! eXperimental !">
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="X_battery_saving_mode"
-            android:summary="@string/pref_description_X_battery_saving_mode"
-            android:title="@string/pref_title_X_battery_saving_mode" />
-
-        <ListPreference
-            android:defaultValue="120"
-            android:dependency="X_battery_saving_mode"
-            android:entries="@array/X_battery_saving_timeout_titles"
-            android:entryValues="@array/X_battery_saving_timeout_values"
-            android:key="X_battery_saving_timeout"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:summary="@string/pref_description_X_battery_saving_timeout"
-            android:title="@string/pref_title_X_battery_saving_timeout" />
-
-    </PreferenceCategory>
 </PreferenceScreen>
