@@ -24,7 +24,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 public class FriendSelectSingleActivityItem extends AppCompatActivity
 {

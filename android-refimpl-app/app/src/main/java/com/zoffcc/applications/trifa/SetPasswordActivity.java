@@ -37,8 +37,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.zoffcc.applications.tofshare.BuildConfig;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.BuildConfig;
+import com.zoffcc.applications.trifa.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 

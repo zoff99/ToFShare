@@ -95,8 +95,8 @@ import com.zoffcc.applications.sorm.GroupDB;
 import com.zoffcc.applications.sorm.GroupMessage;
 import com.zoffcc.applications.sorm.Message;
 import com.zoffcc.applications.sorm.OrmaDatabase;
-import com.zoffcc.applications.tofshare.BuildConfig;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.BuildConfig;
+import com.zoffcc.applications.trifa.R;
 
 import java.io.File;
 import java.io.IOException;

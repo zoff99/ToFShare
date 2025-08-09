@@ -66,7 +66,7 @@ import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.zoffcc.applications.sorm.Filetransfer;
 import com.zoffcc.applications.sorm.Message;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 
 import com.l4digital.fastscroll.FastScroller;
 import com.zoffcc.applications.sorm.Message;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import java.util.Iterator;
 import java.util.List;

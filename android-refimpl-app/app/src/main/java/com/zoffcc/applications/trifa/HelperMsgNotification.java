@@ -29,7 +29,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
 
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import java.util.HashSet;
 

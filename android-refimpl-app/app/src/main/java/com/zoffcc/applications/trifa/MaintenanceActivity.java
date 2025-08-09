@@ -48,7 +48,7 @@ import com.zoffcc.applications.sorm.ConferenceMessage;
 import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.Message;
 import com.zoffcc.applications.sorm.OrmaDatabase;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 

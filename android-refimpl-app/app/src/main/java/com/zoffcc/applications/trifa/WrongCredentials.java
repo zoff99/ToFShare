@@ -21,7 +21,7 @@ package com.zoffcc.applications.trifa;
 
 import android.os.Bundle;
 
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

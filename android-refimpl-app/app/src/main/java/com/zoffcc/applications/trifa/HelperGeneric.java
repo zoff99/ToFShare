@@ -64,8 +64,8 @@ import com.zoffcc.applications.sorm.Filetransfer;
 import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.Message;
 import com.zoffcc.applications.sorm.TRIFADatabaseGlobalsNew;
-import com.zoffcc.applications.tofshare.BuildConfig;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.BuildConfig;
+import com.zoffcc.applications.trifa.R;
 
 import org.secuso.privacyfriendlynetmonitor.ConnectionAnalysis.Collector;
 import org.secuso.privacyfriendlynetmonitor.ConnectionAnalysis.Detector;

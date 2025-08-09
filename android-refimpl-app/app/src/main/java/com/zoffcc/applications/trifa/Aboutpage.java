@@ -33,8 +33,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.zoffcc.applications.tofshare.BuildConfig;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.BuildConfig;
+import com.zoffcc.applications.trifa.R;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

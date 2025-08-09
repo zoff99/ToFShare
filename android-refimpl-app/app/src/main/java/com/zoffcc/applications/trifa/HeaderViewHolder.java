@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 public class HeaderViewHolder extends RecyclerView.ViewHolder
 {

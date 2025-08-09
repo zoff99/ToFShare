@@ -27,7 +27,7 @@ import android.view.View;
 import com.luseen.autolinklibrary.AutoLinkMode;
 import com.luseen.autolinklibrary.EmojiTextViewLinks;
 import com.zoffcc.applications.sorm.Message;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 public class MessageListHolder_error extends RecyclerView.ViewHolder
 {

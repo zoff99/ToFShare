@@ -25,7 +25,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import androidx.appcompat.view.ActionMode;
 import androidx.core.view.MenuItemCompat;

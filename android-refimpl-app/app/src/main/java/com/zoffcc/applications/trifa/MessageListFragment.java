@@ -32,7 +32,7 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.l4digital.fastscroll.FastScroller;
 import com.zoffcc.applications.sorm.Message;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import java.util.ArrayList;
 import java.util.List;

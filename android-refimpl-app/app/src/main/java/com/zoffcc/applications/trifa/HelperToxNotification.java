@@ -29,7 +29,7 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import androidx.core.app.NotificationCompat;
 

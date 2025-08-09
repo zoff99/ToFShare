@@ -236,7 +236,7 @@ android {
             // proguardFile ('proguard-disable.pro')
         }
     }
-    namespace 'com.zoffcc.applications.tofshare'
+    namespace 'com.zoffcc.applications.trifa'
 }
 
 

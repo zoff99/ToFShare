@@ -30,7 +30,7 @@ import android.view.ViewGroup;
 import com.zoffcc.applications.sorm.ConferenceDB;
 import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.GroupDB;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import java.util.ArrayList;
 import java.util.List;

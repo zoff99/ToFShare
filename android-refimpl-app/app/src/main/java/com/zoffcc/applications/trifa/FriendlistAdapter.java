@@ -29,7 +29,7 @@ import com.l4digital.fastscroll.FastScroller;
 import com.zoffcc.applications.sorm.ConferenceDB;
 import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.GroupDB;
-import com.zoffcc.applications.tofshare.R;
+import com.zoffcc.applications.trifa.R;
 
 import java.util.Iterator;
 import java.util.List;
