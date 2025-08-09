@@ -515,10 +515,6 @@ public class MainActivity extends AppCompatActivity
     static List<Long> selected_messages = new ArrayList<Long>();
     static List<Long> selected_messages_text_only = new ArrayList<Long>();
     static List<Long> selected_messages_incoming_file = new ArrayList<Long>();
-    static List<Long> selected_conference_messages = new ArrayList<Long>();
-    static List<Long> selected_group_messages = new ArrayList<Long>();
-    static List<Long> selected_group_messages_text_only = new ArrayList<Long>();
-    static List<Long> selected_group_messages_incoming_file = new ArrayList<Long>();
     //
     // YUV conversion -------
     static ScriptIntrinsicYuvToRGB yuvToRgb = null;

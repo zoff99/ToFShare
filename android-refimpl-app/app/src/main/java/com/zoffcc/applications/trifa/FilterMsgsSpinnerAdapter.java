@@ -28,6 +28,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zoffcc.applications.tofshare.R;
+
 import java.util.List;
 
 public class FilterMsgsSpinnerAdapter extends ArrayAdapter<String>

@@ -39,6 +39,7 @@ import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.zoffcc.applications.sorm.FriendList;
+import com.zoffcc.applications.tofshare.R;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
@@ -816,8 +817,6 @@ public class FriendListHolder extends RecyclerView.ViewHolder implements View.On
 
                             send_all_friend_pubkeys_to_relay(f2.tox_public_key_string);
                             send_relay_pubkey_to_all_friends(f2.tox_public_key_string);
-                            invite_to_all_conferences_own_relay(f2.tox_public_key_string);
-                            invite_to_all_groups_own_relay(f2.tox_public_key_string);
                         }
                         catch (Exception e)
                         {
@@ -886,11 +885,8 @@ public class FriendListHolder extends RecyclerView.ViewHolder implements View.On
                                     // invite also my ToxProxy -------------
                                     if (have_own_relay())
                                     {
-                                        invite_to_conference_own_relay(res_conf_new);
                                     }
                                     // invite also my ToxProxy -------------
-                                    add_conference_wrapper(friend_num_temp_safety2, res_conf_new, "",
-                                                           TOX_CONFERENCE_TYPE_TEXT.value, false);
                                     HelperGeneric.update_savedata_file_wrapper();
                                 }
                             }
@@ -912,8 +908,6 @@ public class FriendListHolder extends RecyclerView.ViewHolder implements View.On
                                 }
                                 else
                                 {
-                                    add_conference_wrapper(friend_num_temp_safety2, res_conf_av_new, "",
-                                                           TOX_CONFERENCE_TYPE_AV.value, false);
                                     HelperGeneric.update_savedata_file_wrapper();
                                 }
                             }

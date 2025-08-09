@@ -49,6 +49,7 @@ import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.zoffcc.applications.sorm.Message;
+import com.zoffcc.applications.tofshare.R;
 
 import java.net.URLConnection;
 

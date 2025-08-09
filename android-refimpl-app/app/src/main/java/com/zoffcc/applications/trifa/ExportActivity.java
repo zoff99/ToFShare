@@ -33,6 +33,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zoffcc.applications.tofshare.R;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,7 +62,7 @@ public class ExportActivity extends AppCompatActivity
         setContentView(R.layout.activity_export);
 
         // prevent screenshots and also dont show the window content in recent activity screen
-        initializeScreenshotSecurity(this);
+        //initializeScreenshotSecurity(this);
 
         TextView text_toxpass = findViewById(R.id.text_toxpass);
         TextView text_dbpass = findViewById(R.id.text_dbpass);

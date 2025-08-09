@@ -37,6 +37,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.zoffcc.applications.tofshare.BuildConfig;
+import com.zoffcc.applications.tofshare.R;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import static com.zoffcc.applications.trifa.MainActivity.getRandomString;

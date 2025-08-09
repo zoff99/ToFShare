@@ -27,6 +27,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.zoffcc.applications.tofshare.R;
+
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -148,7 +150,6 @@ public class ShareActivity extends AppCompatActivity
                     }
                     else if (key_only_sanitzied.length() == (TOX_GROUP_CHAT_ID_SIZE * 2))
                     {
-                        handleToxNGCPublicGroupInvite(key_only_sanitzied);
                     }
                 }
             }
@@ -299,20 +300,6 @@ public class ShareActivity extends AppCompatActivity
         this.finish();
     }
 
-    void handleToxNGCPublicGroupInvite(final String ngc_group_pubkey)
-    {
-        try
-        {
-            Log.i(TAG, "handleToxFriendInvite:ngc_group_pubkey=" + ngc_group_pubkey.substring(0, 5));
-        }
-        catch(Exception ignored)
-        {
-        }
-        JoinPublicGroupActivity.show_join_public_group_activity(this, ngc_group_pubkey);
-        // close this share activity
-        this.finish();
-    }
-
     void handleSendText(Intent intent, String friend_pubkey)
     {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -340,8 +327,6 @@ public class ShareActivity extends AppCompatActivity
             }
             else if (type == 2)
             {
-                add_attachment_ngc(this, intent_fixup, intent, id, false);
-                GroupMessageListActivity.show_messagelist_for_id(this, id, null);
             }
             // close this share activity
             this.finish();
@@ -363,7 +348,6 @@ public class ShareActivity extends AppCompatActivity
                 }
                 else if (type == 2)
                 {
-                    add_attachment_ngc(this, intent_fixup, intent, id, false);
                 }
             }
 
@@ -373,7 +357,6 @@ public class ShareActivity extends AppCompatActivity
             }
             else if (type == 2)
             {
-                GroupMessageListActivity.show_messagelist_for_id(this, id, null);
             }
             // close this share activity
             this.finish();

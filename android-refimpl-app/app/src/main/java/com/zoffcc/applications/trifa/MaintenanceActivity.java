@@ -48,6 +48,7 @@ import com.zoffcc.applications.sorm.ConferenceMessage;
 import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.Message;
 import com.zoffcc.applications.sorm.OrmaDatabase;
+import com.zoffcc.applications.tofshare.R;
 
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 
@@ -200,23 +201,6 @@ public class MaintenanceActivity extends AppCompatActivity implements StrongBuil
                 try
                 {
                     Intent intent = new Intent(getBaseContext(), IOBrowser.class);
-                    startActivity(intent);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        button_audio_roundtrip_test_start.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                try
-                {
-                    Intent intent = new Intent(getBaseContext(), AudioRoundtripActivity.class);
                     startActivity(intent);
                 }
                 catch (Exception e)

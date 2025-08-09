@@ -45,6 +45,7 @@ import android.widget.LinearLayout;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.zoffcc.applications.tofshare.R;
 
 import java.util.List;
 

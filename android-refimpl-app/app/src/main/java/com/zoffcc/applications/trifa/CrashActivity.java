@@ -38,6 +38,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.zoffcc.applications.tofshare.R;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,19 +62,6 @@ public class CrashActivity extends AppCompatActivity
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crash);
-
-        // --- make sure we reset the audio mode ---
-        reset_audio_mode();
-        try
-        {
-            AudioManager am2 = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            am2.setMode(AudioManager.MODE_NORMAL);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        // --- make sure we reset the audio mode ---
 
         CrashView = (View) this.findViewById(R.id.CrashView);
         CrashView.setOnTouchListener(new View.OnTouchListener()
@@ -145,13 +134,6 @@ public class CrashActivity extends AppCompatActivity
                                     {
                                     }
                                 });
-
-                                // get logcat messages ----------------
-                                Logging x = new Logging();
-                                Logging.delegate = CrashActivity.this;
-                                x.new PopulateLogcatAsyncTask(CrashActivity.this.getApplicationContext()).execute();
-                                // get logcat messages ----------------
-
                             }
                             catch (Exception e_rep)
                             {
@@ -206,13 +188,6 @@ public class CrashActivity extends AppCompatActivity
                                     {
                                     }
                                 });
-
-                                // get logcat messages ----------------
-                                Logging x = new Logging();
-                                Logging.delegate = CrashActivity.this;
-                                x.new PopulateLogcatAsyncTask(CrashActivity.this.getApplicationContext()).execute();
-                                // get logcat messages ----------------
-
                             }
                             catch (Exception e_rep)
                             {
@@ -283,55 +258,5 @@ public class CrashActivity extends AppCompatActivity
                                                          PendingIntent.FLAG_CANCEL_CURRENT|PendingIntent.FLAG_IMMUTABLE);
         AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 300, intent); // restart app after n seconds delay
-    }
-
-    @Override
-    public void processFinish(String output_part1)
-    {
-        String output = output_part1 + System.getProperty("line.separator") + System.getProperty("line.separator") +
-                        "LastStackTrace:" + System.getProperty("line.separator") +
-                        MainApplication.last_stack_trace_as_string;
-        MainApplication.last_stack_trace_as_string = ""; // reset last stacktrace
-
-        // String DATA_DEBUG_DIR = new File(getExternalFilesDir(null).getAbsolutePath() + "/crashes").toString();
-        String DATA_DEBUG_DIR = new File(
-            Environment.getExternalStorageDirectory().getAbsolutePath() + "/trifa/crashes").toString();
-
-        Log.i(TAG, "processFinish:DATA_DEBUG_DIR=" + DATA_DEBUG_DIR);
-
-        String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-        String full_file_name = DATA_DEBUG_DIR + "/crash_" + date + ".txt";
-        String full_file_name_suppl = DATA_DEBUG_DIR + "/crash_single.txt";
-        String feedback_text = "If there is no file attached, please attach:\n" + full_file_name + "\nto this email.";
-
-        Logging.writeToFile(output, CrashActivity.this, full_file_name);
-
-        try
-        {
-            new Handler().post(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    progressDialog2.dismiss();
-                }
-            });
-        }
-        catch (Exception ee)
-        {
-        }
-
-        try
-        {
-            Log.i(TAG, "processFinish:MainActivity.main_activity_s=" + MainActivity.main_activity_s);
-            MainActivity.main_activity_s.sendEmailWithAttachment(this, "feedback@zanavi.cc",
-                                                                 "TRIfA Crashlog (a:" + android.os.Build.VERSION.SDK +
-                                                                 ")", feedback_text, full_file_name,
-                                                                 full_file_name_suppl);
-        }
-        catch (Exception ee3)
-        {
-        }
-
     }
 }
