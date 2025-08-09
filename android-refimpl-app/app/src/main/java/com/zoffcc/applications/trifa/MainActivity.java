@@ -434,7 +434,7 @@ public class MainActivity extends AppCompatActivity
     static int PREF__video_cam_resolution = 0;
     static final int PREF_GLOBAL_FONT_SIZE_DEFAULT = 2;
     static int PREF__global_font_size = PREF_GLOBAL_FONT_SIZE_DEFAULT;
-    static boolean PREF__allow_open_encrypted_file_via_intent = false;
+    static boolean PREF__allow_open_encrypted_file_via_intent = true;
     static boolean PREF__allow_file_sharing_to_trifa_via_intent = true;
     static boolean PREF__compact_friendlist = false;
     static boolean PREF__compact_chatlist = true;
@@ -1161,12 +1161,12 @@ public class MainActivity extends AppCompatActivity
         try
         {
             PREF__allow_open_encrypted_file_via_intent = settings.getBoolean("allow_open_encrypted_file_via_intent",
-                                                                             false);
+                                                                             true);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            PREF__allow_open_encrypted_file_via_intent = false;
+            PREF__allow_open_encrypted_file_via_intent = true;
         }
 
         PREF__compact_chatlist = true;
@@ -3674,12 +3674,12 @@ public class MainActivity extends AppCompatActivity
         try
         {
             PREF__allow_open_encrypted_file_via_intent = settings.getBoolean("allow_open_encrypted_file_via_intent",
-                                                                             false);
+                                                                             true);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            PREF__allow_open_encrypted_file_via_intent = false;
+            PREF__allow_open_encrypted_file_via_intent = true;
         }
 
         PREF__compact_chatlist = true;
