@@ -2177,7 +2177,7 @@ public class HelperGeneric
         long friendnum_to_use = tox_friend_by_public_key__wrapper(friend_pubkey);
         boolean need_call_push_url = false;
 
-        global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
+        //**BATTSAV**// global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
 
         boolean msgv1 = true;
 
@@ -3107,8 +3107,7 @@ public class HelperGeneric
                        System.currentTimeMillis());
         }
 
-        if ((!global_showing_messageview) && (!global_showing_anygroupview) && (Callstate.state == 0) &&
-            (!Callstate.audio_group_active) && (!Callstate.audio_ngc_group_active))
+        if (!global_showing_messageview)
         {
             if (global_self_last_went_online_timestamp != -1)
             {

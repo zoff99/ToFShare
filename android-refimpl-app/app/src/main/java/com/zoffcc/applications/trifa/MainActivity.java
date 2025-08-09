@@ -208,6 +208,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_connection_
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_last_went_offline_timestamp;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_last_went_online_timestamp;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_anygroupview;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_mainview;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_messageview;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_tox_self_status;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.last_video_frame_received;
@@ -525,6 +526,7 @@ public class MainActivity extends AppCompatActivity
         metrics = resources.getDisplayMetrics();
         global_showing_messageview = false;
         global_showing_anygroupview = false;
+        global_showing_mainview = true;
 
         Log.i(TAG, "is_nightmode_active:" + is_nightmode_active(this));
 
@@ -3208,6 +3210,7 @@ public class MainActivity extends AppCompatActivity
     {
         Log.i(TAG, "onPause");
         super.onPause();
+        global_showing_mainview = false;
         MainActivity.friend_list_fragment = null;
     }
 
@@ -3216,6 +3219,7 @@ public class MainActivity extends AppCompatActivity
     {
         Log.i(TAG, "onResume");
         super.onResume();
+        global_showing_mainview = true;
 
         /*
          // **************************************
@@ -4932,7 +4936,7 @@ public class MainActivity extends AppCompatActivity
         {
             Log.i(TAG, "global_last_activity_for_battery_savings_ts:004:*PING*");
         }
-        global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
+        //**BATTSAV**// global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
 
         try
         {
@@ -5010,7 +5014,7 @@ public class MainActivity extends AppCompatActivity
         {
             Log.i(TAG, "global_last_activity_for_battery_savings_ts:005:*PING*");
         }
-        global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
+        //**BATTSAV**// global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
         HelperGeneric.receive_incoming_message(1, 0, friend_number, friend_message, raw_message, raw_message_length,
                                                null, null, 0);
     }
@@ -5065,7 +5069,7 @@ public class MainActivity extends AppCompatActivity
         {
             Log.i(TAG, "global_last_activity_for_battery_savings_ts:006:*PING*");
         }
-        global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
+        //**BATTSAV**// global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
         // Log.i(TAG, "friend_sync_message_v2_cb:fn=" + friend_number + " full rawmsg    =" + bytes_to_hex(raw_message));
         // Log.i(TAG, "friend_sync_message_v2_cb:fn=" + friend_number + " wrapped rawdata=" + bytes_to_hex(raw_data));
         final ByteBuffer raw_message_buf_wrapped = ByteBuffer.allocateDirect((int) raw_data_length);
@@ -5165,7 +5169,7 @@ public class MainActivity extends AppCompatActivity
             Log.i(TAG, "global_last_activity_for_battery_savings_ts:007:*PING*");
         }
         // Log.i(TAG, "friend_message_cb::IN:fn=" + get_friend_name_from_num(friend_number) + " len=" + length);
-        global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
+        //**BATTSAV**// global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
         HelperGeneric.receive_incoming_message(0, message_type, friend_number, friend_message, null, 0, null,
                                                msgV3hash_bin, message_timestamp);
     }

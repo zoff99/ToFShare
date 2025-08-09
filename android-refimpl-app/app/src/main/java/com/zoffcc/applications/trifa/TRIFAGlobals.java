@@ -40,6 +40,7 @@ public class TRIFAGlobals
     static long global_last_activity_for_battery_savings_ts = -1;
     static long global_self_last_entered_battery_saving_timestamp = -1;
     static boolean global_showing_messageview = false;
+    static boolean global_showing_mainview = false;
     static boolean global_showing_anygroupview = false;
     static int global_tox_self_status = ToxVars.TOX_USER_STATUS.TOX_USER_STATUS_NONE.value;
 
