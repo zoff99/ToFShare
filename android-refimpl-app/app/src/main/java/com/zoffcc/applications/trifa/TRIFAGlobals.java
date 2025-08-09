@@ -41,7 +41,6 @@ public class TRIFAGlobals
     static long global_self_last_entered_battery_saving_timestamp = -1;
     static boolean global_showing_messageview = false;
     static boolean global_showing_mainview = false;
-    static boolean global_showing_anygroupview = false;
     static int global_tox_self_status = ToxVars.TOX_USER_STATUS.TOX_USER_STATUS_NONE.value;
 
     static String global_notification_token = null;
@@ -60,13 +59,17 @@ public class TRIFAGlobals
     final static String TRIFA_GITHUB_NEW_ISSUE_URL = TRIFA_GITHUB_REPO_URL + "/issues/new";
 
     static boolean HAVE_INTERNET_CONNECTIVITY = true;
+    final static int TOX_BOOTSTRAP_MIN_INTERVAL_SECS = 60 * 5; // 5 minutes
     final static int TOX_BOOTSTRAP_AGAIN_AFTER_OFFLINE_MILLIS =
-            1000 * 60 * 2; // bootstrap again after 2 minutes offline
+            1000 * 60 * 5; // bootstrap again after 5 minutes offline
     final static int SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE = 60 * 5; // 5 minutes
     static long BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS = 10 * 60 * (1000 * 60); // 10 hours
     static int BATTERY_OPTIMIZATION_LAST_SLEEP1 = -1;
     static int BATTERY_OPTIMIZATION_LAST_SLEEP2 = -1;
     static int BATTERY_OPTIMIZATION_LAST_SLEEP3 = -1;
+
+    static int RESEND_MSGS_DELTA_SECS = 60 * 10; // 10 minutes;
+    static int RESEND_FILETRANSFERS_DELTA_SECS = 5 * 10; // 5 minutes;
 
     static int AUTO_ACCEPT_FT_MAX_IMAGE_SIZE_IN_MB = 12;
     static int AUTO_ACCEPT_FT_MAX_VIDEO_SIZE_IN_MB = 40;
@@ -262,6 +265,7 @@ public class TRIFAGlobals
 
     static long global_last_activity_outgoung_ft_ts = -1;
     static long global_last_activity_incoming_ft_ts = -1;
+    static long global_last_bootstrap_ts = -1;
 
     static long ONE_HOUR_IN_MS = 3600 * 1000;
     static int MESSAGES_TIMEDELTA_NO_TIMESTAMP_MS = 30 * 1000;

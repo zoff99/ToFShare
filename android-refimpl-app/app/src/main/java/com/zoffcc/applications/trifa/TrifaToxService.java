@@ -119,7 +119,10 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.PREF_KEY_CUSTOM_BOOTSTR
 import static com.zoffcc.applications.trifa.TRIFAGlobals.PREF_KEY_CUSTOM_BOOTSTRAP_UDP_IP;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.PREF_KEY_CUSTOM_BOOTSTRAP_UDP_KEYHEX;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.PREF_KEY_CUSTOM_BOOTSTRAP_UDP_PORT;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.RESEND_FILETRANSFERS_DELTA_SECS;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.RESEND_MSGS_DELTA_SECS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TOX_BOOTSTRAP_AGAIN_AFTER_OFFLINE_MILLIS;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.TOX_BOOTSTRAP_MIN_INTERVAL_SECS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_MSG_TYPE.TRIFA_MSG_FILE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_MSG_TYPE.TRIFA_MSG_TYPE_TEXT;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.USE_MAX_NUMBER_OF_BOOTSTRAP_NODES;
@@ -128,6 +131,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.bootstrap_node_list;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.bootstrapping;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_last_activity_incoming_ft_ts;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_last_activity_outgoung_ft_ts;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.global_last_bootstrap_ts;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_my_name;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_my_status_message;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_my_toxid;
@@ -135,7 +139,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_connection_
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_last_entered_battery_saving_timestamp;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_last_went_offline_timestamp;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_last_went_online_timestamp;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_anygroupview;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_mainview;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_messageview;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.tcprelay_node_list;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_CONNECTION.TOX_CONNECTION_NONE;
@@ -903,8 +907,6 @@ public class TrifaToxService extends Service
                     {
                         if (tox_iteration_interval_ms < 1)
                         {
-                            //Log.i(TAG, "tox_iterate:(tox_iteration_interval_ms < 2ms!!):" + tox_iteration_interval_ms +
-                            //           "ms");
                             Thread.sleep(1);
                         }
                         else
@@ -964,15 +966,8 @@ public class TrifaToxService extends Service
 
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                                 {
-                                    //alarmManager.setExactAndAllowWhileIdle(
-                                    //        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                                    //        SystemClock.elapsedRealtime() +
-                                    //        BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
-                                    //        (int) (Math.random() * 15000d) + 5000, alarmIntent);
-
                                     Log.i(TAG, "get BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS:" +
                                                BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS);
-
                                     try
                                     {
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
@@ -998,39 +993,12 @@ public class TrifaToxService extends Service
                                 }
                                 else
                                 {
-                                    //alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                                    //                      SystemClock.elapsedRealtime() +
-                                    //                      BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
-                                    //                      (int) (Math.random() * 15000d) + 5000,
-                                    //                      alarmIntent);
-
                                     alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +
                                                                                    BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
                                                                                    (int) (Math.random() * 15000d) +
                                                                                    5000, alarmIntent);
                                 }
 
-
-                                //MARSHMALLOW OR ABOVE
-                                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                                {
-                                    //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-                                    //                                       System.currentTimeMillis() +
-                                    //                                       BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
-                                    //                                       (int) (Math.random() * 15000d) +
-                                    //                                       5000, alarmIntent);
-
-                                    //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                                    //                                 SystemClock.elapsedRealtime() +
-                                    //                                 AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-                                    //                                 AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-                                    //                                 alarmIntent);
-
-                                }
-
-                                // ---------------------------------------------------------
-
-
                                 // --------------- set everything to offline ---------------
                                 // --------------- set everything to offline ---------------
                                 // --------------- set everything to offline ---------------
@@ -1045,92 +1013,7 @@ public class TrifaToxService extends Service
 
                                 if (!need_wakeup_now)
                                 {
-                                    if ((!global_showing_messageview) && (!global_showing_anygroupview))
-                                    {
-                                        set_all_friends_offline();
-                                    }
-                                }
-                                // so that the app knows we went offline
-                                global_self_last_went_offline_timestamp = System.currentTimeMillis();
-                                global_self_connection_status = TOX_CONNECTION_NONE.value;
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-
-                                if (!need_wakeup_now)
-                                {
-                                    if ((!global_showing_messageview) && (!global_showing_anygroupview))
-                                    {
-                                        try
-                                        {
-                                            Thread.sleep(30 * 1000);
-                                        }
-                                        catch (Exception es)
-                                        {
-                                        }
-                                    }
-                                }
-                                MainActivity.tox_iterate();
-
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-                                tox_notification_change_wrapper(0, "sleep: " +
-                                                                   (int) ((BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS /
-                                                                           1000) / 60) + "min (" +
-                                                                   BATTERY_OPTIMIZATION_LAST_SLEEP1 + "/" +
-                                                                   BATTERY_OPTIMIZATION_LAST_SLEEP2 + "/" +
-                                                                   BATTERY_OPTIMIZATION_LAST_SLEEP3 + ") " +
-                                                                   long_date_time_format_or_empty(
-                                                                           global_self_last_entered_battery_saving_timestamp)); // set to offline
-
-                                if (!need_wakeup_now)
-                                {
-                                    if ((!global_showing_messageview) && (!global_showing_anygroupview))
-                                    {
-                                        set_all_friends_offline();
-                                    }
-                                }
-                                // so that the app knows we went offline
-                                global_self_connection_status = TOX_CONNECTION_NONE.value;
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-
-                                Log.i(TAG, "entering BATTERY SAVINGS MODE ... 30s");
-
-                                if (!need_wakeup_now)
-                                {
-                                    if ((!global_showing_messageview) && (!global_showing_anygroupview))
-                                    {
-                                        try
-                                        {
-                                            Thread.sleep(30 * 1000);
-                                        }
-                                        catch (Exception es)
-                                        {
-                                        }
-                                    }
-                                }
-                                MainActivity.tox_iterate();
-
-                                Log.i(TAG, "entering BATTERY SAVINGS MODE ... 60s");
-
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-                                tox_notification_change_wrapper(0, "sleep: " +
-                                                                   (int) ((BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS /
-                                                                           1000) / 60) + "min (" +
-                                                                   BATTERY_OPTIMIZATION_LAST_SLEEP1 + "/" +
-                                                                   BATTERY_OPTIMIZATION_LAST_SLEEP2 + "/" +
-                                                                   BATTERY_OPTIMIZATION_LAST_SLEEP3 + ") " +
-                                                                   long_date_time_format_or_empty(
-                                                                           global_self_last_entered_battery_saving_timestamp)); // set to offline
-
-                                if (!need_wakeup_now)
-                                {
-                                    if ((!global_showing_messageview) && (!global_showing_anygroupview))
+                                    if ((!global_showing_messageview) && (!global_showing_mainview))
                                     {
                                         set_all_friends_offline();
                                     }
@@ -1152,7 +1035,7 @@ public class TrifaToxService extends Service
 
                                 for (int ii = 0; ii < sleep_in_sec; ii++)
                                 {
-                                    if ((global_showing_messageview) || (global_showing_anygroupview))
+                                    if ((global_showing_messageview) || (global_showing_mainview))
                                     {
                                         // if the user opens the message view, or any group view -> go online, to be able to send messages
                                         Log.i(TAG, "finish BATTERY SAVINGS MODE (Message view opened)");
@@ -1168,9 +1051,6 @@ public class TrifaToxService extends Service
                                     try
                                     {
                                         Thread.sleep(10 * 1000); // sleep very long!!
-                                        //Log.i(TAG,
-                                        //      "BATTERY SAVINGS MODE (sleep " + ii + "/" + sleep_in_sec +
-                                        //      ")");
                                     }
                                     catch (Exception es)
                                     {
@@ -1193,63 +1073,20 @@ public class TrifaToxService extends Service
 
                                 Log.i(TAG, "BATTERY SAVINGS MODE, load_and_add_all_conferences");
 
-                                // iterate a few times ---------------------
-                                MainActivity.tox_iterate();
-                                try
-                                {
-                                    Thread.sleep(10);
-                                }
-                                catch (Exception es)
-                                {
-                                }
-                                MainActivity.tox_iterate();
-                                try
-                                {
-                                    Thread.sleep(10);
-                                }
-                                catch (Exception es)
-                                {
-                                }
-                                MainActivity.tox_iterate();
-                                try
-                                {
-                                    Thread.sleep(10);
-                                }
-                                catch (Exception es)
-                                {
-                                }
-                                // iterate a few times ---------------------
-
                                 need_wakeup_now = false;
                                 trifa_service_thread = null;
 
-                                // bootstrap_single_wrapper("127.3.2.1",9988, "AAA236D34978D1D5BD822F0A5BEBD2C53C64CC31CD3149350EE27D4D9A2F9FFF");
-
                                 int TOX_CONNECTION_a = tox_self_get_connection_status();
                                 global_self_connection_status = TOX_CONNECTION_a;
-                                if (TOX_CONNECTION_a == TOX_CONNECTION_NONE.value)
-                                {
-                                    bootstrapping = true;
-                                    global_self_last_went_offline_timestamp = System.currentTimeMillis();
-                                    Log.i(TAG, "BATTERY SAVINGS MODE, bootstrapping");
-                                    tox_notification_change_wrapper(TOX_CONNECTION_a,
-                                                                    ""); // set to real connection status
-                                    TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__start__bootstrapping");
-                                    bootstrap_me();
-                                    TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__bootstrapping:" +
-                                                                     tox_self_get_connection_status());
-                                }
-                                else
-                                {
-                                    bootstrapping = false;
-                                    global_self_last_went_online_timestamp = System.currentTimeMillis();
-                                    global_self_last_went_offline_timestamp = -1;
-                                    tox_notification_change_wrapper(TOX_CONNECTION_a,
-                                                                    ""); // set to real connection status
-                                    Log.i(TAG, "BATTERY SAVINGS MODE, already_online");
-
-                                    TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__already_online");
-                                }
+                                bootstrapping = true;
+                                global_self_last_went_offline_timestamp = System.currentTimeMillis();
+                                Log.i(TAG, "BATTERY SAVINGS MODE, bootstrapping");
+                                tox_notification_change_wrapper(TOX_CONNECTION_a,
+                                                                ""); // set to real connection status
+                                TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__start__bootstrapping");
+                                bootstrap_me();
+                                TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__bootstrapping:" +
+                                                                 tox_self_get_connection_status());
 
 
                                 BATTERY_OPTIMIZATION_LAST_SLEEP3 = BATTERY_OPTIMIZATION_LAST_SLEEP2;
@@ -1288,95 +1125,36 @@ public class TrifaToxService extends Service
                         e.printStackTrace();
                     }
 
+                    Log.i(TAG, "tox_iteration_interval_ms==" + tox_iteration_interval_ms + "ms");
                     MainActivity.tox_iterate();
 
-                    /*
-                    int w = 240;
-                    int h = 320;
-                    int y_bytes = w * h;
-                    int u_bytes = (w * h) / 4;
-                    int v_bytes = (w * h) / 4;
-                    byte[] y_buf = new byte[y_bytes];
-                    byte[] u_buf = new byte[u_bytes];
-                    byte[] v_buf = new byte[v_bytes];
-                    byte[] encoded_vframe = new byte[40000];
-                    int encoded_bytes = toxav_ngc_video_encode(300, 240,320,
-                                                               y_buf, y_bytes,
-                                                               u_buf, u_bytes,
-                                                               v_buf, v_bytes,
-                                                               encoded_vframe);
-                    Log.i(TAG, "toxav_ngc_video_encode:bytes=" + encoded_bytes);
-                    int w2 = 240 + 16; // encoder stride added
-                    int h2 = 320;
-                    int y_bytes2 = w2 * h2;
-                    int u_bytes2 = (w2 * h2) / 4;
-                    int v_bytes2 = (w2 * h2) / 4;
-                    byte[] y_buf2 = new byte[y_bytes2];
-                    byte[] u_buf2 = new byte[u_bytes2];
-                    byte[] v_buf2 = new byte[v_bytes2];
-                    int ystride = toxav_ngc_video_decode(encoded_vframe,
-                                           encoded_bytes,
-                                           w2, h2,
-                                           y_buf2,
-                                           u_buf2,
-                                           v_buf2);
-                    Log.i(TAG, "toxav_ngc_video_decode:ystride=" + ystride);
-                    */
-
-                    if ((Callstate.state != 0) || (Callstate.audio_group_active) || (Callstate.audio_ngc_group_active))
+                    if (global_last_activity_outgoung_ft_ts > -1)
                     {
-                        if ((Callstate.audio_group_active) || (Callstate.audio_ngc_group_active))
+                        if ((global_last_activity_outgoung_ft_ts + 200) > System.currentTimeMillis())
                         {
-                            tox_iteration_interval_ms = 5; // if we are in a group audio call iterate more often
-                            // Log.i(TAG, "(tox_iteration_interval_ms):001");
+                            // iterate faster if outgoing filetransfers are active
+                            tox_iteration_interval_ms = 5;
                         }
                         else
                         {
-                            tox_iteration_interval_ms = 10; // if we are in a video/audio call iterate more often
-                            // Log.i(TAG, "(tox_iteration_interval_ms):002");
+                            tox_iteration_interval_ms = Math.max(100, MainActivity.tox_iteration_interval());
+                        }
+                    }
+                    else if (global_last_activity_incoming_ft_ts > -1)
+                    {
+                        if ((global_last_activity_incoming_ft_ts + 200) > System.currentTimeMillis())
+                        {
+                            // iterate faster if incoming filetransfers are active
+                            tox_iteration_interval_ms = 5;
+                        }
+                        else
+                        {
+                            tox_iteration_interval_ms = Math.max(100, MainActivity.tox_iteration_interval());
                         }
                     }
                     else
                     {
-                        if (global_last_activity_outgoung_ft_ts > -1)
-                        {
-                            if ((global_last_activity_outgoung_ft_ts + 200) > System.currentTimeMillis())
-                            {
-                                // iterate faster if outgoing filetransfers are active
-                                tox_iteration_interval_ms = 5;
-                                // Log.i(TAG, "(tox_iteration_interval_ms):004");
-                            }
-                            else
-                            {
-                                tox_iteration_interval_ms = tox_iteration_interval();
-                            }
-                        }
-                        else if (global_last_activity_incoming_ft_ts > -1)
-                        {
-                            if ((global_last_activity_incoming_ft_ts + 200) > System.currentTimeMillis())
-                            {
-                                // iterate faster if incoming filetransfers are active
-                                tox_iteration_interval_ms = 5;
-                                // Log.i(TAG, "(tox_iteration_interval_ms):005");
-                            }
-                            else
-                            {
-                                tox_iteration_interval_ms = tox_iteration_interval();
-                            }
-                        }
-                        else
-                        {
-                            // tox_iteration_interval_ms = Math.max(100, MainActivity.tox_iteration_interval());
-                            tox_iteration_interval_ms = tox_iteration_interval();
-                            // Log.i(TAG, "tox_iteration_interval_ms:006=" + tox_iteration_interval_ms);
-                        }
-
-                        if (tox_iteration_interval_ms == 50)
-                        {
-                            // HINT: when nothing special is happening, iterate less often to save battery
-                            tox_iteration_interval_ms = 100;
-                            // Log.i(TAG, "tox_iteration_interval_ms:007=" + tox_iteration_interval_ms);
-                        }
+                        tox_iteration_interval_ms = Math.max(100, MainActivity.tox_iteration_interval());
                     }
 
                     if (global_self_connection_status != TOX_CONNECTION_NONE.value)
@@ -1437,31 +1215,31 @@ public class TrifaToxService extends Service
 
     private void send_or_resend_pending_messages()
     {
-        if ((last_resend_pending_messages4_ms + (5 * 1000)) < System.currentTimeMillis())
+        if ((last_resend_pending_messages4_ms + (RESEND_MSGS_DELTA_SECS * 1000L)) < System.currentTimeMillis())
         {
             last_resend_pending_messages4_ms = System.currentTimeMillis();
             resend_push_for_v3_messages();
         }
 
-        if ((last_resend_pending_messages0_ms + (30 * 1000)) < System.currentTimeMillis())
+        if ((last_resend_pending_messages0_ms + (RESEND_MSGS_DELTA_SECS * 1000L)) < System.currentTimeMillis())
         {
             last_resend_pending_messages0_ms = System.currentTimeMillis();
             resend_old_messages(null);
         }
 
-        if ((last_resend_pending_messages1_ms + (30 * 1000)) < System.currentTimeMillis())
+        if ((last_resend_pending_messages1_ms + (RESEND_MSGS_DELTA_SECS * 1000L)) < System.currentTimeMillis())
         {
             last_resend_pending_messages1_ms = System.currentTimeMillis();
             resend_v3_messages(null);
         }
 
-        if ((last_resend_pending_messages2_ms + (30 * 1000)) < System.currentTimeMillis())
+        if ((last_resend_pending_messages2_ms + (RESEND_MSGS_DELTA_SECS * 1000L)) < System.currentTimeMillis())
         {
             last_resend_pending_messages2_ms = System.currentTimeMillis();
             resend_v2_messages(false);
         }
 
-        if ((last_resend_pending_messages3_ms + (120 * 1000)) < System.currentTimeMillis())
+        if ((last_resend_pending_messages3_ms + (RESEND_MSGS_DELTA_SECS * 1000L)) < System.currentTimeMillis())
         {
             last_resend_pending_messages3_ms = System.currentTimeMillis();
             resend_v2_messages(true);
@@ -1470,7 +1248,7 @@ public class TrifaToxService extends Service
 
     private void start_queued_filetransfers()
     {
-        if ((last_start_queued_fts_ms + (4 * 1000)) < System.currentTimeMillis())
+        if ((last_start_queued_fts_ms + (RESEND_FILETRANSFERS_DELTA_SECS * 1000L)) < System.currentTimeMillis())
         {
             last_start_queued_fts_ms = System.currentTimeMillis();
             // Log.i(TAG, "start_queued_outgoing_FTs ============================================");
@@ -1614,6 +1392,23 @@ public class TrifaToxService extends Service
     }
 
     static void bootstrap_me()
+    {
+        if (global_last_bootstrap_ts > -1)
+        {
+            if ((global_last_bootstrap_ts + TOX_BOOTSTRAP_MIN_INTERVAL_SECS) <= System.currentTimeMillis())
+            {
+                global_last_bootstrap_ts = System.currentTimeMillis();
+                bootstrap_me__real();
+            }
+        }
+        else
+        {
+            global_last_bootstrap_ts = System.currentTimeMillis();
+            bootstrap_me__real();
+        }
+    }
+
+    static void bootstrap_me__real()
     {
         Log.i(TAG, "bootstrap_me");
 

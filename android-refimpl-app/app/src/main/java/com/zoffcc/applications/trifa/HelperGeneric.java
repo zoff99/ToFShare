@@ -19,8 +19,6 @@
 
 package com.zoffcc.applications.trifa;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.Notification;
 import android.content.Context;
@@ -36,8 +34,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.AudioDeviceInfo;
-import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -60,21 +56,16 @@ import com.bumptech.glide.request.target.NotificationTarget;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.zoffcc.applications.sorm.ConferenceDB;
-import com.zoffcc.applications.sorm.ConferenceMessage;
 import com.zoffcc.applications.sorm.Filetransfer;
 import com.zoffcc.applications.sorm.FriendList;
 import com.zoffcc.applications.sorm.Message;
 import com.zoffcc.applications.sorm.TRIFADatabaseGlobalsNew;
-import com.zoffcc.applications.trifa.BuildConfig;
-import com.zoffcc.applications.trifa.R;
 
 import org.secuso.privacyfriendlynetmonitor.ConnectionAnalysis.Collector;
 import org.secuso.privacyfriendlynetmonitor.ConnectionAnalysis.Detector;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -83,7 +74,6 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -98,7 +88,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
-import static com.zoffcc.applications.trifa.Callstate.java_video_encoder_first_frame_in;
 import static com.zoffcc.applications.trifa.HelperFriend.friend_call_push_url;
 import static com.zoffcc.applications.trifa.HelperFriend.main_get_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_by_public_key__wrapper;
@@ -114,10 +103,8 @@ import static com.zoffcc.applications.trifa.MainActivity.PREF__compact_chatlist;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__global_font_size;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_CUSTOM_WRITE_CACHE;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;
-import static com.zoffcc.applications.trifa.MainActivity.audio_buffer_2;
 import static com.zoffcc.applications.trifa.MainActivity.context_s;
 import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
-import static com.zoffcc.applications.trifa.MainActivity.toxav_option_set;
 import static com.zoffcc.applications.trifa.ProfileActivity.update_toxid_display_s;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FAB_SCROLL_TO_BOTTOM_FADEIN_MS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FAB_SCROLL_TO_BOTTOM_FADEOUT_MS;
@@ -127,30 +114,21 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.MESSAGE_AVATAR_HEIGHT_N
 import static com.zoffcc.applications.trifa.TRIFAGlobals.MESSAGE_V2_MSG_SENT_OK;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_EDIT_ACTION.NOTIFICATION_EDIT_ACTION_ADD;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.TOX_NGC_HISTORY_SYNC_MAX_PEERNAME_BYTES;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_FT_DIRECTION.TRIFA_FT_DIRECTION_OUTGOING;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_MSG_TYPE.TRIFA_MSG_TYPE_TEXT;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_SYNC_TYPE.TRIFA_SYNC_TYPE_NGC_PEERS;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_SYNC_TYPE.TRIFA_SYNC_TYPE_NONE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.VFS_OWN_AVATAR_DIR;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.VFS_OWN_AVATAR_DIR_FILENAME_WITH_EXTENSION;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.VFS_PREFIX;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.VFS_TMP_FILE_DIR;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.VIDEO_CODEC_H264;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.VIDEO_FRAME_RATE_INCOMING;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.VIDEO_FRAME_RATE_OUTGOING;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.cache_ft_fis_saf;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.cache_ft_fos;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_last_activity_for_battery_savings_ts;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_connection_status;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_self_last_went_online_timestamp;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_anygroupview;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_mainview;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_showing_messageview;
-import static com.zoffcc.applications.trifa.ToxVars.TOXAV_OPTIONS_OPTION.TOXAV_CLIENT_VIDEO_CAPTURE_DELAY_MS;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_CAPABILITY_MSGV2;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_CONNECTION.TOX_CONNECTION_NONE;
-import static com.zoffcc.applications.trifa.ToxVars.TOX_CONNECTION.TOX_CONNECTION_TCP;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_FILE_CONTROL.TOX_FILE_CONTROL_RESUME;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_FILE_KIND.TOX_FILE_KIND_AVATAR;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_HASH_LENGTH;
@@ -1200,54 +1178,6 @@ public class HelperGeneric
         {
             e.printStackTrace();
             Log.i(TAG, "put_vfs_image_on_imageview:EE1:" + e.getMessage());
-        }
-    }
-
-    static void put_vfs_image_on_imageview_real_remoteviews(Context c, Notification notification, int notification_id, int viewid, RemoteViews rv, Drawable placholder, String vfs_image_filename, boolean force_update, boolean is_friend_avatar, FriendList fl)
-    {
-        try
-        {
-            NotificationTarget notificationTarget = new NotificationTarget(c, viewid, rv, notification,
-                                                                           notification_id);
-
-            info.guardianproject.iocipher.File f1 = new info.guardianproject.iocipher.File(vfs_image_filename);
-            if (placholder == null)
-            {
-                if (is_friend_avatar)
-                {
-                    GlideApp.with(c).asBitmap().load(f1).placeholder(
-                            R.drawable.round_loading_animation).diskCacheStrategy(DiskCacheStrategy.NONE).signature(
-                            new com.bumptech.glide.signature.StringSignatureZ(
-                                    "_avatar_" + fl.avatar_pathname + "/" + fl.avatar_filename + "_" +
-                                    fl.avatar_update_timestamp)).skipMemoryCache(false).into(notificationTarget);
-                }
-                else
-                {
-                    GlideApp.with(c).asBitmap().load(f1).placeholder(
-                            R.drawable.round_loading_animation).diskCacheStrategy(
-                            DiskCacheStrategy.NONE).skipMemoryCache(force_update).into(notificationTarget);
-                }
-            }
-            else
-            {
-                if (is_friend_avatar)
-                {
-                    GlideApp.with(c).asBitmap().load(f1).placeholder(placholder).diskCacheStrategy(
-                            DiskCacheStrategy.NONE).signature(new com.bumptech.glide.signature.StringSignatureZ(
-                            "_avatar_" + fl.avatar_pathname + "/" + fl.avatar_filename + "_" +
-                            fl.avatar_update_timestamp)).skipMemoryCache(false).into(notificationTarget);
-                }
-                else
-                {
-                    GlideApp.with(c).asBitmap().load(f1).placeholder(placholder).diskCacheStrategy(
-                            DiskCacheStrategy.NONE).skipMemoryCache(force_update).into(notificationTarget);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            Log.i(TAG, "put_vfs_image_on_imageview_real_remoteviews:EE1:" + e.getMessage());
         }
     }
 
@@ -3101,11 +3031,11 @@ public class HelperGeneric
                        " global_showing_messageview=" + global_showing_messageview +
                        " global_showing_mainview=" + global_showing_mainview +
                        " global_self_last_went_online_timestamp=" + global_self_last_went_online_timestamp +
-                       " global_self_last_went_online_timestamp2=" + (System.currentTimeMillis() - global_self_last_went_online_timestamp) +
+                       " global_self_last_went_online_timestamp:delta=" + (System.currentTimeMillis() - global_self_last_went_online_timestamp) +
                        " global_last_activity_for_battery_savings_ts=" + global_last_activity_for_battery_savings_ts +
-                       " global_last_activity_for_battery_savings_ts2=" + (System.currentTimeMillis() - global_last_activity_for_battery_savings_ts) +
-                       " SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE=" + SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE + " System.currentTimeMillis()=" +
-                       System.currentTimeMillis());
+                       " global_last_activity_for_battery_savings_ts:delta=" + (System.currentTimeMillis() - global_last_activity_for_battery_savings_ts) +
+                       " SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE=" + SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE +
+                       " System.currentTimeMillis()=" + System.currentTimeMillis());
             // @formatter:on
         }
 
@@ -3113,54 +3043,20 @@ public class HelperGeneric
         {
             if (global_self_last_went_online_timestamp != -1)
             {
-                if ((global_self_last_went_online_timestamp + SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE * 1000) <
-                    System.currentTimeMillis())
+                if ((global_self_last_went_online_timestamp + SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE * 1000) < System.currentTimeMillis())
                 {
                     if ((global_last_activity_for_battery_savings_ts +
                          SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE * 1000) < System.currentTimeMillis())
                     {
-                        Log.i(TAG, "battery_saving_can_sleep:------ TRUE ------");
+                        //***//Log.i(TAG, "battery_saving_can_sleep:------ TRUE ------");
                         return true;
                     }
                 }
             }
         }
 
+        //***//Log.i(TAG, "battery_saving_can_sleep:xxxxxxx false xxxxx");
         return false;
-    }
-
-    static void vfs__detach()
-    {
-        try
-        {
-            //Log.i(TAG, "VFS:detachThread:" + Thread.currentThread().getId() + ":" + Thread.currentThread().getName());
-            //vfs.detachThread();
-            //Log.i(TAG, "VFS:detachThread:OK");
-
-            Runnable myRunnable = new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    Log.i(TAG, "VFS:detachThread:" + Thread.currentThread().getId() + ":" +
-                               Thread.currentThread().getName());
-                    vfs.detachThread();
-                    Log.i(TAG, "VFS:detachThread:OK");
-                }
-            };
-            if (main_handler_s != null)
-            {
-                //main_handler_s.post(myRunnable);
-            }
-            //Thread.sleep(400);
-
-            Log.i(TAG, "VFS:detachThread:END");
-        }
-        catch (Exception e5)
-        {
-            Log.i(TAG, "VFS:detachThread:EE5:" + e5.getMessage());
-            e5.printStackTrace();
-        }
     }
 
     static void vfs__unmount()
