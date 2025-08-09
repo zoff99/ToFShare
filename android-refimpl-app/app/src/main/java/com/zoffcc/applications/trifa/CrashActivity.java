@@ -43,8 +43,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.zoffcc.applications.trifa.HelperGeneric.reset_audio_mode;
-
 
 public class CrashActivity extends AppCompatActivity
 {

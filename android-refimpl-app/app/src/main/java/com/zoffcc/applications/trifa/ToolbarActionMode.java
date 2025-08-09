@@ -36,7 +36,6 @@ import static com.zoffcc.applications.trifa.HelperMessage.copy_selected_messages
 import static com.zoffcc.applications.trifa.HelperMessage.delete_selected_messages;
 import static com.zoffcc.applications.trifa.HelperMessage.save_selected_messages;
 import static com.zoffcc.applications.trifa.HelperMessage.show_select_conference_message_info;
-import static com.zoffcc.applications.trifa.HelperMessage.show_select_group_message_info;
 import static com.zoffcc.applications.trifa.HelperMessage.show_select_message_info;
 import static com.zoffcc.applications.trifa.MainActivity.selected_conference_messages;
 import static com.zoffcc.applications.trifa.MainActivity.selected_group_messages;

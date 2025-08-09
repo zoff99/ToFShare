@@ -23,6 +23,7 @@ import android.util.Log;
 
 import com.zoffcc.applications.sorm.FileDB;
 import com.zoffcc.applications.sorm.FriendList;
+import com.zoffcc.applications.tofshare.R;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
