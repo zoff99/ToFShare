@@ -151,6 +151,7 @@ import static com.zoffcc.applications.trifa.HelperGeneric.display_toast_with_con
 import static com.zoffcc.applications.trifa.HelperGeneric.draw_main_top_icon;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.hexstring_to_bytebuffer;
+import static com.zoffcc.applications.trifa.HelperGeneric.initializeScreenshotSecurity;
 import static com.zoffcc.applications.trifa.HelperGeneric.is_nightmode_active;
 import static com.zoffcc.applications.trifa.HelperGeneric.set_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.update_savedata_file_wrapper_throttled_last_trigger_ts;
@@ -526,7 +527,7 @@ public class MainActivity extends AppCompatActivity
         metrics = resources.getDisplayMetrics();
         global_showing_messageview = false;
         global_showing_anygroupview = false;
-        global_showing_mainview = true;
+        global_showing_mainview = false;
 
         Log.i(TAG, "is_nightmode_active:" + is_nightmode_active(this));
 
@@ -686,7 +687,7 @@ public class MainActivity extends AppCompatActivity
         if (PREF__window_security)
         {
             // prevent screenshots and also dont show the window content in recent activity screen
-            //initializeScreenshotSecurity(this);
+            initializeScreenshotSecurity(this);
         }
 
         //        try

@@ -21,6 +21,7 @@ package com.zoffcc.applications.trifa;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.Notification;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,6 +45,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
@@ -3587,6 +3589,18 @@ public class HelperGeneric
         }
 
         return null;
+    }
+
+    public static void initializeScreenshotSecurity(Activity a)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+        {
+            a.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        }
+        else
+        {
+            a.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        }
     }
 
     static boolean is_nightmode_active(final Context c)

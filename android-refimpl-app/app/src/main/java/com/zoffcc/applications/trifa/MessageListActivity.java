@@ -87,6 +87,7 @@ import static com.zoffcc.applications.trifa.HelperGeneric.display_toast;
 import static com.zoffcc.applications.trifa.HelperGeneric.do_fade_anim_on_fab;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_uniq_tmp_filename;
+import static com.zoffcc.applications.trifa.HelperGeneric.initializeScreenshotSecurity;
 import static com.zoffcc.applications.trifa.HelperGeneric.seconds_time_format_or_empty;
 import static com.zoffcc.applications.trifa.HelperGeneric.set_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.tox_friend_send_message_wrapper;
@@ -591,7 +592,7 @@ public class MessageListActivity extends AppCompatActivity
         if (PREF__window_security)
         {
             // prevent screenshots and also dont show the window content in recent activity screen
-            // initializeScreenshotSecurity(this);
+            initializeScreenshotSecurity(this);
         }
 
         final long fn = friendnum;
