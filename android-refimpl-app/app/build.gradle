@@ -314,7 +314,8 @@ dependencies {
     //
     //
     //
-    implementation 'com.github.UnifiedPush:android-connector:2.5.0'
+    implementation 'org.unifiedpush.android:connector:3.0.10'
+    implementation 'org.unifiedpush.android:connector-ui:1.1.0'
     //
     //
     //

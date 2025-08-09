@@ -241,17 +241,26 @@
             </intent-filter>
         </receiver>
 
+        <service android:name=".PushServiceImpl"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.connector.PUSH_EVENT"/>
+            </intent-filter>
+        </service>
+        <!--
         <receiver android:name=".MyExternReceiver" android:enabled="true" android:exported="true">
             <intent-filter>
                 <action android:name="com.zoffcc.applications.tofshare.EXTERN_RECV" />
             </intent-filter>
         </receiver>
-
+        -->
+        <!--
         <receiver android:name=".MyTokenReceiver" android:enabled="true" android:exported="true">
             <intent-filter>
                 <action android:name="com.zoffcc.applications.tofshare.TOKEN_CHANGED" />
             </intent-filter>
         </receiver>
+        -->
 
         <provider
             android:name=".StdContentProvider"

@@ -35,16 +35,18 @@ import androidx.core.app.NotificationCompat;
 
 import static com.zoffcc.applications.trifa.TrifaToxService.trifa_service_thread;
 
-public class MyExternReceiver extends BroadcastReceiver
+public class MyExternReceiver // extends BroadcastReceiver
 {
     private static final String TAG = "trifa.MyExternRcvr";
     private static PowerManager.WakeLock extern_wakeup_lock = null;
 
     static int ICOMING_MSG_NOTIFICATION_ID = 886676;
 
-    @Override
-    public void onReceive(Context context, Intent intent2)
+    // @Override
+    public static void onReceive(Context context, Intent intent2)
     {
+        Log.i(TAG, "onReceive");
+
         try
         {
             if (extern_wakeup_lock == null)
@@ -197,7 +199,7 @@ public class MyExternReceiver extends BroadcastReceiver
         t.start();
     }
 
-    private boolean isMyServiceRunning(String serviceClassName, Context c)
+    private static boolean isMyServiceRunning(String serviceClassName, Context c)
     {
         ActivityManager manager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))

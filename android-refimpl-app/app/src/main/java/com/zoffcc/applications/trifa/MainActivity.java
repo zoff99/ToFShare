@@ -457,6 +457,8 @@ public class MainActivity extends AppCompatActivity
     static boolean PREF__rnnoise_active = false;
     static boolean PREF__trust_all_webcerts = false; // HINT: !!be careful with this option!!
 
+    final static String push_instance_name = "com.zoffcc.applications.push_tofshare";
+
     static String versionName = "";
     static int versionCode = -1;
     static PackageInfo packageInfo_s = null;
@@ -1663,7 +1665,7 @@ public class MainActivity extends AppCompatActivity
         ////// WATCHDOG //////
         */
 
-        registerAppWithDialog(this, "com.zoffcc.applications.push_tofshare");
+        registerAppWithDialog(this, push_instance_name);
 
         Log.i(TAG, "M:STARTUP:-- DONE --");
     }
@@ -1671,64 +1673,60 @@ public class MainActivity extends AppCompatActivity
     private static void registerAppWithDialog(Context context, String slug)
     {
 
-        List<String> distributors = UnifiedPush.getDistributors(context, new ArrayList<>());
-        if (distributors.size() == 1 || !UnifiedPush.getDistributor(context).isEmpty())
+        List<String> distributors = UnifiedPush.getDistributors(context);
+        if ((distributors != null) && (distributors.size() > 0))
         {
-            try
-            {
-                String available_dist = "";
-                for (int i = 0; i < distributors.size(); i++)
-                {
-                    available_dist = available_dist + distributors.get(i) + "\n";
-                }
-                Log.i(TAG, "PUSH:UnifiedPush:dists1=" + available_dist);
-            }
-            catch (Exception ignored)
-            {
-            }
-
             if (distributors.size() == 1)
             {
+                try
+                {
+                    String available_dist = "";
+                    for (int i = 0; i < distributors.size(); i++)
+                    {
+                        available_dist = available_dist + distributors.get(i) + "\n";
+                    }
+                    Log.i(TAG, "PUSH:UnifiedPush:dists1=" + available_dist);
+                }
+                catch (Exception ignored)
+                {
+                }
+
                 UnifiedPush.saveDistributor(context, distributors.get(0));
+                UnifiedPush.registerApp(context, slug,"tofshare push", null);
+                return;
+            }
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            if (distributors.isEmpty())
+            {
+                Toast.makeText(context, "No UnifiedPush Distributors found", Toast.LENGTH_SHORT).show();
             }
             else
             {
-                UnifiedPush.saveDistributor(context, UnifiedPush.getDistributor(context));
-            }
-            UnifiedPush.registerApp(context, slug, new ArrayList<>(), "");
-            return;
-        }
-
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        if (distributors.size() == 0)
-        {
-            Toast.makeText(context, "No UnifiedPush Distributors found", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            try
-            {
-                String available_dist = "";
-                for (int i = 0; i < distributors.size(); i++)
+                try
                 {
-                    available_dist = available_dist + distributors.get(i) + "\n";
+                    String available_dist = "";
+                    for (int i = 0; i < distributors.size(); i++)
+                    {
+                        available_dist = available_dist + distributors.get(i) + "\n";
+                    }
+                    Log.i(TAG, "PUSH:UnifiedPush:dists2=" + available_dist);
                 }
-                Log.i(TAG, "PUSH:UnifiedPush:dists2=" + available_dist);
-            }
-            catch (Exception ignored)
-            {
-            }
+                catch (Exception ignored)
+                {
+                }
 
-            alert.setTitle("select_distributors");
-            String[] distributorsStr = distributors.toArray(new String[0]);
-            alert.setSingleChoiceItems(distributorsStr, -1, (dialog, item) -> {
-                String distributor = distributorsStr[item];
-                UnifiedPush.saveDistributor(context, distributor);
-                UnifiedPush.registerApp(context, slug, new ArrayList<>(), "");
-                dialog.dismiss();
-            });
+                alert.setTitle("select_distributors");
+                String[] distributorsStr = distributors.toArray(new String[0]);
+                alert.setSingleChoiceItems(distributorsStr, -1, (dialog, item) -> {
+                    String distributor = distributorsStr[item];
+                    UnifiedPush.saveDistributor(context, distributor);
+                    UnifiedPush.registerApp(context, slug, "tofshare push", null);
+                    dialog.dismiss();
+                });
+            }
+            alert.show();
         }
-        alert.show();
     }
 
     void upgrade_db_schema_do(int old_version, int new_version)

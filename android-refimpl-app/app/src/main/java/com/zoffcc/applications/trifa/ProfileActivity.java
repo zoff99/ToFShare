@@ -54,6 +54,8 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.zoffcc.applications.trifa.R;
 
+import org.unifiedpush.android.connector.UnifiedPush;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -89,6 +91,7 @@ import static com.zoffcc.applications.trifa.Identicon.IDENTICON_ROWS;
 import static com.zoffcc.applications.trifa.MainActivity.clipboard;
 import static com.zoffcc.applications.trifa.MainActivity.friend_list_fragment;
 import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
+import static com.zoffcc.applications.trifa.MainActivity.push_instance_name;
 import static com.zoffcc.applications.trifa.MainActivity.tox_get_all_tcp_relays;
 import static com.zoffcc.applications.trifa.MainActivity.tox_get_all_udp_connections;
 import static com.zoffcc.applications.trifa.MainActivity.tox_self_get_capabilities;
@@ -278,6 +281,24 @@ public class ProfileActivity extends AppCompatActivity
                     try
                     {
                         remove_own_pushurl_in_db();
+
+                        try
+                        {
+                            UnifiedPush.unregister(v.getContext(), push_instance_name);
+                        }
+                        catch(Exception e2)
+                        {
+                            e2.printStackTrace();
+                        }
+                        try
+                        {
+                            UnifiedPush.removeDistributor(v.getContext());
+                        }
+                        catch(Exception e2)
+                        {
+                            e2.printStackTrace();
+                        }
+
 
                         my_pushurl_textview.setVisibility(View.INVISIBLE);
                         remove_own_pushurl_button.setVisibility(View.INVISIBLE);

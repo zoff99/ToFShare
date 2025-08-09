@@ -51,7 +51,7 @@ public class MyTokenReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent2)
     {
-        // Log.i(TAG, "got intent: " + intent2);
+        Log.i(TAG, "got intent: " + intent2);
         try
         {
             if (token_wakeup_lock == null)
