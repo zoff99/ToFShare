@@ -54,7 +54,6 @@ import static com.zoffcc.applications.trifa.BootstrapNodeEntryDB.get_udp_nodelis
 import static com.zoffcc.applications.trifa.CombinedFriendsAndConferences.COMBINED_IS_FRIEND;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.set_all_filetransfers_inactive;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.start_outgoing_ft;
-import static com.zoffcc.applications.trifa.HelperFriend.add_friend_real;
 import static com.zoffcc.applications.trifa.HelperFriend.friend_call_push_url;
 import static com.zoffcc.applications.trifa.HelperFriend.get_friend_msgv3_capability;
 import static com.zoffcc.applications.trifa.HelperFriend.is_friend_online;
@@ -91,7 +90,6 @@ import static com.zoffcc.applications.trifa.MainActivity.PREF__force_udp_only;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__use_push_service;
 import static com.zoffcc.applications.trifa.MainActivity.SD_CARD_FILES_DEBUG_DIR;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;
-import static com.zoffcc.applications.trifa.MainActivity.cache_confid_confnum;
 import static com.zoffcc.applications.trifa.MainActivity.cache_fnum_pubkey;
 import static com.zoffcc.applications.trifa.MainActivity.cache_pubkey_fnum;
 import static com.zoffcc.applications.trifa.MainActivity.context_s;
@@ -641,7 +639,6 @@ public class TrifaToxService extends Service
 
                 cache_pubkey_fnum.clear();
                 cache_fnum_pubkey.clear();
-                cache_confid_confnum.clear();
 
                 try
                 {

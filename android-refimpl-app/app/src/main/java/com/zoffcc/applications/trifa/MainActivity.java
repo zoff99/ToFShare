@@ -484,15 +484,7 @@ public class MainActivity extends AppCompatActivity
     // ---- lookup cache ----
     static Map<String, Long> cache_pubkey_fnum = new HashMap<String, Long>();
     static Map<Long, String> cache_fnum_pubkey = new HashMap<Long, String>();
-    // static Map<String, String> cache_peernum_pubkey = new HashMap<String, String>();
-    // static Map<String, String> cache_peername_pubkey = new HashMap<String, String>();
-    static Map<String, String> cache_peername_pubkey2 = new HashMap<String, String>();
-    static Map<String, Long> cache_confid_confnum = new HashMap<String, Long>();
     // ---- lookup cache ----
-
-    // ---- lookup cache for conference drawer ----
-    static Map<String, Long> lookup_peer_listnum_pubkey = new HashMap<String, Long>();
-    // ---- lookup cache for conference drawer ----
 
     // main drawer ----------
     static Drawer main_drawer = null;
