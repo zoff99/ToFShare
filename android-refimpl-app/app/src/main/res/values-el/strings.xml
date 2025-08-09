@@ -61,7 +61,6 @@
     <string name="pref_title_software_echo_cancel">Ακύρωση ηχούς</string>
     <string name="pref_description_video_uv_reversed">Αντιστρέψτε τη σειρά των επιπέδων UV στο βίντεο της κάμερας</string>
     <string name="pref_title_video_uv_reversed">αντίστροφη UV σε βίντεο</string>
-    <string name="pref_description_auto_accept_all_upto">αυτόματη αποδοχή όλων των αρχείων μεγέθους έως 200 MByte</string>
     <string name="pref_title_auto_accept_all_upto">αυτόματη αποδοχή όλων των αρχείων</string>
     <string name="pref_description_auto_accept_video">αυτόματη αποδοχή βίντεο μεγέθους έως 40 MByte</string>
     <string name="pref_title_auto_accept_video">αυτόματη αποδοχή βίντεο</string>

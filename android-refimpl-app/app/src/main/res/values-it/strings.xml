@@ -310,7 +310,6 @@
     <string name="MainActivity_new_noti_token_dialog_text">Nuovo token di notifica ricevuto. Usare questo Token\?</string>
     <string name="MainActivity_new_noti_token_dialog_title">Token</string>
     <string name="MainActivity_yes_button">si</string>
-    <string name="pref_description_auto_accept_all_upto">accettare automaticamente tutti i file fino a 200 MByte di dimensioni</string>
     <string name="pref_title_auto_accept_all_upto">accettare automaticamente tutti i file</string>
     <string name="pref_description_start_on_boot">avvia l\'applicazione dopo il boot.
 \nGoogle non lo permette più a partire da Android 10</string>
@@ -383,7 +382,6 @@
     <string name="pref_description_allow_push_server_ntfy">ATTENZIONE: si consenti al server ntfy.sh di ricevere notifiche push, questo potrebbe far trapelare i tuoi metadati di timestamp quando ricevi notifiche push, se un amico si iscrive con il tuo token push. ntfy.sh NON ha password e NESSUNA autenticazione. Sei stato avvertito.</string>
     <string name="add_public_group_success">Hai creato un gruppo pubblico</string>
     <string name="MessageListHolder_file_outgoing_cancel_ft_message">Vuoi annullare questo trasferimento di file\?</string>
-    <string name="incoming_filetransfer_size_too_large">Dimensione del file in arrivo troppo grande. Possono essere ricevuti solo file fino a 2 GByte.</string>
     <string name="FriendListHolder_toggle_notification_silent_message">Vuoi attivare/disattivare il silenzio delle notifiche per questo amico\?</string>
     <string name="layout___group_myname2">il mio nome nel gruppo:</string>
     <string name="layout___group_mypubjkey2">La mia Pubkey:</string>

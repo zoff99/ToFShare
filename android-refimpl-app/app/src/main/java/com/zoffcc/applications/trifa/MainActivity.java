@@ -177,6 +177,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.LOWER_GLOBAL_AUDIO_BITR
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LOWER_GLOBAL_VIDEO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LOWER_NGC_VIDEO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LOWER_NGC_VIDEO_QUANTIZER;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.MAX_ALLOWED_INCOMING_FILESIZE_BYTES;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NGC_AUDIO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NORMAL_GLOBAL_AUDIO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_EDIT_ACTION.NOTIFICATION_EDIT_ACTION_ADD;
@@ -428,8 +429,8 @@ public class MainActivity extends AppCompatActivity
     static int GLOBAL_AV_BUFFER_MS = 120;
     static int PREF__audio_group_play_volume_percent = 100;
     static boolean PREF__auto_accept_image = true;
-    static boolean PREF__auto_accept_video = false;
-    static boolean PREF__auto_accept_all_upto = false;
+    static boolean PREF__auto_accept_video = true;
+    static boolean PREF__auto_accept_all_upto = true;
     static int PREF__video_cam_resolution = 0;
     static final int PREF_GLOBAL_FONT_SIZE_DEFAULT = 2;
     static int PREF__global_font_size = PREF_GLOBAL_FONT_SIZE_DEFAULT;
@@ -1069,22 +1070,22 @@ public class MainActivity extends AppCompatActivity
 
         try
         {
-            PREF__auto_accept_video = settings.getBoolean("auto_accept_video", false);
+            PREF__auto_accept_video = settings.getBoolean("auto_accept_video", true);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            PREF__auto_accept_video = false;
+            PREF__auto_accept_video = true;
         }
 
         try
         {
-            PREF__auto_accept_all_upto = settings.getBoolean("auto_accept_all_upto", false);
+            PREF__auto_accept_all_upto = settings.getBoolean("auto_accept_all_upto", true);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            PREF__auto_accept_all_upto = false;
+            PREF__auto_accept_all_upto = true;
         }
 
         try
@@ -3556,22 +3557,22 @@ public class MainActivity extends AppCompatActivity
 
         try
         {
-            PREF__auto_accept_video = settings.getBoolean("auto_accept_video", false);
+            PREF__auto_accept_video = settings.getBoolean("auto_accept_video", true);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            PREF__auto_accept_video = false;
+            PREF__auto_accept_video = true;
         }
 
         try
         {
-            PREF__auto_accept_all_upto = settings.getBoolean("auto_accept_all_upto", false);
+            PREF__auto_accept_all_upto = settings.getBoolean("auto_accept_all_upto", true);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            PREF__auto_accept_all_upto = false;
+            PREF__auto_accept_all_upto = true;
         }
 
         try
@@ -5649,8 +5650,9 @@ public class MainActivity extends AppCompatActivity
 
     static void android_tox_callback_file_recv_cb_method(long friend_number, long file_number, int a_TOX_FILE_KIND, long file_size, String filename, long filename_length)
     {
-        // HINT: IOCipher can only handle files up to 2GBytes in size
-        if (file_size >= ((UINT32_MAX_JAVA / 2L) - 1L))
+        // HINT: ~~IOCipher can only handle files up to 2GBytes in size~~
+        //         ^^^ this is no longer true!!
+        if (file_size >= MAX_ALLOWED_INCOMING_FILESIZE_BYTES)
         {
             try
             {
@@ -5661,7 +5663,7 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
 
-            display_toast(context_s.getString(R.string.incoming_filetransfer_size_too_large), false, 800);
+            display_toast("Incoming file is too large", false, 800);
             return;
         }
 

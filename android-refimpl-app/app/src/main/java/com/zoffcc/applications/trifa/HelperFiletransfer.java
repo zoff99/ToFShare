@@ -159,7 +159,7 @@ public class HelperFiletransfer
             {
                 if (get_filetransfer_filesize_from_id(message.filetransfer_id) <=
                     AUTO_ACCEPT_FT_MAX_ANYKIND_SIZE_IN_MB * 1014 *
-                    1024) // if file size is smaller than 200 MByte accept FT
+                    1024) // if file size is smaller than 2 GByte accept FT
                 {
                     if (get_filetransfer_state_from_id(message.filetransfer_id) == TOX_FILE_CONTROL_PAUSE.value)
                     {

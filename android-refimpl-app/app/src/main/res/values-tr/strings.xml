@@ -313,7 +313,6 @@
     <string name="MainActivity_new_noti_token_dialog_text">Yeni bildirim belirteci alındı. Bu belirteç kullanılsın mı\?</string>
     <string name="MainActivity_new_noti_token_dialog_title">Belirteç</string>
     <string name="MainActivity_yes_button">evet</string>
-    <string name="pref_description_auto_accept_all_upto">boyutu 200 megabayta kadar olan tüm dosyaları otomatik olarak kabul et</string>
     <string name="pref_title_auto_accept_all_upto">tüm dosyaları otomatik olarak kabul et</string>
     <string name="wrong_credentials_error">Yanlış Kimlik Bilgileri</string>
     <string name="title_activity_wrong_credentials">Yanlış Kimlik Bilgileri</string>
@@ -407,7 +406,6 @@
     <string name="pref_description_allow_push_server_ntfy">UYARI: Anlık bildirimler için ntfy.sh sunucusuna izin verin. Bu, bir arkadaşınız anlık bildirim belirtecinizle abone olursa, anlık bildirimler aldığınızda zaman damgalarının üst verilerini sızdırabilir. ntfy.sh parola ve kimlik doğrulamasına sahip DEĞİLDİR. Uyarıldınız.</string>
     <string name="pref_description_enable_ngc_features">!! Deneysel !!
 \nBu tam olarak çalışmıyor!!</string>
-    <string name="incoming_filetransfer_size_too_large">Gelen dosya boyutu çok büyük. Yalnızca 2 GByte\'a kadar olan dosyalar alınabilir.</string>
     <string name="pref_title_message_paging_num_msgs_per_page">Mesaj Sayfalama</string>
     <string name="pref_description_message_paging_num_msgs_per_page">Sayfa başına gösterilecek mesaj sayısını ayarlayın. 0, sayfalama yok anlamına gelir</string>
     <string name="invite_friend_success">Bir arkadaşlık isteği aldınız</string>

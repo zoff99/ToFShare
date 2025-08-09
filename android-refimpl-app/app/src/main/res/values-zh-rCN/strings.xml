@@ -325,7 +325,6 @@
     <string name="MainActivity_new_noti_token_dialog_text">收到了新的通知令牌。使用这枚令牌吗？</string>
     <string name="MainActivity_new_noti_token_dialog_title">令牌</string>
     <string name="MainActivity_yes_button">是</string>
-    <string name="pref_description_auto_accept_all_upto">自动接受所有最大 200 MByte 的文件</string>
     <string name="pref_title_auto_accept_all_upto">自动接受所有文件</string>
     <string name="layout___iobrowser_start">浏览加密的存储</string>
     <string name="pref_description_start_on_boot">开机后启动本应用。
@@ -417,7 +416,6 @@
     <string name="pref_title_allow_enable_ngc_features">NGC - 新群聊</string>
     <string name="pref_description_enable_ngc_features">!! 实验性 !!
 \n不完全正常工作！！</string>
-    <string name="incoming_filetransfer_size_too_large">传入的文件太大。 只能接收最大 2 GBytes 的文件。</string>
     <string name="pref_title_message_paging_num_msgs_per_page">每页消息数</string>
     <string name="pref_description_message_paging_num_msgs_per_page">设置每页显示的消息数。0 表示不分页</string>
     <string name="invite_join_conference_success">你已应邀加入会议群</string>

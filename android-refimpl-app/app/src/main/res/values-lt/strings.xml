@@ -227,7 +227,6 @@
     <string name="layout___migdb_do_not_close">NEUŽDARYKITE šio ekrano</string>
     <string name="messages_search_default_text">ieškoti ...</string>
     <string name="MainActivity_yes_button">taip</string>
-    <string name="pref_description_auto_accept_all_upto">Automatiškai priimti visus failus iki 200 MBaitų dydžio</string>
     <string name="pref_title_auto_accept_all_upto">Automatiškai priimti visus failus</string>
     <string name="pref_description_allow_file_sharing_to_trifa_via_intent">bendrinti failus su TRIfA per bendrinimo ketinimą.</string>
     <string name="pref_title_allow_file_sharing_to_trifa_via_intent">dalytis failais</string>
@@ -258,7 +257,6 @@
     <string name="group_message_list_activity_name">Grupė</string>
     <string name="invite_friend_success">Gavote prašymą draugauti</string>
     <string name="MessageListHolder_file_outgoing_cancel_ft_message">Ar norite atšaukti šį failų perdavimą\?</string>
-    <string name="incoming_filetransfer_size_too_large">Gaunamų failų dydis per didelis. Galima priimti tik iki 2 GB dydžio failus.</string>
     <string name="layout___group_name">Grupės pavadinimas</string>
     <string name="layout___group_id">Grupės ID</string>
     <string name="layout___group_id2">Grupės ID:</string>

@@ -188,7 +188,6 @@
     <string name="title_activity_maintenance">பராமரிப்பு</string>
     <string name="pref_title_auto_accept_image">ஆட்டோ ஏற்றுக்கொள்ளும் படங்கள்</string>
     <string name="pref_description_auto_accept_image">12 mbyte வரை படங்களையும் புகைப்படங்களையும் தானாக ஏற்றுக்கொள்கிறது</string>
-    <string name="pref_description_auto_accept_all_upto">ஆட்டோ அனைத்து கோப்புகளையும் 200 mbyte வரை ஏற்றுக்கொள்ளுங்கள்</string>
     <string name="pref_description_software_echo_cancel">மென்பொருள் எதிரொலி ரத்துசெய்ய பயன்படுத்தவும்</string>
     <string name="pref_description_video_cam_resolution">வீடியோ அழைப்புக்கு என்ன தீர்மானம் பயன்படுத்த வேண்டும்</string>
     <string name="pref_title_global_font_size">எழுத்துரு அளவு</string>
@@ -261,7 +260,6 @@
     <string name="MainActivity_setup_push_tip_text">புச் அறிவிப்பு பயன்பாடு மற்றும் அமைவு புச் அறிவிப்பை நீங்கள் நிறுவவில்லை. புச் அறிவிப்பு இல்லாமல் ட்ரிஃபா முழுமையாக செயல்படும், ஆனால் செய்திகளைப் பெறுவதற்கு தொடர்ந்து ஆன்லைனில் இருக்க வேண்டும். புச் அறிவிப்புடன் நீங்கள் பேட்டரி மற்றும் இன்டர்நெட் பேண்ட்விட் சேமிக்க முடியும்.\n\n புச் அறிவிப்பை இப்போது எவ்வாறு அமைக்க முடியும் என்பதைப் பார்க்க விரும்புகிறீர்களா?</string>
     <string name="Aboutpage_0">ட்ரிஃபா க்ராச்லாக்</string>
     <string name="CallingActivity_23">வீடியோ தாமதம்:</string>
-    <string name="incoming_filetransfer_size_too_large">உள்வரும் கோப்பு அளவு மிகப் பெரியது. 2 பைட்டுகள் வரை கோப்புகளை மட்டுமே பெற முடியும்.</string>
     <string name="layout___toxid">டாக்சைட்</string>
     <string name="layout___group_name">குழு பெயர்</string>
     <string name="layout___group_id">குழு ஐடி</string>

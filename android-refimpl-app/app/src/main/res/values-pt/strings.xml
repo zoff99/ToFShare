@@ -214,7 +214,6 @@
     <string name="pref_description_start_on_boot">inicia a aplicação após a inicialização.
 \nA Google já não permite isso a partir do Android 10</string>
     <string name="pref_title_start_on_boot">executar na inicialização</string>
-    <string name="pref_description_auto_accept_all_upto">aceitar automaticamente todos os ficheiros de até 200 MB de tamanho</string>
     <string name="pref_title_auto_accept_all_upto">aceitar automaticamente todos os ficheiros</string>
     <string name="layout___own_pushurl">URL de Push:</string>
     <string name="layout___remove_own_pushurl">remover a URL de Push</string>
@@ -298,7 +297,6 @@
 \nDeseja ver como pode configurar a Notificação por Push agora\?</string>
     <string name="ProfileActivity_delete_avatar_dialog_title">Remover foto do perfil</string>
     <string name="ProfileActivity_delete_avatar_dialog_text">Deseja remover o sua foto de perfil\?</string>
-    <string name="incoming_filetransfer_size_too_large">O ficheiro a ser recebido é muito grande. Somente ficheiros de até 2 GBytes podem ser recebidos.</string>
     <string name="layout___group_name">Nome do Grupo</string>
     <string name="layout___group_id">ID do grupo</string>
     <string name="layout___create_new_private_group">Criar novo Grupo Privado</string>

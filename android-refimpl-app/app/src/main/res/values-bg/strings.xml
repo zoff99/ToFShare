@@ -29,7 +29,6 @@
     <string name="pref_title_auto_accept_video">Автоматично приемане на видеоклипове</string>
     <string name="pref_description_auto_accept_video">Автоматично приемане видеоклипове с размер до 40 МБ</string>
     <string name="pref_title_auto_accept_all_upto">Автоматично приемане на всички файлове</string>
-    <string name="pref_description_auto_accept_all_upto">Автоматично приемане на всички Файлове с размер до 200 МБ</string>
     <string name="pref_title_video_uv_reversed">Обръщане на UV във видеото</string>
     <string name="pref_description_video_uv_reversed">Обръщане реда на равнините UV във видеото от камерата</string>
     <string name="pref_title_software_echo_cancel">Подтискане на ехото</string>
@@ -286,7 +285,6 @@
     <string name="MessageListHolder_file_incoming_cancel_ft_title">Отказ от файла</string>
     <string name="MainActivity_join_trifa_groupchat">Присъединяване към информационна група</string>
     <string name="MessageListActivity_longpress_to_record_audiomsg">Задръжте, за да запишете гласово съобщение</string>
-    <string name="incoming_filetransfer_size_too_large">Постъпващият файл е твърде голям. Могат да бъдат получени само файлове до 2 ГБ.</string>
     <string name="layout___group_name">Име на групов разговор</string>
     <string name="layout___group_id">Group ID</string>
     <string name="layout___peer_first_join_date">Дата на първо присъединяване:</string>

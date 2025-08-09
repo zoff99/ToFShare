@@ -211,7 +211,6 @@
     <string name="MainActivity_new_noti_token_dialog_text">Novo token de notificação recebido. Usar este token\?</string>
     <string name="MainActivity_new_noti_token_dialog_title">Token</string>
     <string name="MainActivity_yes_button">sim</string>
-    <string name="pref_description_auto_accept_all_upto">aceitar automaticamente todos os arquivos de até 200 MB de tamanho</string>
     <string name="pref_title_auto_accept_all_upto">aceitar automaticamente todos os arquivos</string>
     <string name="pref_description_start_on_boot">inicia o aplicativo após a inicialização.
 \nA Google não permite mais isso começando com o Android 10</string>
@@ -302,7 +301,6 @@
     <string name="pref_title_allow_enable_ngc_features">NGC - Novos Bate-papos em grupo</string>
     <string name="pref_description_enable_ngc_features">!! Experimental !!
 \nIsso NÃO está funcionando completamente!!</string>
-    <string name="incoming_filetransfer_size_too_large">O arquivo a ser recebido é muito grande. Somente arquivos de até 2 GBytes podem ser recebidos.</string>
     <string name="pref_title_message_paging_num_msgs_per_page">Paginação de Mensagens</string>
     <string name="pref_description_message_paging_num_msgs_per_page">Define o número de mensagens a serem exibidas por página. 0 significa sem paginação</string>
     <string name="invite_friend_success">Você recebeu um Pedido de Amizade</string>

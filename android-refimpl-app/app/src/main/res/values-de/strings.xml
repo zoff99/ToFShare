@@ -302,7 +302,6 @@
     <string name="MainActivity_new_noti_token_dialog_text">Neues Benachrichtigungstoken empfangen. Verwenden Sie dieses Token\?</string>
     <string name="MainActivity_new_noti_token_dialog_title">Token</string>
     <string name="MainActivity_yes_button">ja</string>
-    <string name="pref_description_auto_accept_all_upto">akzeptiert automatisch alle Dateien bis zu einer Größe von 200 MByte</string>
     <string name="pref_title_auto_accept_all_upto">Auto akzeptieren alle Dateien</string>
     <string name="pref_description_start_on_boot">starten die Anwendung nach dem Booten.
 \nGoogle erlaubt dies ab Android 10 nicht mehr</string>
@@ -404,7 +403,6 @@
     <string name="layout___group_mypubjkey2">Mein Pubkey:</string>
     <string name="layout___group_myname2">mein Name in der Gruppe:</string>
     <string name="pref_description_allow_open_encrypted_file_via_intent">Dateien direkt aus dem verschlüsselten Speicher über Intent öffnen. Dies kann potenziell gefährlich sein, da andere bösartige Anwendungen andere Dateien in TRIfAs verschlüsseltem Speicher öffnen könnten.</string>
-    <string name="incoming_filetransfer_size_too_large">Eingehende Dateien zu groß. Es können nur Dateien bis zu 2 GBytes empfangen werden.</string>
     <string name="MainActivity_join_trifa_groupchat">Info-Gruppe beitreten</string>
     <string name="layout___peer_first_join_date">Datum des ersten Beitritts:</string>
     <string name="layout___conf_message_stats">Nachrichten in der Konferenz:</string>

@@ -66,13 +66,13 @@
             android:title="@string/pref_title_auto_accept_image" />
 
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="auto_accept_video"
             android:summary="@string/pref_description_auto_accept_video"
             android:title="@string/pref_title_auto_accept_video" />
 
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="auto_accept_all_upto"
             android:summary="@string/pref_description_auto_accept_all_upto"
             android:title="@string/pref_title_auto_accept_all_upto" />

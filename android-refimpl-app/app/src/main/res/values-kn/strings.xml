@@ -367,7 +367,6 @@
     <string name="layout___own_pushurl">ಪುಶ್ URL:</string>
     <string name="title_activity_grouppeerinfo">ಗುಂಪು ಪೀರಿನ್ಫೋ</string>
     <string name="pref_title_auto_accept_all_upto">ಎಲ್ಲಾ ಫೈಲ್‌ಗಳನ್ನು ಸ್ವಯಂ ಸ್ವೀಕರಿಸಿ</string>
-    <string name="pref_description_auto_accept_all_upto">200 MegaByte ಗಾತ್ರದವರೆಗಿನ ಎಲ್ಲಾ ಫೈಲ್ ಗಳನ್ನು ಸ್ವಯಂ ಸ್ವೀಕರಿಸು</string>
     <string name="pref_title_force_udp_only">ಬಲ UDP ಮೋಡ್</string>
     <string name="pref_description_force_udp_only">ಇದು ಕೇವಲ UDP ಮೋಡ್ ಅನ್ನು ಒತ್ತಾಯಿಸುತ್ತದೆ, ಈ ಸೆಟ್ಟಿಂಗ್ ಆನ್ ಆಗಿರುವುದರಿಂದ ಕೆಲವು ಸಂಪರ್ಕಗಳನ್ನು ತಲುಪಲು ಸಾಧ್ಯವಾಗದಿರಬಹುದು
 \nಬದಲಾವಣೆಗೆ ಮರುಪ್ರಾರಂಭದ ಅಗತ್ಯವಿದೆ!</string>

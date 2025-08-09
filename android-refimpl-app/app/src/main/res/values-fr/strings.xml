@@ -325,7 +325,6 @@
     <string name="MainActivity_new_noti_token_dialog_text">Nouveau token de notification reçu. Utiliser ce token \?</string>
     <string name="MainActivity_new_noti_token_dialog_title">Token</string>
     <string name="MainActivity_yes_button">oui</string>
-    <string name="pref_description_auto_accept_all_upto">accepter automatiquement tous les fichiers d\'une taille maximale de 200 Mo</string>
     <string name="pref_title_auto_accept_all_upto">accepter automatiquement tous les fichiers</string>
     <string name="pref_description_start_on_boot">exécute l’application après le démarrage.
 \nGoogle ne permet plus cela à partir d’Android 10</string>
@@ -412,7 +411,6 @@
     <string name="MessageListHolder_file_incoming_cancel_ft_title">annuler le transfert de fichiers</string>
     <string name="MessageListHolder_file_incoming_cancel_ft_message">Voulez-vous annuler ce transfert de fichiers \?</string>
     <string name="pref_title_allow_push_server_ntfy">Autoriser le serveur ntfy.sh</string>
-    <string name="incoming_filetransfer_size_too_large">Taille du fichier entrant trop grande. Seuls les fichiers jusqu\'à 2 Go peuvent être reçus.</string>
     <string name="pref_title_allow_enable_ngc_features">NGC - Nouveaux groupes de discussion</string>
     <string name="pref_description_allow_push_server_ntfy">AVERTISSEMENT : si vous autorisez le serveur ntfy.sh pour les notifications push, cela peut entraîner une fuite de vos métadonnées d\'horodatage lorsque vous recevez des notifications push, si un ami s\'abonne avec votre jeton push. Le ntfy.sh n\'a AUCUN mot de passe et AUCUNE authentification. Vous avez été prévenu.</string>
     <string name="pref_description_enable_ngc_features">! ! Expérimental ! !

@@ -364,7 +364,6 @@
     <string name="group_message_list_activity_name">समूह</string>
     <string name="conference_audio_activity_player_name">ध्वनि सम्मेलन वादक</string>
     <string name="pref_description_auto_accept_video">आकार में 40 मेगाबाइट तक के वीडियो स्वतः स्वीकार करें</string>
-    <string name="pref_description_auto_accept_all_upto">२०० मेगाबाइट आकार तक की सभी फाइलों को स्वतः स्वीकार करें</string>
     <string name="pref_title_video_cam_resolution">छायाचित्रक का विभेदन</string>
     <string name="pref_title_mic_gain_factor">ध्वनिग्राही प्राप्ति की मर्यादा</string>
     <string name="pref_description_mic_gain_factor">यदि आपका ध्वनिग्राही कम आवाज के साथ पंजीकृत करता है तो उच्च प्राप्ति निर्धारित करें</string>

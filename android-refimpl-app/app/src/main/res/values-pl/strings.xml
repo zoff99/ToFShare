@@ -32,7 +32,6 @@
     <string name="pref_title_higher_video_quality">Jakość wideo</string>
     <string name="pref_description_software_echo_cancel">Użyj oprogramowanie do usuwania echa</string>
     <string name="pref_title_software_echo_cancel">Usuwanie echa</string>
-    <string name="pref_description_auto_accept_all_upto">Automatycznie akceptuj pliki do 200MB</string>
     <string name="pref_title_auto_accept_all_upto">Automatycznie akceptuj wszelkie pliki</string>
     <string name="pref_description_auto_accept_video">Akceptuj automatycznie filmy do 40MB</string>
     <string name="pref_description_auto_accept_image">Akceptuj automatycznie obrazki powyżej 12MB</string>
@@ -262,7 +261,6 @@
     <string name="MainActivity_notification_new_message5">nowa Wiadomość</string>
     <string name="MainActivity_setup_push_tip_title">Ustaw Powiadomienia Push</string>
     <string name="ProfileActivity_delete_avatar_dialog_title">Usuń Zdjęcie Profilowe</string>
-    <string name="incoming_filetransfer_size_too_large">Za duży rozmiar pliku przychodzącego. Odbierane mogą być tylko pliki poniżej 2 GB.</string>
     <string name="layout___group_id">ID Grupy</string>
     <string name="layout___scan_qr_code">skanuj Kod QR</string>
     <string name="layout___push_to_talk">Naciśnij i mów</string>

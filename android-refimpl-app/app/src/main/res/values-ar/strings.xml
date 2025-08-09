@@ -310,7 +310,6 @@
     <string name="MainActivity_new_noti_token_dialog_text">تم استلام رمز إعلام جديد. استخدم هذا الرمز؟</string>
     <string name="MainActivity_new_noti_token_dialog_title">رمز</string>
     <string name="MainActivity_yes_button">نعم</string>
-    <string name="pref_description_auto_accept_all_upto">قبول تلقائي لجميع الملفات التي يصل حجمها إلى 200 ميغا بايت</string>
     <string name="pref_title_auto_accept_all_upto">قبول تلقائي لجميع الملفات</string>
     <string name="pref_description_start_on_boot">بدء تشغيل التطبيق بعد التمهيد.
 \nجوجل لا يسمح هذا بعد الآن بدءا من الروبوت 10</string>
@@ -358,7 +357,6 @@
     <string name="pref_title_allow_push_server_ntfy">السماح بخادم ntfy.sh</string>
     <string name="pref_description_allow_push_server_ntfy">تحذير: اسمح لخادم ntfy.sh بدفع الإشعارات ، فقد يؤدي ذلك إلى تسريب البيانات الوصفية للطوابع الزمنية عند تلقي إشعارات الدفع ، إذا اشترك أحد الأصدقاء برمز الدفع الخاص بك. ntfy.sh ليس لديه كلمات مرور ولا مصادقة. لقد تم تحذيرك.</string>
     <string name="pref_description_speakerphone_tweak">إذا لم يتحول التطبيق إلى مكبر الصوت في مكالمة ، فحاول تنشيط هذا الإصلاح.</string>
-    <string name="incoming_filetransfer_size_too_large">حجم الملف الوارد كبير جدًا. يمكن استلام الملفات التي تصل إلى 2 غيغابايت فقط.</string>
     <string name="layout___group_name">اسم المجموعة</string>
     <string name="pref_title_window_security">منع لقطات تصوير الشاشة</string>
     <string name="title_activity_groupinfo">معلومات المجموعة</string>
