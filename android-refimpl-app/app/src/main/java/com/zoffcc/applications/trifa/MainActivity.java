@@ -398,8 +398,8 @@ public class MainActivity extends AppCompatActivity
     static boolean PREF__fps_half = false;
     static boolean PREF__h264_encoder_use_intra_refresh = true;
     static boolean PREF__conference_show_system_messages = false;
-    static boolean PREF__X_battery_saving_mode = false;
-    static int PREF__X_battery_saving_timeout = 15; // in minutes
+    static boolean PREF__X_battery_saving_mode = true;
+    static int PREF__X_battery_saving_timeout = 120; // in minutes
     static boolean PREF__X_misc_button_enabled = false;
     static String PREF__X_misc_button_msg = "t"; // TODO: hardcoded for now!
     static boolean PREF__U_keep_nospam = false;
@@ -806,7 +806,7 @@ public class MainActivity extends AppCompatActivity
         PREF__U_keep_nospam = settings.getBoolean("U_keep_nospam", false);
         PREF__set_fps = settings.getBoolean("set_fps", false);
         PREF__conference_show_system_messages = settings.getBoolean("conference_show_system_messages", false);
-        PREF__X_battery_saving_mode = settings.getBoolean("X_battery_saving_mode", false);
+        PREF__X_battery_saving_mode = settings.getBoolean("X_battery_saving_mode", true);
         PREF__X_misc_button_enabled = settings.getBoolean("X_misc_button_enabled", false);
         PREF__local_discovery_enabled = settings.getBoolean("local_discovery_enabled", false);
         PREF__force_udp_only = settings.getBoolean("force_udp_only", false);
@@ -818,20 +818,20 @@ public class MainActivity extends AppCompatActivity
 
         try
         {
-            if (settings.getString("X_battery_saving_timeout", "15").compareTo("15") == 0)
+            if (settings.getString("X_battery_saving_timeout", "120").compareTo("120") == 0)
             {
-                PREF__X_battery_saving_timeout = 15;
+                PREF__X_battery_saving_timeout = 120;
             }
             else
             {
-                PREF__X_battery_saving_timeout = Integer.parseInt(settings.getString("X_battery_saving_timeout", "15"));
+                PREF__X_battery_saving_timeout = Integer.parseInt(settings.getString("X_battery_saving_timeout", "120"));
                 Log.i(TAG, "PREF__X_battery_saving_timeout:1:=" + PREF__X_battery_saving_timeout);
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            PREF__X_battery_saving_timeout = 15;
+            PREF__X_battery_saving_timeout = 120;
         }
 
         boolean tmp1 = settings.getBoolean("udp_enabled", false);
@@ -3240,7 +3240,7 @@ public class MainActivity extends AppCompatActivity
         PREF__U_keep_nospam = settings.getBoolean("U_keep_nospam", false);
         PREF__set_fps = settings.getBoolean("set_fps", false);
         PREF__conference_show_system_messages = settings.getBoolean("conference_show_system_messages", false);
-        PREF__X_battery_saving_mode = settings.getBoolean("X_battery_saving_mode", false);
+        PREF__X_battery_saving_mode = settings.getBoolean("X_battery_saving_mode", true);
         PREF__X_misc_button_enabled = settings.getBoolean("X_misc_button_enabled", false);
         PREF__local_discovery_enabled = settings.getBoolean("local_discovery_enabled", false);
         PREF__force_udp_only = settings.getBoolean("force_udp_only", false);
@@ -3258,20 +3258,20 @@ public class MainActivity extends AppCompatActivity
 
         try
         {
-            if (settings.getString("X_battery_saving_timeout", "15").compareTo("15") == 0)
+            if (settings.getString("X_battery_saving_timeout", "120").compareTo("120") == 0)
             {
-                PREF__X_battery_saving_timeout = 15;
+                PREF__X_battery_saving_timeout = 120;
             }
             else
             {
-                PREF__X_battery_saving_timeout = Integer.parseInt(settings.getString("X_battery_saving_timeout", "15"));
+                PREF__X_battery_saving_timeout = Integer.parseInt(settings.getString("X_battery_saving_timeout", "120"));
                 Log.i(TAG, "PREF__X_battery_saving_timeout:2:=" + PREF__X_battery_saving_timeout);
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            PREF__X_battery_saving_timeout = 15;
+            PREF__X_battery_saving_timeout = 120;
         }
 
         try
