@@ -19,7 +19,6 @@
 
 package com.zoffcc.applications.trifa;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,7 +38,6 @@ import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.zoffcc.applications.sorm.FriendList;
-import com.zoffcc.applications.trifa.R;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
@@ -59,24 +57,16 @@ import static com.zoffcc.applications.trifa.HelperGeneric.long_date_time_format;
 import static com.zoffcc.applications.trifa.HelperGeneric.update_savedata_file_wrapper;
 import static com.zoffcc.applications.trifa.HelperRelay.get_pushurl_for_friend;
 import static com.zoffcc.applications.trifa.HelperRelay.get_relay_for_friend;
-import static com.zoffcc.applications.trifa.HelperRelay.have_own_relay;
-import static com.zoffcc.applications.trifa.HelperRelay.invite_to_all_conferences_own_relay;
 import static com.zoffcc.applications.trifa.HelperRelay.send_all_friend_pubkeys_to_relay;
 import static com.zoffcc.applications.trifa.HelperRelay.send_relay_pubkey_to_all_friends;
 import static com.zoffcc.applications.trifa.HelperRelay.set_friend_as_own_relay_in_db;
 import static com.zoffcc.applications.trifa.Identicon.create_avatar_identicon_for_pubkey;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__show_friendnumber_on_friendlist;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;
-import static com.zoffcc.applications.trifa.MainActivity.cache_confid_confnum;
 import static com.zoffcc.applications.trifa.MainActivity.cache_fnum_pubkey;
 import static com.zoffcc.applications.trifa.MainActivity.cache_pubkey_fnum;
 import static com.zoffcc.applications.trifa.MainActivity.friend_list_fragment;
-import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
-import static com.zoffcc.applications.trifa.MainActivity.tox_conference_invite;
-import static com.zoffcc.applications.trifa.MainActivity.tox_conference_new;
 import static com.zoffcc.applications.trifa.MainActivity.tox_friend_delete;
-import static com.zoffcc.applications.trifa.MainActivity.tox_friend_get_connection_ip;
-import static com.zoffcc.applications.trifa.MainActivity.toxav_add_av_groupchat;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FL_NOTIFICATION_ICON_ALPHA_NOT_SELECTED;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FL_NOTIFICATION_ICON_ALPHA_SELECTED;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FL_NOTIFICATION_ICON_SIZE_DP_NOT_SELECTED;
@@ -87,8 +77,6 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.LAST_ONLINE_TIMSTAMP_ON
 import static com.zoffcc.applications.trifa.TRIFAGlobals.ONE_HOUR_IN_MS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.VFS_FILE_DIR;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.VFS_PREFIX;
-import static com.zoffcc.applications.trifa.ToxVars.TOX_CONFERENCE_TYPE.TOX_CONFERENCE_TYPE_AV;
-import static com.zoffcc.applications.trifa.ToxVars.TOX_CONFERENCE_TYPE.TOX_CONFERENCE_TYPE_TEXT;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_CONNECTION.TOX_CONNECTION_NONE;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_CONNECTION.TOX_CONNECTION_TCP;
 import static com.zoffcc.applications.trifa.TrifaToxService.orma;
