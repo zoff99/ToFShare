@@ -85,7 +85,6 @@ import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notificati
 import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notification_setup;
 import static com.zoffcc.applications.trifa.MainActivity.DEBUG_BATTERY_OPTIMIZATION_LOGGING;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__X_battery_saving_mode;
-import static com.zoffcc.applications.trifa.MainActivity.PREF__X_battery_saving_timeout;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__force_udp_only;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__use_push_service;
 import static com.zoffcc.applications.trifa.MainActivity.SD_CARD_FILES_DEBUG_DIR;
@@ -914,11 +913,8 @@ public class TrifaToxService extends Service
                             {
                                 need_wakeup_now = false;
 
-                                // set the used value to the new value
-                                BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS = PREF__X_battery_saving_timeout * 1000 * 60;
                                 Log.i(TAG, "set BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS:" +
-                                           BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS + " PREF__X_battery_saving_timeout:" +
-                                           PREF__X_battery_saving_timeout);
+                                           BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS);
 
 
                                 Log.i(TAG, "entering BATTERY SAVINGS MODE ...");
@@ -1268,10 +1264,8 @@ public class TrifaToxService extends Service
 
 
                                 // set the used value to the new value
-                                BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS = PREF__X_battery_saving_timeout * 1000 * 60;
                                 Log.i(TAG, "set BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS:" +
-                                           BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS + " PREF__X_battery_saving_timeout:" +
-                                           PREF__X_battery_saving_timeout);
+                                           BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS);
 
                                 // global_self_connection_status = tox_self_get_connection_status();
                             }

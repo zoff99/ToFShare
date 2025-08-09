@@ -401,7 +401,6 @@ public class MainActivity extends AppCompatActivity
     static boolean PREF__h264_encoder_use_intra_refresh = true;
     static boolean PREF__conference_show_system_messages = false;
     static boolean PREF__X_battery_saving_mode = true;
-    static int PREF__X_battery_saving_timeout = 120; // in minutes
     static boolean PREF__X_misc_button_enabled = false;
     static String PREF__X_misc_button_msg = "t"; // TODO: hardcoded for now!
     static boolean PREF__U_keep_nospam = false;
@@ -818,24 +817,6 @@ public class MainActivity extends AppCompatActivity
         PREF__mic_gain_factor_toggle = settings.getBoolean("mic_gain_factor_toggle", false);
         PREF__window_security = settings.getBoolean("window_security", true);
         PREF__use_native_audio_play = settings.getBoolean("X_use_native_audio_play", true);
-
-        try
-        {
-            if (settings.getString("X_battery_saving_timeout", "120").compareTo("120") == 0)
-            {
-                PREF__X_battery_saving_timeout = 120;
-            }
-            else
-            {
-                PREF__X_battery_saving_timeout = Integer.parseInt(settings.getString("X_battery_saving_timeout", "120"));
-                Log.i(TAG, "PREF__X_battery_saving_timeout:1:=" + PREF__X_battery_saving_timeout);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            PREF__X_battery_saving_timeout = 120;
-        }
 
         boolean tmp1 = settings.getBoolean("udp_enabled", false);
 
@@ -3261,24 +3242,6 @@ public class MainActivity extends AppCompatActivity
         update_savedata_file_wrapper_throttled_last_trigger_ts = 0;
 
         remove_all_progressDialogs();
-
-        try
-        {
-            if (settings.getString("X_battery_saving_timeout", "120").compareTo("120") == 0)
-            {
-                PREF__X_battery_saving_timeout = 120;
-            }
-            else
-            {
-                PREF__X_battery_saving_timeout = Integer.parseInt(settings.getString("X_battery_saving_timeout", "120"));
-                Log.i(TAG, "PREF__X_battery_saving_timeout:2:=" + PREF__X_battery_saving_timeout);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            PREF__X_battery_saving_timeout = 120;
-        }
 
         try
         {

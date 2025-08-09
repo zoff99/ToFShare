@@ -131,18 +131,6 @@
         android:summary="@string/pref_description_X_battery_saving_mode_new"
         android:title="@string/pref_title_X_battery_saving_mode_new" />
 
-    <ListPreference
-        android:defaultValue="120"
-        android:dependency="X_battery_saving_mode"
-        android:entries="@array/X_battery_saving_timeout_titles"
-        android:entryValues="@array/X_battery_saving_timeout_values"
-        android:key="X_battery_saving_timeout"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="@string/pref_description_X_battery_saving_timeout"
-        android:title="@string/pref_title_X_battery_saving_timeout" />
-
-
     <PreferenceCategory android:title="! unsafe !">
 
         <SwitchPreference
