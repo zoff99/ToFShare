@@ -1707,6 +1707,13 @@ public class MainActivity extends AppCompatActivity
                             if (distributors.get(i).compareTo(chosen_push_distributor) == 0)
                             {
                                 // the previously chosen distributor was found, register it again
+                                try
+                                {
+                                    Log.i(TAG, "PUSH:UnifiedPush:found chosen_distributor=" + distributors.get(i));
+                                }
+                                catch(Exception e2)
+                                {
+                                }
                                 found_chosen_distributor = true;
                                 UnifiedPush.saveDistributor(context, distributors.get(i));
                                 UnifiedPush.registerApp(context, MainActivity.push_instance_name, "tofshare push", null);

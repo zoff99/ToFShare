@@ -45,6 +45,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.CONTROL_PROXY_MESSAGE_T
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_FCM_PUSH_URL_PREFIX;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_FCM_PUSH_URL_PREFIX_OLD;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_NTFY_PUSH_URL_PREFIX;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_PROVIDER_DB_KEY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_TOKEN_DB_KEY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_UP_PUSH_URL_PREFIX;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_GROUP_CHAT_ID_SIZE;
@@ -247,5 +248,6 @@ public class HelperRelay
     static void remove_own_pushurl_in_db()
     {
         del_g_opts(NOTIFICATION_TOKEN_DB_KEY);
+        del_g_opts(NOTIFICATION_PROVIDER_DB_KEY);
     }
 }
