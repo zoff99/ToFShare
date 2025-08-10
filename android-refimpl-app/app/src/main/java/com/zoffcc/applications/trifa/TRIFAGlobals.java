@@ -59,11 +59,11 @@ public class TRIFAGlobals
     final static String TRIFA_GITHUB_NEW_ISSUE_URL = TRIFA_GITHUB_REPO_URL + "/issues/new";
 
     static boolean HAVE_INTERNET_CONNECTIVITY = true;
-    final static int TOX_BOOTSTRAP_MIN_INTERVAL_SECS = 60 * 5; // 5 minutes
+    final static int TOX_BOOTSTRAP_MIN_INTERVAL_SECS = 20; // 20 seconds
     final static int TOX_BOOTSTRAP_AGAIN_AFTER_OFFLINE_MILLIS =
             1000 * 60 * 5; // bootstrap again after 5 minutes offline
     final static int SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE = 60 * 5; // 5 minutes
-    static long BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS = 10 * 60 * (1000 * 60); // 10 hours
+    static long BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS = 100 * 60 * (1000 * 60); // 100 hours
     static int BATTERY_OPTIMIZATION_LAST_SLEEP1 = -1;
     static int BATTERY_OPTIMIZATION_LAST_SLEEP2 = -1;
     static int BATTERY_OPTIMIZATION_LAST_SLEEP3 = -1;

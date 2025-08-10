@@ -3963,7 +3963,7 @@ public class HelperGeneric
             }
         }
 
-        // Log.i(TAG, "append_logger_msg:3:LOG_FRIEND_TOXID=" + log_friend_pubkey + " msg=" + logmsg);
+        Log.i(TAG, "append_logger_msg:3:msg=" + logmsg);
 
         long pin_timestamp = System.currentTimeMillis();
         Message m = new Message();

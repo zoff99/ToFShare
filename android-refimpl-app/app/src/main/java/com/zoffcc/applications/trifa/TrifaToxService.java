@@ -100,6 +100,7 @@ import static com.zoffcc.applications.trifa.MainActivity.context_s;
 import static com.zoffcc.applications.trifa.MainActivity.get_my_toxid;
 import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
 import static com.zoffcc.applications.trifa.MainActivity.tox_friend_get_connection_status;
+import static com.zoffcc.applications.trifa.MainActivity.tox_iterate;
 import static com.zoffcc.applications.trifa.MainActivity.tox_iteration_interval;
 import static com.zoffcc.applications.trifa.MainActivity.tox_self_capabilites;
 import static com.zoffcc.applications.trifa.MainActivity.tox_self_get_capabilities;
@@ -881,7 +882,7 @@ public class TrifaToxService extends Service
                     try
                     {
                         TrifaToxService.write_debug_file("STARTUP__start__bootstrapping");
-                        bootstrap_me();
+                        bootstrap_me(true);
                         TrifaToxService.write_debug_file("STARTUP__finish__bootstrapping");
                     }
                     catch (Exception e)
@@ -1135,10 +1136,12 @@ public class TrifaToxService extends Service
                                     catch (Exception es)
                                     {
                                         TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__interrupted");
+                                        append_logger_msg(TAG + "::" + "BATTERY_SAVINGS_MODE__finish__interrupted");
                                         break;
                                     }
                                 }
 
+                                append_logger_msg(TAG + "::" + "finish BATTERY SAVINGS MODE, connecting again");
                                 Log.i(TAG, "finish BATTERY SAVINGS MODE, connecting again");
                                 TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__connecting");
 
@@ -1164,7 +1167,9 @@ public class TrifaToxService extends Service
                                 tox_notification_change_wrapper(TOX_CONNECTION_a,
                                                                 ""); // set to real connection status
                                 TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__start__bootstrapping");
-                                bootstrap_me();
+                                bootstrap_me(true);
+                                tox_iterate();
+                                bootstrap_me(true);
                                 TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__bootstrapping:" +
                                                                  tox_self_get_connection_status());
 
@@ -1404,7 +1409,7 @@ public class TrifaToxService extends Service
                         try
                         {
                             TrifaToxService.write_debug_file("RUN__start__bootstrapping");
-                            bootstrap_me();
+                            bootstrap_me(false);
                             TrifaToxService.write_debug_file(
                                     "RUN__finish__bootstrapping:" + tox_self_get_connection_status());
                         }
@@ -1473,15 +1478,23 @@ public class TrifaToxService extends Service
         }
     }
 
-    static void bootstrap_me()
+    static void bootstrap_me(boolean force)
     {
         append_logger_msg(TAG + "::" + "calling bootstrap_me()");
+        if (force)
+        {
+            global_last_bootstrap_ts = System.currentTimeMillis();
+            append_logger_msg(TAG + "::" + "calling bootstrap_me__real() [force]");
+            bootstrap_me__real();
+            return;
+        }
+
         if (global_last_bootstrap_ts > -1)
         {
             if ((global_last_bootstrap_ts + (TOX_BOOTSTRAP_MIN_INTERVAL_SECS * 1000)) <= System.currentTimeMillis())
             {
                 final long dt = System.currentTimeMillis() - global_last_bootstrap_ts;
-                append_logger_msg(TAG + "::" + "calling bootstrap_me__real() [delta time ms: " + dt + " (min ms: " + (TOX_BOOTSTRAP_MIN_INTERVAL_SECS * 1000) + " )]");
+                append_logger_msg(TAG + "::" + "calling bootstrap_me__real() [delta time s: " + (dt / 1000) + " (min s: " + TOX_BOOTSTRAP_MIN_INTERVAL_SECS + " )]");
                 global_last_bootstrap_ts = System.currentTimeMillis();
                 bootstrap_me__real();
             }
