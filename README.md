@@ -1,5 +1,7 @@
 # Tox File Share (for Android)
 
+This is a simplified version of TRIfA (the Tox Message Application for Android) the focuses on stable file exchange.
+
 Status
 =
 [![Android CI](https://github.com/zoff99/ToFShare/actions/workflows/app_startup.yml/badge.svg?branch=master)](https://github.com/zoff99/ToFShare/actions/workflows/app_startup.yml)
