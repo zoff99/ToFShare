@@ -33,6 +33,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import static com.zoffcc.applications.trifa.HelperGeneric.append_logger_msg;
 import static com.zoffcc.applications.trifa.TrifaToxService.trifa_service_thread;
 
 public class MyExternReceiver // extends BroadcastReceiver
@@ -162,6 +163,7 @@ public class MyExternReceiver // extends BroadcastReceiver
 
                     if (trifa_service_thread != null)
                     {
+                        append_logger_msg(TAG + "::" + "need_wakeup_now trigger 002");
                         TrifaToxService.need_wakeup_now = true;
                         trifa_service_thread.interrupt();
                     }

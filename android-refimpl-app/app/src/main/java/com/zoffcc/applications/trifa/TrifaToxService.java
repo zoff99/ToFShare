@@ -54,7 +54,6 @@ import static com.zoffcc.applications.trifa.BootstrapNodeEntryDB.get_udp_nodelis
 import static com.zoffcc.applications.trifa.CombinedFriendsAndConferences.COMBINED_IS_FRIEND;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.set_all_filetransfers_inactive;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.start_outgoing_ft;
-import static com.zoffcc.applications.trifa.HelperFriend.add_friend_real;
 import static com.zoffcc.applications.trifa.HelperFriend.add_friend_real_norequest;
 import static com.zoffcc.applications.trifa.HelperFriend.friend_call_push_url;
 import static com.zoffcc.applications.trifa.HelperFriend.get_friend_msgv3_capability;
@@ -65,6 +64,7 @@ import static com.zoffcc.applications.trifa.HelperFriend.set_all_friends_offline
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_by_public_key__wrapper;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_get_public_key__wrapper;
 import static com.zoffcc.applications.trifa.HelperGeneric.IPisValid;
+import static com.zoffcc.applications.trifa.HelperGeneric.append_logger_msg;
 import static com.zoffcc.applications.trifa.HelperGeneric.battery_saving_can_sleep;
 import static com.zoffcc.applications.trifa.HelperGeneric.bootstrap_single_wrapper;
 import static com.zoffcc.applications.trifa.HelperGeneric.bytebuffer_to_hexstring;
@@ -958,6 +958,7 @@ public class TrifaToxService extends Service
                             Log.i(TAG, "need_add_log_pseudo_friend=update meta data");
                         }
                         Log.i(TAG, "need_add_log_pseudo_friend=true (INSERT)");
+                        append_logger_msg("need_add_log_pseudo_friend=true (INSERT)");
                     }
                 }
                 // -------- add log friend --------
@@ -975,6 +976,7 @@ public class TrifaToxService extends Service
                 // ------- MAIN TOX LOOP ---------------------------------------------------------------
                 // ------- MAIN TOX LOOP ---------------------------------------------------------------
                 // ------- MAIN TOX LOOP ---------------------------------------------------------------
+                append_logger_msg(TAG + "::" + "tox main loop START");
                 tox_thread_starting_up = 1;
                 while (!stop_me)
                 {
@@ -995,6 +997,7 @@ public class TrifaToxService extends Service
 
 
                                 Log.i(TAG, "entering BATTERY SAVINGS MODE ...");
+                                append_logger_msg(TAG + "::" + "entering BATTERY SAVINGS MODE ...");
                                 TrifaToxService.write_debug_file(
                                         "BATTERY_SAVINGS_MODE__enter:" + tox_self_get_connection_status());
 
@@ -1028,6 +1031,7 @@ public class TrifaToxService extends Service
 
                                 trifa_service_thread = Thread.currentThread();
 
+                                append_logger_msg(TAG + "::" + "setting alarm ...");
                                 // ---------------------------------------------------------
                                 Intent intent_wakeup = new Intent(getApplicationContext(), WakeupAlarmReceiver.class);
                                 // intentWakeFullBroacastReceiver.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
@@ -1120,6 +1124,7 @@ public class TrifaToxService extends Service
 
                                     if (need_wakeup_now)
                                     {
+                                        append_logger_msg(TAG + "::" + "need_wakeup_now trigger 001");
                                         break;
                                     }
 
@@ -1247,6 +1252,8 @@ public class TrifaToxService extends Service
                 // ------- MAIN TOX LOOP ---------------------------------------------------------------
                 // ------- MAIN TOX LOOP ---------------------------------------------------------------
                 // ------- MAIN TOX LOOP ---------------------------------------------------------------
+
+                append_logger_msg(TAG + "::" + "tox main loop stop");
 
                 tox_thread_starting_up = 2;
 
@@ -1468,10 +1475,13 @@ public class TrifaToxService extends Service
 
     static void bootstrap_me()
     {
+        append_logger_msg(TAG + "::" + "calling bootstrap_me()");
         if (global_last_bootstrap_ts > -1)
         {
-            if ((global_last_bootstrap_ts + TOX_BOOTSTRAP_MIN_INTERVAL_SECS) <= System.currentTimeMillis())
+            if ((global_last_bootstrap_ts + (TOX_BOOTSTRAP_MIN_INTERVAL_SECS * 1000)) <= System.currentTimeMillis())
             {
+                final long dt = System.currentTimeMillis() - global_last_bootstrap_ts;
+                append_logger_msg(TAG + "::" + "calling bootstrap_me__real() [delta time ms: " + dt + " (min ms: " + (TOX_BOOTSTRAP_MIN_INTERVAL_SECS * 1000) + " )]");
                 global_last_bootstrap_ts = System.currentTimeMillis();
                 bootstrap_me__real();
             }
@@ -1479,14 +1489,14 @@ public class TrifaToxService extends Service
         else
         {
             global_last_bootstrap_ts = System.currentTimeMillis();
+            append_logger_msg(TAG + "::" + "calling bootstrap_me__real() [startup]");
             bootstrap_me__real();
         }
     }
 
     static void bootstrap_me__real()
     {
-        Log.i(TAG, "bootstrap_me");
-
+        Log.i(TAG, "bootstrap_me__real");
         bootstap_from_custom_nodes();
 
         // ----- UDP ------
@@ -1927,6 +1937,7 @@ public class TrifaToxService extends Service
             if (trifa_service_thread != null)
             {
                 Log.i(TAG, "wakeup_tox_thread");
+                append_logger_msg(TAG + "::" + "need_wakeup_now trigger 003 [wakeup_tox_thread]");
                 TrifaToxService.need_wakeup_now = true;
                 trifa_service_thread.interrupt();
                 Log.i(TAG, "wakeup_tox_thread:DONE");
