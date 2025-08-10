@@ -1723,13 +1723,14 @@ public class MessageListActivity extends AppCompatActivity
             return;
         }
 
-        if (file_size > FT_OUTGOING_FILESIZE_FRIEND_MAX_TOTAL)
+        if (file_size >= FT_OUTGOING_FILESIZE_FRIEND_MAX_TOTAL)
         {
             display_toast("File too large", true, 100);
             Log.i(TAG, "add_outgoing_file:documentFile:file_size=File too large");
             return;
         }
 
+        //noinspection ConstantValue
         if (file_size < FT_OUTGOING_FILESIZE_BYTE_USE_STORAGE_FRAMEWORK) // less than xxx Bytes filesize
         {
             Log.i(TAG, "add_outgoing_file:documentFile:0001");
@@ -1808,6 +1809,21 @@ public class MessageListActivity extends AppCompatActivity
         }
         else
         {
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+            // should never get here !!!!!!!!!!!!
+
+
             // Log.i(TAG, "add_outgoing_file:friendnum(2)=" + friendnum);
 
             Filetransfer f = new Filetransfer();
