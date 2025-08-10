@@ -134,6 +134,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.RESEND_FILETRANSFERS_DE
 import static com.zoffcc.applications.trifa.TRIFAGlobals.RESEND_MSGS_DELTA_SECS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TOX_BOOTSTRAP_AGAIN_AFTER_OFFLINE_MILLIS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TOX_BOOTSTRAP_MIN_INTERVAL_SECS;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.TOX_MIN_NORMAL_ITERATE_DELTA_MS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_MSG_TYPE.TRIFA_MSG_FILE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_MSG_TYPE.TRIFA_MSG_TYPE_TEXT;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.USE_MAX_NUMBER_OF_BOOTSTRAP_NODES;
@@ -890,6 +891,8 @@ public class TrifaToxService extends Service
                         e.printStackTrace();
                         Log.i(TAG, "bootstrap_me:001:EE:" + e.getMessage());
                     }
+
+                    check_if_still_bootstrapping();
                 }
 
                 // --------------- bootstrap ---------------
@@ -1001,31 +1004,6 @@ public class TrifaToxService extends Service
                                 append_logger_msg(TAG + "::" + "entering BATTERY SAVINGS MODE ...");
                                 TrifaToxService.write_debug_file(
                                         "BATTERY_SAVINGS_MODE__enter:" + tox_self_get_connection_status());
-
-                                // try to fix endless bootstraping (on yellow) bug ----------------
-                                if (tox_self_get_connection_status() == 0)
-                                {
-                                    final int millis_sleep = 100;
-                                    final int seconds_for_bootstrapping = 10;
-                                    TrifaToxService.write_debug_file(
-                                            "BATTERY_SAVINGS_MODE__start_wait_for_bootstrapping:" +
-                                            tox_self_get_connection_status());
-                                    for (int ii = 0; ii < ((seconds_for_bootstrapping * 1000) / millis_sleep); ii++)
-                                    {
-                                        MainActivity.tox_iterate();
-                                        try
-                                        {
-                                            Thread.sleep(millis_sleep);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                        }
-                                    }
-                                    TrifaToxService.write_debug_file(
-                                            "BATTERY_SAVINGS_MODE__done_wait_for_bootstrapping:" +
-                                            tox_self_get_connection_status());
-                                }
-                                // try to fix endless bootstraping (on yellow) bug ----------------
 
                                 long current_timestamp_ = System.currentTimeMillis();
                                 global_self_last_entered_battery_saving_timestamp = current_timestamp_;
@@ -1169,10 +1147,10 @@ public class TrifaToxService extends Service
                                 TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__start__bootstrapping");
                                 bootstrap_me(true);
                                 tox_iterate();
-                                bootstrap_me(true);
                                 TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__bootstrapping:" +
                                                                  tox_self_get_connection_status());
 
+                                check_if_still_bootstrapping();
 
                                 BATTERY_OPTIMIZATION_LAST_SLEEP3 = BATTERY_OPTIMIZATION_LAST_SLEEP2;
                                 BATTERY_OPTIMIZATION_LAST_SLEEP2 = BATTERY_OPTIMIZATION_LAST_SLEEP1;
@@ -1222,7 +1200,7 @@ public class TrifaToxService extends Service
                         }
                         else
                         {
-                            tox_iteration_interval_ms = Math.max(100, MainActivity.tox_iteration_interval());
+                            tox_iteration_interval_ms = Math.max(TOX_MIN_NORMAL_ITERATE_DELTA_MS, MainActivity.tox_iteration_interval());
                         }
                     }
                     else if (global_last_activity_incoming_ft_ts > -1)
@@ -1234,12 +1212,12 @@ public class TrifaToxService extends Service
                         }
                         else
                         {
-                            tox_iteration_interval_ms = Math.max(100, MainActivity.tox_iteration_interval());
+                            tox_iteration_interval_ms = Math.max(TOX_MIN_NORMAL_ITERATE_DELTA_MS, MainActivity.tox_iteration_interval());
                         }
                     }
                     else
                     {
-                        tox_iteration_interval_ms = Math.max(100, MainActivity.tox_iteration_interval());
+                        tox_iteration_interval_ms = Math.max(TOX_MIN_NORMAL_ITERATE_DELTA_MS, MainActivity.tox_iteration_interval());
                     }
 
                     if (global_self_connection_status != TOX_CONNECTION_NONE.value)
@@ -1298,6 +1276,33 @@ public class TrifaToxService extends Service
         };
 
         ToxServiceThread.start();
+    }
+
+    private void check_if_still_bootstrapping()
+    {
+        try
+        {
+            if (tox_self_get_connection_status() != TOX_CONNECTION_NONE.value)
+            {
+                bootstrapping = false;
+                append_logger_msg(TAG + "::check_if_still_bootstrapping:false");
+            }
+        }
+        catch(Exception e)
+        {
+            append_logger_msg(TAG + "::check_if_still_bootstrapping:EE:001");
+        }
+
+        try
+        {
+            tox_notification_change_wrapper(tox_self_get_connection_status(),"");
+            append_logger_msg(TAG + "::tox_notification_change:" + tox_self_get_connection_status());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            append_logger_msg(TAG + "::check_if_still_bootstrapping:EE:002");
+        }
     }
 
     private void send_or_resend_pending_messages()
@@ -1418,6 +1423,8 @@ public class TrifaToxService extends Service
                             e.printStackTrace();
                             Log.i(TAG, "bootstrap_me:001:EE:" + e.getMessage());
                         }
+
+                        check_if_still_bootstrapping();
                     }
                 }
             }

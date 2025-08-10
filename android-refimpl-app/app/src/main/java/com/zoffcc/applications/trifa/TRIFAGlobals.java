@@ -41,6 +41,7 @@ public class TRIFAGlobals
     static long global_self_last_entered_battery_saving_timestamp = -1;
     static boolean global_showing_messageview = false;
     static boolean global_showing_mainview = false;
+    final static int TOX_MIN_NORMAL_ITERATE_DELTA_MS = 100;
     static int global_tox_self_status = ToxVars.TOX_USER_STATUS.TOX_USER_STATUS_NONE.value;
 
     static String global_notification_token = null;
@@ -59,7 +60,7 @@ public class TRIFAGlobals
     final static String TRIFA_GITHUB_NEW_ISSUE_URL = TRIFA_GITHUB_REPO_URL + "/issues/new";
 
     static boolean HAVE_INTERNET_CONNECTIVITY = true;
-    final static int TOX_BOOTSTRAP_MIN_INTERVAL_SECS = 20; // 20 seconds
+    final static int TOX_BOOTSTRAP_MIN_INTERVAL_SECS = 60; // 60 seconds
     final static int TOX_BOOTSTRAP_AGAIN_AFTER_OFFLINE_MILLIS =
             1000 * 60 * 5; // bootstrap again after 5 minutes offline
     final static int SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE = 60 * 5; // 5 minutes
@@ -243,8 +244,8 @@ public class TRIFAGlobals
     static final int LEN_TRIFA_AUTOGEN_PASSWORD = 32;
     static final int LEN_TRIFA_MANUAL_PASSWORD_MIN_LEN = 7;
 
-    static final int USE_MAX_NUMBER_OF_BOOTSTRAP_NODES = 8;
-    static final int USE_MAX_NUMBER_OF_BOOTSTRAP_TCP_RELAYS = 8;
+    static final int USE_MAX_NUMBER_OF_BOOTSTRAP_NODES = 20;
+    static final int USE_MAX_NUMBER_OF_BOOTSTRAP_TCP_RELAYS = 20;
 
     static final int INTERVAL_ADD_ALL_FRIENDS_CLEAR_MS = 1000;
     static final int INTERVAL_UPDATE_NGC_GROUP_ALL_USERS_MS = 1000;
