@@ -140,22 +140,18 @@ import static com.zoffcc.applications.trifa.HelperFriend.get_friend_avatar_saved
 import static com.zoffcc.applications.trifa.HelperFriend.get_friend_msgv3_capability;
 import static com.zoffcc.applications.trifa.HelperFriend.main_get_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.send_friend_msg_receipt_v2_wrapper;
-import static com.zoffcc.applications.trifa.HelperFriend.send_pushurl_to_all_friends;
 import static com.zoffcc.applications.trifa.HelperFriend.send_pushurl_to_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_by_public_key__wrapper;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_get_public_key__wrapper;
 import static com.zoffcc.applications.trifa.HelperFriend.update_friend_in_db_capabilities;
 import static com.zoffcc.applications.trifa.HelperFriend.update_friend_in_db_ip_addr_str;
 import static com.zoffcc.applications.trifa.HelperGeneric.bytes_to_hex;
-import static com.zoffcc.applications.trifa.HelperGeneric.del_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.display_toast;
 import static com.zoffcc.applications.trifa.HelperGeneric.display_toast_with_context_custom_duration;
 import static com.zoffcc.applications.trifa.HelperGeneric.draw_main_top_icon;
-import static com.zoffcc.applications.trifa.HelperGeneric.get_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.hexstring_to_bytebuffer;
 import static com.zoffcc.applications.trifa.HelperGeneric.initializeScreenshotSecurity;
 import static com.zoffcc.applications.trifa.HelperGeneric.is_nightmode_active;
-import static com.zoffcc.applications.trifa.HelperGeneric.set_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.update_savedata_file_wrapper_throttled_last_trigger_ts;
 import static com.zoffcc.applications.trifa.HelperGeneric.write_chunk_to_VFS_file;
 import static com.zoffcc.applications.trifa.HelperMsgNotification.change_msg_notification;
@@ -183,8 +179,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.MAX_ALLOWED_INCOMING_FI
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NGC_AUDIO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NORMAL_GLOBAL_AUDIO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_EDIT_ACTION.NOTIFICATION_EDIT_ACTION_ADD;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_TOKEN_DB_KEY;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_TOKEN_DB_KEY_NEED_ACK;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_PROVIDER_DB_KEY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.ORBOT_PROXY_HOST;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.ORBOT_PROXY_PORT;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.PREF__DB_secrect_key__user_hash;
@@ -441,7 +436,6 @@ public class MainActivity extends AppCompatActivity
     static boolean PREF__compact_chatlist = true;
     static boolean PREF__use_push_service = true;
     static String[] PREF__toxirc_muted_peers = {};
-    static boolean PREF__hide_setup_push_tip = false;
     static boolean PREF__show_friendnumber_on_friendlist = false;
     static int PREF__dark_mode_pref = 1;
     static boolean PREF__allow_push_server_ntfy = true;
@@ -1217,19 +1211,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         own_push_token_load();
-        if ((PREF__hide_setup_push_tip == false) && (TRIFAGlobals.global_notification_token == null))
-        {
-            // show icon for PUSH tip
-            top_imageview3.setBackgroundColor(Color.TRANSPARENT);
-            final Drawable d1 = new IconicsDrawable(this).icon(FontAwesome.Icon.faw_info_circle).paddingDp(15).color(
-                    getResources().getColor(R.color.md_yellow_600)).sizeDp(100);
-            top_imageview3.setImageDrawable(d1);
-            fadeInAndShowImage(top_imageview3, 5000);
-        }
-        else
-        {
-            top_imageview3.setVisibility(View.GONE);
-        }
+        top_imageview3.setVisibility(View.GONE);
 
         fadeInAndShowImage(top_imageview, 5000);
         fadeOutAndHideImage(mt, 4000);
@@ -1665,14 +1647,13 @@ public class MainActivity extends AppCompatActivity
         ////// WATCHDOG //////
         */
 
-        registerAppWithDialog(this, push_instance_name);
+        register_for_push(this);
 
         Log.i(TAG, "M:STARTUP:-- DONE --");
     }
 
-    private static void registerAppWithDialog(Context context, String slug)
+    private static void register_for_push(Context context)
     {
-
         List<String> distributors = UnifiedPush.getDistributors(context);
         if ((distributors != null) && (distributors.size() > 0))
         {
@@ -1692,40 +1673,89 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 UnifiedPush.saveDistributor(context, distributors.get(0));
-                UnifiedPush.registerApp(context, slug,"tofshare push", null);
+                UnifiedPush.registerApp(context, MainActivity.push_instance_name, "tofshare push", null);
+                HelperGeneric.del_g_opts(NOTIFICATION_PROVIDER_DB_KEY);
                 return;
             }
 
-            AlertDialog.Builder alert = new AlertDialog.Builder(context);
-            if (distributors.isEmpty())
+            try
             {
-                Toast.makeText(context, "No UnifiedPush Distributors found", Toast.LENGTH_SHORT).show();
+                String available_dist = "";
+                for (int i = 0; i < distributors.size(); i++)
+                {
+                    available_dist = available_dist + distributors.get(i) + "\n";
+                }
+                Log.i(TAG, "PUSH:UnifiedPush:dists2=" + available_dist);
             }
-            else
+            catch (Exception ignored)
             {
-                try
-                {
-                    String available_dist = "";
-                    for (int i = 0; i < distributors.size(); i++)
-                    {
-                        available_dist = available_dist + distributors.get(i) + "\n";
-                    }
-                    Log.i(TAG, "PUSH:UnifiedPush:dists2=" + available_dist);
-                }
-                catch (Exception ignored)
-                {
-                }
+            }
 
-                alert.setTitle("select_distributors");
-                String[] distributorsStr = distributors.toArray(new String[0]);
-                alert.setSingleChoiceItems(distributorsStr, -1, (dialog, item) -> {
-                    String distributor = distributorsStr[item];
-                    UnifiedPush.saveDistributor(context, distributor);
-                    UnifiedPush.registerApp(context, slug, "tofshare push", null);
-                    dialog.dismiss();
-                });
+            final String chosen_push_distributor = HelperGeneric.get_g_opts(NOTIFICATION_PROVIDER_DB_KEY);
+            boolean found_chosen_distributor = false;
+
+            Log.i(TAG, "PUSH:UnifiedPush:chosen_push_distributor=" + chosen_push_distributor);
+
+            if ((chosen_push_distributor != null))
+            {
+                if (!distributors.isEmpty())
+                {
+                    try
+                    {
+                        for (int i = 0; i < distributors.size(); i++)
+                        {
+                            if (distributors.get(i).compareTo(chosen_push_distributor) == 0)
+                            {
+                                // the previously chosen distributor was found, register it again
+                                found_chosen_distributor = true;
+                                UnifiedPush.saveDistributor(context, distributors.get(i));
+                                UnifiedPush.registerApp(context, MainActivity.push_instance_name, "tofshare push", null);
+                                return;
+                            }
+                        }
+                    }
+                    catch (Exception ignored)
+                    {
+                        found_chosen_distributor = false;
+                    }
+                }
             }
-            alert.show();
+
+            if (!found_chosen_distributor)
+            {
+                HelperGeneric.del_g_opts(NOTIFICATION_PROVIDER_DB_KEY);
+                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                if (distributors.isEmpty())
+                {
+                    Toast.makeText(context, "No UnifiedPush Distributors found", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    try
+                    {
+                        String available_dist = "";
+                        for (int i = 0; i < distributors.size(); i++)
+                        {
+                            available_dist = available_dist + distributors.get(i) + "\n";
+                        }
+                        Log.i(TAG, "PUSH:UnifiedPush:dists2=" + available_dist);
+                    }
+                    catch (Exception ignored)
+                    {
+                    }
+
+                    alert.setTitle("select_distributors");
+                    String[] distributorsStr = distributors.toArray(new String[0]);
+                    alert.setSingleChoiceItems(distributorsStr, -1, (dialog, item) -> {
+                        String distributor = distributorsStr[item];
+                        UnifiedPush.saveDistributor(context, distributor);
+                        UnifiedPush.registerApp(context, MainActivity.push_instance_name, "tofshare push", null);
+                        HelperGeneric.set_g_opts(NOTIFICATION_PROVIDER_DB_KEY, distributor);
+                        dialog.dismiss();
+                    });
+                }
+                alert.show();
+            }
         }
     }
 
@@ -3401,19 +3431,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         own_push_token_load();
-        if ((PREF__hide_setup_push_tip == false) && (TRIFAGlobals.global_notification_token == null))
-        {
-            // show icon for PUSH tip
-            top_imageview3.setBackgroundColor(Color.TRANSPARENT);
-            final Drawable d1 = new IconicsDrawable(this).icon(FontAwesome.Icon.faw_info_circle).paddingDp(15).color(
-                    getResources().getColor(R.color.md_yellow_600)).sizeDp(100);
-            top_imageview3.setImageDrawable(d1);
-            top_imageview3.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            top_imageview3.setVisibility(View.GONE);
-        }
+        top_imageview3.setVisibility(View.GONE);
 
         top_imageview3.setOnClickListener(new View.OnClickListener()
         {
@@ -3854,67 +3872,6 @@ public class MainActivity extends AppCompatActivity
         {
             e.printStackTrace();
         }
-
-        // ACK new Notification token --------------------------
-        try
-        {
-            if (get_g_opts(NOTIFICATION_TOKEN_DB_KEY_NEED_ACK) != null)
-            {
-                // ok we have a new token, show the user a dialog to ask if we should use it
-                AlertDialog ad = new AlertDialog.Builder(this).setNegativeButton(R.string.MainActivity_no_button,
-                                                                                 new DialogInterface.OnClickListener()
-                                                                                 {
-                                                                                     public void onClick(DialogInterface dialog, int id)
-                                                                                     {
-                                                                                         try
-                                                                                         {
-                                                                                             del_g_opts(
-                                                                                                     NOTIFICATION_TOKEN_DB_KEY_NEED_ACK);
-                                                                                         }
-                                                                                         catch (Exception e)
-                                                                                         {
-                                                                                             e.printStackTrace();
-                                                                                             Log.i(TAG,
-                                                                                                   "del_NOTIFICATION_TOKEN_DB_KEY_NEED_ACK:EE01:" +
-                                                                                                   e.getMessage());
-                                                                                         }
-                                                                                     }
-                                                                                 }).setPositiveButton(
-                        R.string.MainActivity_yes_button, new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                try
-                                {
-                                    String new_token = get_g_opts(NOTIFICATION_TOKEN_DB_KEY_NEED_ACK);
-                                    set_g_opts(NOTIFICATION_TOKEN_DB_KEY, new_token);
-                                    del_g_opts(NOTIFICATION_TOKEN_DB_KEY_NEED_ACK);
-                                    if (PREF__use_push_service)
-                                    {
-                                        // now send token to all friends
-                                        send_pushurl_to_all_friends();
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    e.printStackTrace();
-                                    Log.i(TAG, "update_NOTIFICATION_TOKEN_DB_KEY_NEED_ACK:EE01:" + e.getMessage());
-                                }
-                            }
-                        }).create();
-                ad.setTitle(getString(R.string.MainActivity_new_noti_token_dialog_title));
-                ad.setMessage(getString(R.string.MainActivity_new_noti_token_dialog_text) + "\n\n" +
-                              get_g_opts(NOTIFICATION_TOKEN_DB_KEY_NEED_ACK));
-                ad.setCancelable(false);
-                ad.setCanceledOnTouchOutside(false);
-                ad.show();
-            }
-        }
-        catch (Exception ee2)
-        {
-            Log.i(TAG, "NOTIFICATION_TOKEN_DB_KEY_NEED_ACK:EE03:" + ee2.getMessage());
-        }
-        // ACK new Notification token --------------------------
     }
 
     @Override

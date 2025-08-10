@@ -4,6 +4,7 @@
 
 package com.zoffcc.applications.trifa
 
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -117,6 +118,7 @@ class PushServiceImpl : PushService() {
 
     private var token_wakeup_lock: PowerManager.WakeLock? = null
 
+    @SuppressLint("ObsoleteSdkInt")
     fun token_changed(intent2: Intent)
     {
         Log.i(TAG, "got intent: " + intent2)
@@ -125,7 +127,7 @@ class PushServiceImpl : PushService() {
             if (token_wakeup_lock == null)
             {
                 val pm = context.getSystemService(POWER_SERVICE) as PowerManager
-                token_wakeup_lock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "trifa:trifa_token_wakeup_lock");
+                token_wakeup_lock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "trifa:trifa_token_wakeup_lock")
             }
         }
         catch (e: Exception)
@@ -142,14 +144,14 @@ class PushServiceImpl : PushService() {
                 {
                     token_wakeup_lock?.isHeld?.let {
                         if (!it) {
-                            token_wakeup_lock?.acquire(10*1000L /*10 seconds*/);
-                            Log.i(TAG, "acquiring wakelock");
+                            token_wakeup_lock?.acquire(10*1000L /*10 seconds*/)
+                            Log.i(TAG, "acquiring wakelock")
                         }
                     }
                 }
                 catch (e: Exception)
                 {
-                    e.printStackTrace();
+                    e.printStackTrace()
                 }
 
                 try
@@ -172,43 +174,6 @@ class PushServiceImpl : PushService() {
                         } else {
                             Log.i(TAG, "API:" + Build.VERSION.SDK_INT)
                             try {
-                                val nm3 = context.getSystemService(
-                                    NOTIFICATION_SERVICE
-                                ) as NotificationManager
-
-                                val fullScreenIntent =
-                                    Intent(context, StartMainActivityWrapper::class.java)
-                                val fullScreenPendingIntent = PendingIntent.getActivity(
-                                    context, 0,
-                                    fullScreenIntent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                                )
-
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    val channel = NotificationChannel(
-                                        "trifa_extern_token_receiver_id", "new Token",
-                                        NotificationManager.IMPORTANCE_HIGH
-                                    )
-                                    nm3.createNotificationChannel(channel)
-                                }
-
-                                val notificationBuilder: NotificationCompat.Builder =
-                                    NotificationCompat.Builder(
-                                        context,
-                                        "trifa_extern_token_receiver_id"
-                                    ).setSmallIcon(R.mipmap.ic_launcher).
-                                    setContentTitle("TRIfA").
-                                    setContentText("new Token").
-                                    setPriority(NotificationCompat.PRIORITY_HIGH).
-                                    setCategory(NotificationCompat.CATEGORY_CALL).
-                                    setAutoCancel(true).
-                                    setFullScreenIntent(fullScreenPendingIntent, true)
-
-                                val incomingMsgNotification = notificationBuilder.build()
-                                nm3.notify(
-                                    MyTokenReceiver.CHANGE_TOKEN_NOTIFICATION_ID,
-                                    incomingMsgNotification
-                                )
                                 Log.i(TAG, "notify")
                             } catch (e2: java.lang.Exception) {
                                 e2.printStackTrace()
@@ -225,7 +190,7 @@ class PushServiceImpl : PushService() {
                 }
                 catch (e: Exception)
                 {
-                    e.printStackTrace();
+                    e.printStackTrace()
                     Log.i(TAG, "TrifaToxService startup:EE01:" + e.message)
                 }
 
@@ -268,15 +233,19 @@ class PushServiceImpl : PushService() {
                     e.printStackTrace()
                 }
 
-
-
-                try {
-                    HelperGeneric.set_g_opts(
-                        TRIFAGlobals.NOTIFICATION_TOKEN_DB_KEY_NEED_ACK,
-                        tokenReceived
-                    )
-                } catch (e: java.lang.Exception) {
-                    e.printStackTrace()
+                val current_push_token = HelperGeneric.get_g_opts(TRIFAGlobals.NOTIFICATION_TOKEN_DB_KEY)
+                if (!current_push_token.isNullOrEmpty()) {
+                    if (current_push_token == tokenReceived) {
+                        // push token has changed
+                        set_new_push_token(tokenReceived)
+                        send_push_token_to_all_friends()
+                    }
+                } else {
+                    if (tokenReceived != null) {
+                        // push token is new (we had no push token before)
+                        set_new_push_token(tokenReceived)
+                        send_push_token_to_all_friends()
+                    }
                 }
 
                 try {
@@ -304,12 +273,33 @@ class PushServiceImpl : PushService() {
         t.start()
     }
 
+    private fun send_push_token_to_all_friends() {
+        if (MainActivity.PREF__use_push_service) {
+            // now send token to all friends
+            HelperFriend.send_pushurl_to_all_friends()
+        }
+    }
+
+    private fun set_new_push_token(tokenReceived: String) {
+        try {
+            HelperGeneric.set_g_opts(
+                TRIFAGlobals.NOTIFICATION_TOKEN_DB_KEY,
+                tokenReceived
+            )
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun isMyServiceRunning(serviceClassName: String, c: Context): Boolean {
-        val manager = c.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        for (service in manager.getRunningServices(Int.Companion.MAX_VALUE)) {
-            if (serviceClassName == service.service.getClassName()) {
-                return true
+        try {
+            val manager = c.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+            for (service in manager.getRunningServices(Int.Companion.MAX_VALUE)) {
+                if (serviceClassName == service.service.className) {
+                    return true
+                }
             }
+        } catch(_: Exception) {
         }
         return false
     }
