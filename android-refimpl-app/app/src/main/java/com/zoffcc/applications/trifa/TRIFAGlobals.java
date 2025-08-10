@@ -71,9 +71,9 @@ public class TRIFAGlobals
     static int RESEND_MSGS_DELTA_SECS = 60 * 10; // 10 minutes;
     static int RESEND_FILETRANSFERS_DELTA_SECS = 5 * 10; // 5 minutes;
 
-    static int AUTO_ACCEPT_FT_MAX_IMAGE_SIZE_IN_MB = 12;
-    static int AUTO_ACCEPT_FT_MAX_VIDEO_SIZE_IN_MB = 40;
-    static int AUTO_ACCEPT_FT_MAX_ANYKIND_SIZE_IN_MB = 2 * 1024;
+    static int AUTO_ACCEPT_FT_MAX_IMAGE_SIZE_IN_MB = 200;
+    static int AUTO_ACCEPT_FT_MAX_VIDEO_SIZE_IN_MB = 20 * 1024;
+    static int AUTO_ACCEPT_FT_MAX_ANYKIND_SIZE_IN_MB = 20 * 1024;
 
     public static final String MY_PACKAGE_NAME = "com.zoffcc.applications.trifa";
     public static final int CONFERENCE_COOKIE_LENGTH = 35;

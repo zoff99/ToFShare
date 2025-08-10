@@ -94,16 +94,18 @@ public class HelperFiletransfer
         {
             String mimeType = URLConnection.guessContentTypeFromName(
                     get_filetransfer_filename_from_id(message.filetransfer_id).toLowerCase());
-            // Log.i(TAG, "check_auto_accept_incoming_filetransfer:mime-type=" + mimeType);
+            Log.i(TAG, "check_auto_accept_incoming_filetransfer:mime-type=" + mimeType);
 
             if (mimeType != null)
             {
                 if (PREF__auto_accept_image)
                 {
+                    Log.i(TAG, "check_auto_accept_incoming_filetransfer:image:check");
                     if (get_filetransfer_filesize_from_id(message.filetransfer_id) <=
-                        AUTO_ACCEPT_FT_MAX_IMAGE_SIZE_IN_MB * 1024 *
-                        1024) // if file size is smaller than 12 MByte accept FT
+                        (long) AUTO_ACCEPT_FT_MAX_IMAGE_SIZE_IN_MB * 1024 *
+                        1024) // if file size is smaller than x MByte accept FT
                     {
+                        Log.i(TAG, "check_auto_accept_incoming_filetransfer:image:size:check");
                         if (mimeType.startsWith("image/"))
                         {
                             if (get_filetransfer_state_from_id(message.filetransfer_id) == TOX_FILE_CONTROL_PAUSE.value)
@@ -128,10 +130,12 @@ public class HelperFiletransfer
 
                 if (PREF__auto_accept_video)
                 {
+                    Log.i(TAG, "check_auto_accept_incoming_filetransfer:video:check");
                     if (get_filetransfer_filesize_from_id(message.filetransfer_id) <=
-                        AUTO_ACCEPT_FT_MAX_VIDEO_SIZE_IN_MB * 1024 *
-                        1024) // if file size is smaller than 40 MByte accept FT
+                        (long) AUTO_ACCEPT_FT_MAX_VIDEO_SIZE_IN_MB * 1024 *
+                        1024) // if file size is smaller than xx MByte accept FT
                     {
+                        Log.i(TAG, "check_auto_accept_incoming_filetransfer:video:size:check");
                         if (mimeType.startsWith("video/"))
                         {
                             if (get_filetransfer_state_from_id(message.filetransfer_id) == TOX_FILE_CONTROL_PAUSE.value)
@@ -157,10 +161,12 @@ public class HelperFiletransfer
 
             if (PREF__auto_accept_all_upto)
             {
+                Log.i(TAG, "check_auto_accept_incoming_filetransfer:other:check");
                 if (get_filetransfer_filesize_from_id(message.filetransfer_id) <=
-                    AUTO_ACCEPT_FT_MAX_ANYKIND_SIZE_IN_MB * 1014 *
-                    1024) // if file size is smaller than 2 GByte accept FT
+                    (long) AUTO_ACCEPT_FT_MAX_ANYKIND_SIZE_IN_MB * 1014 *
+                    1024) // if file size is smaller than xx GByte accept FT
                 {
+                    Log.i(TAG, "check_auto_accept_incoming_filetransfer:other:size:check");
                     if (get_filetransfer_state_from_id(message.filetransfer_id) == TOX_FILE_CONTROL_PAUSE.value)
                     {
                         // accept FT
