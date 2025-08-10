@@ -51,7 +51,9 @@ import static com.zoffcc.applications.trifa.HelperFriend.delete_friend_all_filet
 import static com.zoffcc.applications.trifa.HelperFriend.delete_friend_all_messages;
 import static com.zoffcc.applications.trifa.HelperFriend.main_get_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_by_public_key__wrapper;
+import static com.zoffcc.applications.trifa.HelperGeneric.display_toast;
 import static com.zoffcc.applications.trifa.HelperGeneric.dp2px;
+import static com.zoffcc.applications.trifa.HelperGeneric.get_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.is_nightmode_active;
 import static com.zoffcc.applications.trifa.HelperGeneric.long_date_time_format;
 import static com.zoffcc.applications.trifa.HelperGeneric.update_savedata_file_wrapper;
@@ -70,6 +72,8 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.FL_NOTIFICATION_ICON_SI
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FRIEND_AVATAR_FILENAME;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LAST_ONLINE_TIMSTAMP_ONLINE_NOW;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LAST_ONLINE_TIMSTAMP_ONLINE_OFFLINE;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.LOGFRIEND_TOXID_DB_KEY;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.LOG_FRIEND_TOXID;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.ONE_HOUR_IN_MS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.VFS_FILE_DIR;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.VFS_PREFIX;
@@ -757,7 +761,23 @@ public class FriendListHolder extends RecyclerView.ViewHolder implements View.On
                         break;
                     case R.id.item_delete:
                         // delete friend -----------------
-                        show_delete_friend_confirm_dialog(v, f2);
+                        try
+                        {
+                            if ((f2.tox_public_key_string != null) &&
+                                (f2.tox_public_key_string.toUpperCase().equals(LOG_FRIEND_TOXID)))
+                            {
+                                // can not delete log friend
+                                display_toast("You can not delete the internal logger", false, 1);
+                            }
+                            else
+                            {
+                                show_delete_friend_confirm_dialog(v, f2);
+                            }
+                        }
+                        catch(Exception e)
+                        {
+                            show_delete_friend_confirm_dialog(v, f2);
+                        }
                         // delete friend -----------------
                         break;
                 }
