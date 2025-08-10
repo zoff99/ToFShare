@@ -1,6 +1,7 @@
 # Tox File Share (for Android)
 
 This is a simplified version of TRIfA (the Tox Message Application for Android) the focuses on stable file exchange.
+This is a work in progress, feel free to help out.
 
 Status
 =
