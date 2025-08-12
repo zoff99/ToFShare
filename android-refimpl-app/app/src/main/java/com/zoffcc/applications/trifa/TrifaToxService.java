@@ -141,6 +141,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.USE_MAX_NUMBER_OF_BOOTS
 import static com.zoffcc.applications.trifa.TRIFAGlobals.USE_MAX_NUMBER_OF_BOOTSTRAP_TCP_RELAYS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.bootstrap_node_list;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.bootstrapping;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.global_last_activity_for_battery_savings_ts;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_last_activity_incoming_ft_ts;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_last_activity_outgoung_ft_ts;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_last_bootstrap_ts;
@@ -969,7 +970,7 @@ public class TrifaToxService extends Service
                 // -------- add log friend --------
                 // -------- add log friend --------
 
-
+                global_last_activity_for_battery_savings_ts = System.currentTimeMillis();
                 global_self_last_went_offline_timestamp = System.currentTimeMillis();
                 Log.i(TAG, "global_self_last_went_offline_timestamp[2]=" + global_self_last_went_offline_timestamp +
                            " HAVE_INTERNET_CONNECTIVITY=" + HAVE_INTERNET_CONNECTIVITY);
@@ -1131,8 +1132,6 @@ public class TrifaToxService extends Service
                                 catch (Exception e)
                                 {
                                 }
-
-                                Log.i(TAG, "BATTERY SAVINGS MODE, load_and_add_all_conferences");
 
                                 need_wakeup_now = false;
                                 trifa_service_thread = null;
