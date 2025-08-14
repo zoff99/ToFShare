@@ -11,7 +11,11 @@
                 android:height="20dp"/>
         </shape>
     </item>
-    <item>
+    <item
+        android:end="-10dp"
+        android:start="-10dp"
+        android:bottom="-5dp"
+        android:top="-5dp">
         <rotate
             android:fromDegrees="45"
             android:toDegrees="0">
@@ -22,7 +26,11 @@
             </shape>
         </rotate>
     </item>
-    <item>
+    <item
+        android:end="-10dp"
+        android:start="-10dp"
+        android:bottom="-5dp"
+        android:top="-5dp">
         <rotate
             android:fromDegrees="-45"
             android:toDegrees="0">
