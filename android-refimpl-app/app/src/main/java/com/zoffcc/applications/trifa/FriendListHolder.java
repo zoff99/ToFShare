@@ -51,6 +51,7 @@ import static com.zoffcc.applications.trifa.HelperFriend.delete_friend_all_filet
 import static com.zoffcc.applications.trifa.HelperFriend.delete_friend_all_messages;
 import static com.zoffcc.applications.trifa.HelperFriend.main_get_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_by_public_key__wrapper;
+import static com.zoffcc.applications.trifa.HelperGeneric.del_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.display_toast;
 import static com.zoffcc.applications.trifa.HelperGeneric.dp2px;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_g_opts;
@@ -72,6 +73,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.FL_NOTIFICATION_ICON_SI
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FRIEND_AVATAR_FILENAME;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LAST_ONLINE_TIMSTAMP_ONLINE_NOW;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LAST_ONLINE_TIMSTAMP_ONLINE_OFFLINE;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.LOGFRIEND_ON_STARTUP_DONE_DB_KEY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LOGFRIEND_TOXID_DB_KEY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LOG_FRIEND_TOXID;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.ONE_HOUR_IN_MS;
@@ -766,8 +768,71 @@ public class FriendListHolder extends RecyclerView.ViewHolder implements View.On
                             if ((f2.tox_public_key_string != null) &&
                                 (f2.tox_public_key_string.toUpperCase().equals(LOG_FRIEND_TOXID)))
                             {
-                                // can not delete log friend
-                                display_toast("You can not delete the internal logger", false, 1);
+                                // removing the log friend
+                                del_g_opts(LOGFRIEND_ON_STARTUP_DONE_DB_KEY);
+                                del_g_opts(LOGFRIEND_TOXID_DB_KEY);
+                                try
+                                {
+                                    long friend_num_temp = tox_friend_by_public_key__wrapper(f2.tox_public_key_string);
+
+                                    Log.i(TAG, "onMenuItemClick:1:fn=" + friend_num_temp);
+
+                                    // delete friends files -------
+                                    Log.i(TAG, "onMenuItemClick:1.c:fnum=" + friend_num_temp);
+                                    delete_friend_all_files(f2.tox_public_key_string);
+                                    // delete friend  files -------
+
+                                    // delete friends FTs -------
+                                    Log.i(TAG, "onMenuItemClick:1.d:fnum=" + friend_num_temp);
+                                    delete_friend_all_filetransfers(f2.tox_public_key_string);
+                                    // delete friend  FTs -------
+
+                                    // delete friends messages -------
+                                    Log.i(TAG, "onMenuItemClick:1.b:fnum=" + friend_num_temp);
+                                    delete_friend_all_messages(f2.tox_public_key_string);
+                                    // delete friend  messages -------
+
+                                    // delete friend -------
+                                    // Log.i(TAG, "onMenuItemClick:1.a:pubkey=" + f2.tox_public_key_string);
+                                    delete_friend(f2.tox_public_key_string);
+                                    // delete friend -------
+
+                                    // delete friend - tox ----
+                                    Log.i(TAG, "onMenuItemClick:4");
+                                    if (friend_num_temp > -1)
+                                    {
+                                        int res = tox_friend_delete(friend_num_temp);
+                                        cache_pubkey_fnum.clear();
+                                        cache_fnum_pubkey.clear();
+                                        update_savedata_file_wrapper(); // save toxcore datafile (friend removed)
+                                        Log.i(TAG, "onMenuItemClick:5:res=" + res);
+                                    }
+                                    // delete friend - tox ----
+
+                                    // load all friends into data list ---
+                                    Log.i(TAG, "onMenuItemClick:6");
+                                    try
+                                    {
+                                        if (friend_list_fragment != null)
+                                        {
+                                            // reload friendlist
+                                            // TODO: only remove 1 item, don't clear all!! this can crash
+                                            friend_list_fragment.add_all_friends_clear(0);
+                                        }
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+
+                                    Log.i(TAG, "onMenuItemClick:7");
+                                    // load all friends into data list ---
+                                }
+                                catch (Exception e)
+                                {
+                                    e.printStackTrace();
+                                    Log.i(TAG, "onMenuItemClick:8:EE:" + e.getMessage());
+                                }
                             }
                             else
                             {
