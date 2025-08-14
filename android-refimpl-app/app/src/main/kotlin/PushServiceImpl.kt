@@ -6,9 +6,6 @@ package com.zoffcc.applications.trifa
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -16,7 +13,6 @@ import android.os.Build
 import android.os.PowerManager
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
 import org.unifiedpush.android.connector.FailedReason
 import org.unifiedpush.android.connector.PushService
 import org.unifiedpush.android.connector.UnifiedPush
@@ -221,13 +217,11 @@ class PushServiceImpl : PushService() {
                     e.printStackTrace()
                 }
 
-
                 try {
                     Log.i(TAG, "MyTokenReceiver:" + "onReceive")
 
                     if (TrifaToxService.trifa_service_thread != null) {
-                        TrifaToxService.need_wakeup_now = true
-                        TrifaToxService.trifa_service_thread.interrupt()
+                        HelperGeneric.trigger_proper_wakeup_outside_tox_service_thread()
                     }
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()

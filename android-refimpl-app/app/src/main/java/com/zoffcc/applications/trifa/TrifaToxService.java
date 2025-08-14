@@ -80,6 +80,8 @@ import static com.zoffcc.applications.trifa.HelperGeneric.long_date_time_format_
 import static com.zoffcc.applications.trifa.HelperGeneric.set_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.tox_friend_resend_msgv3_wrapper;
 import static com.zoffcc.applications.trifa.HelperGeneric.tox_friend_send_message_wrapper;
+import static com.zoffcc.applications.trifa.HelperGeneric.trigger_proper_wakeup_from_tox_service_thread;
+import static com.zoffcc.applications.trifa.HelperGeneric.trigger_proper_wakeup_outside_tox_service_thread;
 import static com.zoffcc.applications.trifa.HelperGeneric.vfs__unmount;
 import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_messageid;
 import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_no_read_recvedts;
@@ -902,7 +904,7 @@ public class TrifaToxService extends Service
                 // --------------- bootstrap ---------------
 
                 long tox_iteration_interval_ms = tox_iteration_interval();
-                // Log.i(TAG, "tox_iteration_interval_ms=" + tox_iteration_interval_ms);
+                Log.i(TAG, "tox_iteration_interval_ms=" + tox_iteration_interval_ms);
 
                 MainActivity.tox_iterate();
 
@@ -1020,181 +1022,74 @@ public class TrifaToxService extends Service
                             if ((PREF__X_battery_saving_mode) && (battery_saving_can_sleep()))
                             {
                                 need_wakeup_now = false;
-
-                                Log.i(TAG, "set BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS:" +
-                                           BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS);
-
-
-                                Log.i(TAG, "entering BATTERY SAVINGS MODE ...");
-                                append_logger_msg(TAG + "::" + "entering BATTERY SAVINGS MODE ...");
-                                TrifaToxService.write_debug_file(
-                                        "BATTERY_SAVINGS_MODE__enter:" + tox_self_get_connection_status());
-
-                                long current_timestamp_ = System.currentTimeMillis();
-                                global_self_last_entered_battery_saving_timestamp = current_timestamp_;
-
                                 trifa_service_thread = Thread.currentThread();
 
+                                append_logger_msg(TAG + "::" + "entering BATTERY SAVINGS MODE ... BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS=" + BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS);
+
                                 append_logger_msg(TAG + "::" + "setting alarm ...");
-                                // ---------------------------------------------------------
-                                Intent intent_wakeup = new Intent(getApplicationContext(), WakeupAlarmReceiver.class);
-                                // intentWakeFullBroacastReceiver.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                                PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 1001,
-                                                                                       intent_wakeup,
-                                                                                       PendingIntent.FLAG_CANCEL_CURRENT|PendingIntent.FLAG_IMMUTABLE);
-                                getApplicationContext();
-                                AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(
-                                        ALARM_SERVICE);
+                                set_alarm_for_battery_saving_sleep();
 
-
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                                {
-                                    Log.i(TAG, "get BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS:" +
-                                               BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS);
-                                    try
-                                    {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                                        {
-                                            if (alarmManager.canScheduleExactAlarms())
-                                            {
-                                                Log.i(TAG, "canScheduleExactAlarms:true");
-                                            }
-                                            else
-                                            {
-                                                Log.i(TAG, "canScheduleExactAlarms:**FALSE**");
-                                            }
-                                        }
-                                    }
-                                    catch(Exception e)
-                                    {
-                                    }
-                                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-                                                                           System.currentTimeMillis() +
-                                                                           BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
-                                                                           (int) (Math.random() * 15000d) + 5000,
-                                                                           alarmIntent);
-                                }
-                                else
-                                {
-                                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +
-                                                                                   BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
-                                                                                   (int) (Math.random() * 15000d) +
-                                                                                   5000, alarmIntent);
-                                }
-
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-                                tox_notification_change_wrapper(0, "sleep: " +
-                                                                   (int) ((BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS /
-                                                                           1000) / 60) + "min (" +
-                                                                   BATTERY_OPTIMIZATION_LAST_SLEEP1 + "/" +
-                                                                   BATTERY_OPTIMIZATION_LAST_SLEEP2 + "/" +
-                                                                   BATTERY_OPTIMIZATION_LAST_SLEEP3 + ") " +
-                                                                   long_date_time_format_or_empty(
-                                                                           global_self_last_entered_battery_saving_timestamp)); // set to offline
-
-                                if (!need_wakeup_now)
-                                {
-                                    if ((!global_showing_messageview) && (!global_showing_mainview))
-                                    {
-                                        set_all_friends_offline();
-                                    }
-                                }
-                                // so that the app knows we went offline
+                                tox_notification_change_wrapper(TOX_CONNECTION_NONE.value, "");
+                                set_all_friends_offline();
                                 global_self_last_went_offline_timestamp = System.currentTimeMillis();
                                 global_self_connection_status = TOX_CONNECTION_NONE.value;
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
-                                // --------------- set everything to offline ---------------
 
                                 long sleep_in_sec = BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS;
                                 // add some random value, so that the sleep is not always exactly the same
                                 sleep_in_sec = sleep_in_sec + (int) (Math.random() * 15000d) + 5000;
                                 sleep_in_sec = sleep_in_sec / 1000;
                                 sleep_in_sec = sleep_in_sec / 10; // now in 10s of seconds!!
-
-                                Log.i(TAG, "entering BATTERY SAVINGS MODE ... sleep for " + (10 * sleep_in_sec) + "s");
+                                append_logger_msg(TAG + "::" + "entering BATTERY SAVINGS MODE ... sleep for " + (10 * sleep_in_sec) + "s");
 
                                 for (int ii = 0; ii < sleep_in_sec; ii++)
                                 {
                                     if ((global_showing_messageview) || (global_showing_mainview))
                                     {
                                         // if the user opens the message view, or any group view -> go online, to be able to send messages
-                                        Log.i(TAG, "finish BATTERY SAVINGS MODE (Message view opened)");
-                                        TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__msgview");
+                                        trigger_proper_wakeup_from_tox_service_thread();
+                                        append_logger_msg(TAG + "::finish BATTERY SAVINGS MODE (Message view opened)");
                                         break;
                                     }
 
                                     if (need_wakeup_now)
                                     {
+                                        trigger_proper_wakeup_from_tox_service_thread();
                                         append_logger_msg(TAG + "::" + "need_wakeup_now trigger 001");
                                         break;
                                     }
 
                                     try
                                     {
+                                        // android OS will freeze the app (CPU cycles) here
+                                        // android OS will freeze the app (CPU cycles) here
                                         Thread.sleep(10 * 1000); // sleep very long!!
+                                        // android OS will freeze the app (CPU cycles) here
+                                        // android OS will freeze the app (CPU cycles) here
                                     }
                                     catch (Exception es)
                                     {
-                                        TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__interrupted");
                                         append_logger_msg(TAG + "::" + "BATTERY_SAVINGS_MODE__finish__interrupted");
                                         break;
                                     }
                                 }
-
                                 append_logger_msg(TAG + "::" + "finish BATTERY SAVINGS MODE, connecting again");
-                                Log.i(TAG, "finish BATTERY SAVINGS MODE, connecting again");
-                                TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__connecting");
 
-                                // update all friends again
-                                try
-                                {
-                                    load_and_add_all_friends();
-                                }
-                                catch (Exception e)
-                                {
-                                }
+                                update_friends_and_groups();
 
                                 need_wakeup_now = false;
                                 trifa_service_thread = null;
 
                                 int TOX_CONNECTION_a = tox_self_get_connection_status();
                                 global_self_connection_status = TOX_CONNECTION_a;
+
                                 bootstrapping = true;
                                 global_self_last_went_offline_timestamp = System.currentTimeMillis();
-                                Log.i(TAG, "BATTERY SAVINGS MODE, bootstrapping");
-                                tox_notification_change_wrapper(TOX_CONNECTION_a,
-                                                                ""); // set to real connection status
-                                TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__start__bootstrapping");
+                                tox_notification_change_wrapper(TOX_CONNECTION_a,"");
                                 bootstrap_me(true);
                                 tox_iterate();
-                                TrifaToxService.write_debug_file("BATTERY_SAVINGS_MODE__finish__bootstrapping:" +
-                                                                 tox_self_get_connection_status());
-
-                                check_if_still_bootstrapping();
-
-                                BATTERY_OPTIMIZATION_LAST_SLEEP3 = BATTERY_OPTIMIZATION_LAST_SLEEP2;
-                                BATTERY_OPTIMIZATION_LAST_SLEEP2 = BATTERY_OPTIMIZATION_LAST_SLEEP1;
-                                BATTERY_OPTIMIZATION_LAST_SLEEP1 = (int) (
-                                        (System.currentTimeMillis() - current_timestamp_) / 1000 / 60);
-                                if ((BATTERY_OPTIMIZATION_LAST_SLEEP1 < 0) ||
-                                    (BATTERY_OPTIMIZATION_LAST_SLEEP1 > (3 * 3600 * 1000)))
-                                {
-                                    BATTERY_OPTIMIZATION_LAST_SLEEP1 = -1;
-                                }
-
-
-                                // set the used value to the new value
-                                Log.i(TAG, "set BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS:" +
-                                           BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS);
-
-                                // global_self_connection_status = tox_self_get_connection_status();
-                            }
+                                check_if_still_bootstrapping();                            }
                             else
                             {
-                                // Log.i(TAG, "(tox_iteration_interval_ms):" + tox_iteration_interval_ms + "ms");
                                 Thread.sleep(tox_iteration_interval_ms);
                             }
                         }
@@ -1211,7 +1106,6 @@ public class TrifaToxService extends Service
                         e.printStackTrace();
                     }
 
-                    // Log.i(TAG, "tox_iteration_interval_ms==" + tox_iteration_interval_ms + "ms");
                     MainActivity.tox_iterate();
 
                     if (global_last_activity_outgoung_ft_ts > -1)
@@ -1299,6 +1193,80 @@ public class TrifaToxService extends Service
         };
 
         ToxServiceThread.start();
+    }
+
+    private void update_friends_and_groups()
+    {
+        // update all friends again
+        try
+        {
+            load_and_add_all_friends();
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    private void set_alarm_for_battery_saving_sleep()
+    {
+        // ---------------------------------------------------------
+        Intent intent_wakeup = new Intent(getApplicationContext(), WakeupAlarmReceiver.class);
+        // intentWakeFullBroacastReceiver.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 1001,
+                                                               intent_wakeup,
+                                                               PendingIntent.FLAG_CANCEL_CURRENT|PendingIntent.FLAG_IMMUTABLE);
+        getApplicationContext();
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(
+                ALARM_SERVICE);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            //alarmManager.setExactAndAllowWhileIdle(
+            //        AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            //        SystemClock.elapsedRealtime() +
+            //        BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
+            //        (int) (Math.random() * 15000d) + 5000, alarmIntent);
+
+            Log.i(TAG, "get BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS:" +
+                       BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS);
+
+            try
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                {
+                    if (alarmManager.canScheduleExactAlarms())
+                    {
+                        Log.i(TAG, "canScheduleExactAlarms:true");
+                    }
+                    else
+                    {
+                        Log.i(TAG, "canScheduleExactAlarms:**FALSE**");
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+            }
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+                                                   System.currentTimeMillis() +
+                                                   BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
+                                                   (int) (Math.random() * 15000d) + 5000,
+                                                   alarmIntent);
+        }
+        else
+        {
+            //alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            //                      SystemClock.elapsedRealtime() +
+            //                      BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
+            //                      (int) (Math.random() * 15000d) + 5000,
+            //                      alarmIntent);
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +
+                                                           BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS +
+                                                           (int) (Math.random() * 15000d) +
+                                                           5000, alarmIntent);
+        }
     }
 
     private void check_if_still_bootstrapping()
@@ -1973,17 +1941,14 @@ public class TrifaToxService extends Service
 
     static void wakeup_tox_thread()
     {
+        append_logger_msg(TAG + "::wakeup_tox_thread");
         // This will wakeup the tox_iterate() thread and go online as quick as possible
         // only useful if in Batterysavings-Mode
         try
         {
             if (trifa_service_thread != null)
             {
-                Log.i(TAG, "wakeup_tox_thread");
-                append_logger_msg(TAG + "::" + "need_wakeup_now trigger 003 [wakeup_tox_thread]");
-                TrifaToxService.need_wakeup_now = true;
-                trifa_service_thread.interrupt();
-                Log.i(TAG, "wakeup_tox_thread:DONE");
+                trigger_proper_wakeup_outside_tox_service_thread();
             }
         }
         catch (Exception e)
