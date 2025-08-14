@@ -89,6 +89,7 @@ import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notificati
 import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notification_change_wrapper;
 import static com.zoffcc.applications.trifa.HelperToxNotification.tox_notification_setup;
 import static com.zoffcc.applications.trifa.MainActivity.DEBUG_BATTERY_OPTIMIZATION_LOGGING;
+import static com.zoffcc.applications.trifa.MainActivity.DEBUG_USE_LOGFRIEND;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__X_battery_saving_mode;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__force_udp_only;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__use_push_service;
@@ -909,61 +910,84 @@ public class TrifaToxService extends Service
                 // -------- add log friend --------
                 // -------- add log friend --------
                 // -------- add log friend --------
-                boolean need_add_log_pseudo_friend = true;
-                try
+                if (DEBUG_USE_LOGFRIEND)
                 {
-                    if (get_g_opts(LOGFRIEND_ON_STARTUP_DONE_DB_KEY) != null)
+                    boolean need_add_log_pseudo_friend = true;
+                    try
                     {
-                        if (get_g_opts(LOGFRIEND_ON_STARTUP_DONE_DB_KEY).equals("true"))
+                        if (get_g_opts(LOGFRIEND_ON_STARTUP_DONE_DB_KEY) != null)
                         {
-                            if (get_g_opts(LOGFRIEND_TOXID_DB_KEY) != null)
+                            if (get_g_opts(LOGFRIEND_ON_STARTUP_DONE_DB_KEY).equals("true"))
                             {
-                                if (get_g_opts(LOGFRIEND_TOXID_DB_KEY).length() > 2)
+                                if (get_g_opts(LOGFRIEND_TOXID_DB_KEY) != null)
                                 {
-                                    LOG_FRIEND_TOXID = get_g_opts(LOGFRIEND_TOXID_DB_KEY);
-                                    need_add_log_pseudo_friend = false;
-                                    Log.i(TAG, "need_add_log_pseudo_friend=false");
+                                    if (get_g_opts(LOGFRIEND_TOXID_DB_KEY).length() > 2)
+                                    {
+                                        LOG_FRIEND_TOXID = get_g_opts(LOGFRIEND_TOXID_DB_KEY);
+                                        need_add_log_pseudo_friend = false;
+                                        Log.i(TAG, "need_add_log_pseudo_friend=false");
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                if (need_add_log_pseudo_friend)
-                {
-                    Log.i(TAG, "need_add_log_pseudo_friend:start");
-
-                    ByteBuffer hash_bytes = ByteBuffer.allocateDirect(TOX_HASH_LENGTH);
-                    MainActivity.tox_messagev3_get_new_message_id(hash_bytes);
-                    LOG_FRIEND_TOXID = bytebuffer_to_hexstring(hash_bytes, true);
-                    if (LOG_FRIEND_TOXID == null)
+                    catch (Exception e)
                     {
-                        del_g_opts(LOGFRIEND_ON_STARTUP_DONE_DB_KEY);
-                        del_g_opts(LOGFRIEND_TOXID_DB_KEY);
-                        Log.i(TAG, "need_add_log_pseudo_friend:some error generating the ID for log_pseudo_friend");
+                        e.printStackTrace();
+                    }
+
+                    if (need_add_log_pseudo_friend)
+                    {
+                        Log.i(TAG, "need_add_log_pseudo_friend:start");
+
+                        ByteBuffer hash_bytes = ByteBuffer.allocateDirect(TOX_HASH_LENGTH);
+                        MainActivity.tox_messagev3_get_new_message_id(hash_bytes);
+                        LOG_FRIEND_TOXID = bytebuffer_to_hexstring(hash_bytes, true);
+                        if (LOG_FRIEND_TOXID == null)
+                        {
+                            del_g_opts(LOGFRIEND_ON_STARTUP_DONE_DB_KEY);
+                            del_g_opts(LOGFRIEND_TOXID_DB_KEY);
+                            Log.i(TAG, "need_add_log_pseudo_friend:some error generating the ID for log_pseudo_friend");
+                        }
+                        else
+                        {
+                            add_friend_real_norequest(LOG_FRIEND_TOXID);
+                            set_g_opts(LOGFRIEND_ON_STARTUP_DONE_DB_KEY, "true");
+                            set_g_opts(LOGFRIEND_TOXID_DB_KEY, LOG_FRIEND_TOXID);
+                            // Log.i(TAG, "need_add_log_pseudo_friend:get:" + LOG_FRIEND_TOXID + " :: " + (LOG_FRIEND_TOXID.substring(0, 32 * 2).toUpperCase()));
+                            FriendList f_log_friend = main_get_friend(
+                                    LOG_FRIEND_TOXID.substring(0, 32 * 2).toUpperCase());
+                            if (f_log_friend != null)
+                            {
+                                f_log_friend.status_message = LOG_FRIEND_INIT_STATUSMSG;
+                                f_log_friend.name = LOG_FRIEND_INIT_NAME;
+                                HelperFriend.update_friend_in_db_name(f_log_friend);
+                                HelperFriend.update_friend_in_db_status_message(f_log_friend);
+                                HelperFriend.update_single_friend_in_friendlist_view(f_log_friend);
+                                Log.i(TAG, "need_add_log_pseudo_friend=update meta data");
+                            }
+                            Log.i(TAG, "need_add_log_pseudo_friend=true (INSERT)");
+                            append_logger_msg("need_add_log_pseudo_friend=true (INSERT)");
+                        }
                     }
                     else
                     {
-                        add_friend_real_norequest(LOG_FRIEND_TOXID);
-                        set_g_opts(LOGFRIEND_ON_STARTUP_DONE_DB_KEY, "true");
-                        set_g_opts(LOGFRIEND_TOXID_DB_KEY, LOG_FRIEND_TOXID);
-                        // Log.i(TAG, "need_add_log_pseudo_friend:get:" + LOG_FRIEND_TOXID + " :: " + (LOG_FRIEND_TOXID.substring(0, 32 * 2).toUpperCase()));
-                        FriendList f_log_friend = main_get_friend(LOG_FRIEND_TOXID.substring(0, 32 * 2).toUpperCase());
-                        if (f_log_friend != null)
+                        if ((LOG_FRIEND_TOXID != null) && (LOG_FRIEND_TOXID.length() > 2))
                         {
-                            f_log_friend.status_message = LOG_FRIEND_INIT_STATUSMSG;
-                            f_log_friend.name = LOG_FRIEND_INIT_NAME;
-                            HelperFriend.update_friend_in_db_name(f_log_friend);
-                            HelperFriend.update_friend_in_db_status_message(f_log_friend);
-                            HelperFriend.update_single_friend_in_friendlist_view(f_log_friend);
-                            Log.i(TAG, "need_add_log_pseudo_friend=update meta data");
+                            add_friend_real_norequest(LOG_FRIEND_TOXID);
+                            FriendList f_log_friend = main_get_friend(
+                                    LOG_FRIEND_TOXID.substring(0, 32 * 2).toUpperCase());
+                            if (f_log_friend != null)
+                            {
+                                f_log_friend.status_message = LOG_FRIEND_INIT_STATUSMSG;
+                                f_log_friend.name = LOG_FRIEND_INIT_NAME;
+                                HelperFriend.update_friend_in_db_name(f_log_friend);
+                                HelperFriend.update_friend_in_db_status_message(f_log_friend);
+                                HelperFriend.update_single_friend_in_friendlist_view(f_log_friend);
+                                Log.i(TAG, "need_add_log_pseudo_friend=update meta data");
+                            }
+                            Log.i(TAG, "need_add_log_pseudo_friend=true (refresh)");
                         }
-                        Log.i(TAG, "need_add_log_pseudo_friend=true (INSERT)");
-                        append_logger_msg("need_add_log_pseudo_friend=true (INSERT)");
                     }
                 }
                 // -------- add log friend --------
