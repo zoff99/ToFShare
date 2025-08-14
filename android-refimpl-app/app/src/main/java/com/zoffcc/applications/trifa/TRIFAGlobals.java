@@ -97,7 +97,7 @@ public class TRIFAGlobals
 
     public static final long UINT32_MAX_JAVA = 4294967295L; // 0xffffffff == UINT32_MAX
     public static final long MiByte_BYTES = (1014 * 1024);
-    public static final long MAX_ALLOWED_INCOMING_FILESIZE_BYTES = 10 * 1024 * MiByte_BYTES; // 10 GiBytes max incoming files !
+    public static final long MAX_ALLOWED_INCOMING_FILESIZE_BYTES = 20 * 1024 * MiByte_BYTES; // 20 GiBytes max incoming files !
     /*
      // HINT: java does NOT have an unsigned 64 bit number!
     public static final long UINT64_MAX_JAVA = 0xffffffffffffffffL; // 0xffffffffffffffff == UINT64_MAX
@@ -122,7 +122,7 @@ public class TRIFAGlobals
     /** @noinspection PointlessArithmeticExpression*/
     final static long AVATAR_SELF_MAX_BYTE_SIZE = 1L * 1024 * 1024; // limit incoming avatars at 1MByte size
 
-    final static long FT_OUTGOING_FILESIZE_FRIEND_MAX_TOTAL = 20L * 1000 * 1000 * 1000; // 20Gbyte max outoing filesize
+    final static long FT_OUTGOING_FILESIZE_FRIEND_MAX_TOTAL = 20 * 1024 * MiByte_BYTES; // 20Gbyte max outoing filesize
     final static long FT_OUTGOING_FILESIZE_BYTE_USE_STORAGE_FRAMEWORK = FT_OUTGOING_FILESIZE_FRIEND_MAX_TOTAL; // above this size we need Storage Framework for outgoing FTs
 
     static boolean orbot_is_really_running = false;
