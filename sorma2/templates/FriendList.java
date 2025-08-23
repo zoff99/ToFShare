@@ -113,6 +113,10 @@ public class FriendList
     @Column(indexed = true, defaultExpr = "0", helpers = Column.Helpers.ALL)
     long msgv3_capability = 0;
 
+    @Column(indexed = true, defaultExpr = "false", helpers = Column.Helpers.ALL)
+    @Nullable
+    boolean is_default_ft_contact = false;
+
     // ______@@SORMA_END@@______
 
     @Override
