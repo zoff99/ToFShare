@@ -13,6 +13,19 @@
         android:background="@color/md_red_400"
         android:title="   ---   "
         android:visible="true"
+        app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/item_add_default_ft_contact"
+        android:icon="@drawable/ic_content_copy_white_24dp"
+        android:title="@string/layout___add_as_default_ft_contact"
+        android:visible="true"
+        app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/item_dummy02"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:background="@color/md_red_400"
+        android:title="   ---   "
+        android:visible="true"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/item_delete"

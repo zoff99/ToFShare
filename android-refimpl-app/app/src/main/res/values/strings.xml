@@ -532,6 +532,7 @@
     <string name="layout___create_text_group">Create Text Group</string>
     <string name="layout___create_audio_group">Create Audio Group</string>
     <string name="layout___add_as_toxproxy">add as ToxProxy</string>
+    <string name="layout___add_as_default_ft_contact">add as Default Contact</string>
     <string name="layout___peer_name">peer name</string>
     <string name="layout___online">Online</string>
     <string name="layout___copy">Copy</string>
