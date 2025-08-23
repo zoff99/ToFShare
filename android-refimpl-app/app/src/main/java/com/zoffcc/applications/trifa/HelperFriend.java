@@ -23,7 +23,6 @@ import android.util.Log;
 
 import com.zoffcc.applications.sorm.FileDB;
 import com.zoffcc.applications.sorm.FriendList;
-import com.zoffcc.applications.trifa.R;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -57,8 +56,6 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.GENERIC_TOR_USERAGENT;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LAST_ONLINE_TIMSTAMP_ONLINE_NOW;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.ORBOT_PROXY_HOST;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.ORBOT_PROXY_PORT;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.PUSH_URL_TRIGGER_AGAIN_MAX_COUNT;
-import static com.zoffcc.applications.trifa.TRIFAGlobals.PUSH_URL_TRIGGER_AGAIN_SECONDS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_FT_DIRECTION.TRIFA_FT_DIRECTION_INCOMING;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.UINT32_MAX_JAVA;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.global_my_name;
@@ -66,6 +63,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.global_my_toxid;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_PUBLIC_KEY_SIZE;
 import static com.zoffcc.applications.trifa.TrifaToxService.orma;
 
+/** @noinspection UnusedAssignment, CallToPrintStackTrace , SameParameterValue , StatementWithEmptyBody , StringOperationCanBeSimplified , PointlessBooleanExpression , UnnecessaryLocalVariable , unused , StringEqualsEmptyString , DataFlowIssue , SizeReplaceableByIsEmpty , Convert2Lambda , UnusedReturnValue , ResultOfMethodCallIgnored , CommentedOutCode */
 public class HelperFriend
 {
     private static final String TAG = "trifa.Hlp.Friend";
@@ -86,7 +84,7 @@ public class HelperFriend
 
             if (fl.size() > 0)
             {
-                f = (FriendList) fl.get(0);
+                f = fl.get(0);
                 // Log.i(TAG, "main_get_friend:f=" + f);
             }
             else
@@ -114,7 +112,7 @@ public class HelperFriend
 
             if (fl.size() > 0)
             {
-                f = (FriendList) fl.get(0);
+                f = fl.get(0);
             }
             else
             {
@@ -148,7 +146,7 @@ public class HelperFriend
     {
         try
         {
-            final FriendList f = (FriendList) orma.selectFromFriendList().
+            final FriendList f = orma.selectFromFriendList().
                     tox_public_key_stringEq(tox_friend_get_public_key__wrapper(friendnum)).
                     toList().get(0);
             if ((f.TOX_CONNECTION_real != 0) && (f.msgv3_capability == 1))
@@ -171,7 +169,7 @@ public class HelperFriend
     {
         try
         {
-            final FriendList f = (FriendList) orma.selectFromFriendList().
+            final FriendList f = orma.selectFromFriendList().
                     tox_public_key_stringEq(tox_friend_get_public_key__wrapper(friendnum)).
                     toList().get(0);
             if ((f.TOX_CONNECTION_real != 0) && (f.msgv3_capability != 1))
@@ -218,7 +216,7 @@ public class HelperFriend
                             TOX_CONNECTION(0).
                             execute();
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 {
                 }
 
@@ -228,7 +226,7 @@ public class HelperFriend
                             TOX_CONNECTION_real(0).
                             execute();
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 {
                 }
 
@@ -238,7 +236,7 @@ public class HelperFriend
                             TOX_CONNECTION_on_off(0).
                             execute();
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 {
                 }
 
@@ -248,7 +246,7 @@ public class HelperFriend
                             TOX_CONNECTION_on_off_real(0).
                             execute();
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 {
                 }
 
@@ -259,7 +257,7 @@ public class HelperFriend
                             last_online_timestamp(System.currentTimeMillis()).
                             execute();
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 {
                 }
 
@@ -270,7 +268,7 @@ public class HelperFriend
                             last_online_timestamp_real(System.currentTimeMillis()).
                             execute();
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 {
                 }
 
@@ -294,7 +292,7 @@ public class HelperFriend
                 {
                     MainActivity.friend_list_fragment.set_all_friends_to_offline();
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 {
                 }
             }
@@ -431,7 +429,7 @@ public class HelperFriend
         long ret = 0;
         try
         {
-            FriendList f = (FriendList) orma.selectFromFriendList().
+            FriendList f = orma.selectFromFriendList().
                     tox_public_key_stringEq(friend_public_key_string).
                     get(0);
             if (f != null)
@@ -452,7 +450,7 @@ public class HelperFriend
         long ret = 0;
         try
         {
-            FriendList f = (FriendList) orma.selectFromFriendList().
+            FriendList f = orma.selectFromFriendList().
                     tox_public_key_stringEq(HelperFriend.tox_friend_get_public_key__wrapper(friend_number)).
                     get(0);
             if (f != null)
@@ -477,7 +475,7 @@ public class HelperFriend
         {
             if ((new_value == 0) || (new_value == 1))
             {
-                FriendList f = (FriendList) orma.selectFromFriendList().
+                FriendList f = orma.selectFromFriendList().
                         tox_public_key_stringEq(HelperFriend.tox_friend_get_public_key__wrapper(friend_number)).
                         get(0);
                 if (f != null)
@@ -495,7 +493,7 @@ public class HelperFriend
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception ignored)
         {
         }
     }
@@ -667,7 +665,7 @@ public class HelperFriend
             ret = orma.selectFromFriendList().tox_public_key_stringEq(friend_pubkey).
                     get(0).avatar_ftid_hex.toUpperCase();
         }
-        catch (Exception e)
+        catch (Exception ignored)
         {
         }
         return ret;
@@ -1206,7 +1204,7 @@ public class HelperFriend
                 e1.printStackTrace();
             }
 
-            FriendList fl = (FriendList) orma.selectFromFriendList().
+            FriendList fl = orma.selectFromFriendList().
                     tox_public_key_stringEq(pub_key).
                     toList().get(0);
 
@@ -1512,7 +1510,7 @@ public class HelperFriend
                     int i = 0;
                     for (i = 0; i < fl.size(); i++)
                     {
-                        FriendList n = (FriendList) fl.get(i);
+                        FriendList n = fl.get(i);
                         send_pushurl_to_friend(n.tox_public_key_string);
                     }
                 }
@@ -1521,5 +1519,39 @@ public class HelperFriend
         catch (Exception ignored)
         {
         }
+    }
+
+    //
+    // keep this as a "synchronized" function, so we always have a consistent state for "is_default_ft_contact"
+    //
+    static synchronized String get_set_is_default_ft_contact(final String friend_pubkey, final boolean set)
+    {
+        // on "get" the "friend_pubkey" input parameter is ignored, and the return value is either null oder friend_pubkey
+        // on "set" the return value is null, and the input parameter "friend_pubkey" must not be null
+        try
+        {
+            if (set)
+            {
+                if ((friend_pubkey != null) && (friend_pubkey.length() == (TOX_PUBLIC_KEY_SIZE * 2)))
+                {
+                    // delete all flags
+                    orma.updateFriendList().is_default_ft_contact(false).execute();
+                    // now set the flag only for the wanted friend
+                    orma.updateFriendList().tox_public_key_stringEq(friend_pubkey.toString()).is_default_ft_contact(true).execute();
+                }
+                return null;
+            }
+            else // get
+            {
+                // get the friends public key of the friend that has the flas set
+                // null on error
+                return orma.selectFromFriendList().is_default_ft_contactEq(true).orderByAdded_timestampAsc().get(0).tox_public_key_string;
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
