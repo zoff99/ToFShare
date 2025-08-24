@@ -23,6 +23,8 @@ import android.app.Activity;
 import android.app.Notification;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -35,6 +37,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -145,6 +148,7 @@ import static com.zoffcc.applications.trifa.TrifaToxService.stop_tox_fg_done;
 import static com.zoffcc.applications.trifa.TrifaToxService.trifa_service_thread;
 import static com.zoffcc.applications.trifa.TrifaToxService.vfs;
 
+/** @noinspection UnnecessaryLocalVariable*/
 public class HelperGeneric
 {
     private static final String TAG = "trifa.Hlp.Generic";
@@ -4051,6 +4055,26 @@ public class HelperGeneric
         }
         catch(Exception ignored)
         {
+        }
+    }
+
+    static public float get_battery_percent()
+    {
+        try
+        {
+            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            Intent batteryStatus = context_s.registerReceiver(null, ifilter);
+
+            //noinspection DataFlowIssue
+            int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+            float batteryPct = level * 100 / (float)scale;
+            return batteryPct;
+        }
+        catch(Exception e)
+        {
+            return -99f;
         }
     }
 }
