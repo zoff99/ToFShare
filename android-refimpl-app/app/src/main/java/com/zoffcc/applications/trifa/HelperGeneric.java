@@ -100,6 +100,7 @@ import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_m
 import static com.zoffcc.applications.trifa.HelperMessage.update_message_in_db_resend_count;
 import static com.zoffcc.applications.trifa.HelperMessage.update_single_message;
 import static com.zoffcc.applications.trifa.HelperMsgNotification.change_msg_notification;
+import static com.zoffcc.applications.trifa.MainActivity.BATTERY_PERCENT_UNKNOWN;
 import static com.zoffcc.applications.trifa.MainActivity.DEBUG_USE_LOGFRIEND;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__DB_secrect_key;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__X_battery_saving_mode;
@@ -108,8 +109,10 @@ import static com.zoffcc.applications.trifa.MainActivity.PREF__global_font_size;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_CUSTOM_WRITE_CACHE;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;
 import static com.zoffcc.applications.trifa.MainActivity.context_s;
+import static com.zoffcc.applications.trifa.MainActivity.global_battery_percent;
 import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
 import static com.zoffcc.applications.trifa.ProfileActivity.update_toxid_display_s;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.BATTERY_PERCENT_OFFLINE_THRESHOLD;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FAB_SCROLL_TO_BOTTOM_FADEIN_MS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.FAB_SCROLL_TO_BOTTOM_FADEOUT_MS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LAST_ONLINE_TIMSTAMP_ONLINE_NOW;
@@ -3050,6 +3053,12 @@ public class HelperGeneric
 
         if ((!global_showing_messageview) && (!global_showing_mainview))
         {
+            if (global_battery_percent < BATTERY_PERCENT_OFFLINE_THRESHOLD)
+            {
+                // if we are low on battery and non of the UI screens are showing, go to sleep immediately
+                return true;
+            }
+
             if (global_self_last_went_online_timestamp != -1)
             {
                 if ((global_self_last_went_online_timestamp + SECONDS_TO_STAY_ONLINE_IN_BATTERY_SAVINGS_MODE * 1000) < System.currentTimeMillis())
@@ -4070,11 +4079,13 @@ public class HelperGeneric
             int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
             float batteryPct = level * 100 / (float)scale;
+            // Log.i(TAG, "get_battery_percent:" + batteryPct);
             return batteryPct;
         }
         catch(Exception e)
         {
-            return -99f;
+            Log.i(TAG, "get_battery_percent:" + "EE:" + BATTERY_PERCENT_UNKNOWN);
+            return BATTERY_PERCENT_UNKNOWN;
         }
     }
 }

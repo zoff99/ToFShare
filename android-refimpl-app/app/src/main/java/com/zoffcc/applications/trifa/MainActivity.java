@@ -150,6 +150,7 @@ import static com.zoffcc.applications.trifa.HelperGeneric.bytes_to_hex;
 import static com.zoffcc.applications.trifa.HelperGeneric.display_toast;
 import static com.zoffcc.applications.trifa.HelperGeneric.display_toast_with_context_custom_duration;
 import static com.zoffcc.applications.trifa.HelperGeneric.draw_main_top_icon;
+import static com.zoffcc.applications.trifa.HelperGeneric.get_battery_percent;
 import static com.zoffcc.applications.trifa.HelperGeneric.hexstring_to_bytebuffer;
 import static com.zoffcc.applications.trifa.HelperGeneric.initializeScreenshotSecurity;
 import static com.zoffcc.applications.trifa.HelperGeneric.is_nightmode_active;
@@ -458,6 +459,8 @@ public class MainActivity extends AppCompatActivity
     static String versionName = "";
     static int versionCode = -1;
     static PackageInfo packageInfo_s = null;
+    static final float BATTERY_PERCENT_UNKNOWN = -99f;
+    static float global_battery_percent = BATTERY_PERCENT_UNKNOWN;
     IntentFilter receiverFilter1 = null;
     IntentFilter receiverFilter2 = null;
     IntentFilter receiverFilter3 = null;
@@ -605,6 +608,9 @@ public class MainActivity extends AppCompatActivity
         main_activity_s = this;
         TRIFAGlobals.CONFERENCE_CHAT_BG_CORNER_RADIUS_IN_PX = (int) HelperGeneric.dp2px(10);
         TRIFAGlobals.CONFERENCE_CHAT_DRAWER_ICON_CORNER_RADIUS_IN_PX = (int) HelperGeneric.dp2px(20);
+
+        // put this after! context_s has been set
+        global_battery_percent = get_battery_percent();
 
         if ((!TOX_SERVICE_STARTED) || (orma == null))
         {

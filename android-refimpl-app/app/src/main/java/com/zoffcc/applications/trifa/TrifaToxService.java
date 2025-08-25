@@ -69,6 +69,7 @@ import static com.zoffcc.applications.trifa.HelperGeneric.battery_saving_can_sle
 import static com.zoffcc.applications.trifa.HelperGeneric.bootstrap_single_wrapper;
 import static com.zoffcc.applications.trifa.HelperGeneric.bytebuffer_to_hexstring;
 import static com.zoffcc.applications.trifa.HelperGeneric.del_g_opts;
+import static com.zoffcc.applications.trifa.HelperGeneric.get_battery_percent;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_combined_connection_status;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_toxconnection_wrapper;
@@ -101,6 +102,7 @@ import static com.zoffcc.applications.trifa.MainActivity.cache_fnum_pubkey;
 import static com.zoffcc.applications.trifa.MainActivity.cache_pubkey_fnum;
 import static com.zoffcc.applications.trifa.MainActivity.context_s;
 import static com.zoffcc.applications.trifa.MainActivity.get_my_toxid;
+import static com.zoffcc.applications.trifa.MainActivity.global_battery_percent;
 import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
 import static com.zoffcc.applications.trifa.MainActivity.tox_friend_get_connection_status;
 import static com.zoffcc.applications.trifa.MainActivity.tox_iterate;
@@ -120,6 +122,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.BATTERY_OPTIMIZATION_LA
 import static com.zoffcc.applications.trifa.TRIFAGlobals.BATTERY_OPTIMIZATION_LAST_SLEEP2;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.BATTERY_OPTIMIZATION_LAST_SLEEP3;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.BATTERY_OPTIMIZATION_SLEEP_IN_MILLIS;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.CHECK_BATTERY_PERCENT_DELTA_SECS;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.HAVE_INTERNET_CONNECTIVITY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LOGFRIEND_ON_STARTUP_DONE_DB_KEY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.LOGFRIEND_TOXID_DB_KEY;
@@ -181,6 +184,7 @@ public class TrifaToxService extends Service
     static long last_resend_pending_messages2_ms = -1;
     static long last_resend_pending_messages3_ms = -1;
     static long last_resend_pending_messages4_ms = -1;
+    static long last_check_battery_percent_ms = -1;
     static long last_start_queued_fts_ms = -1;
     static boolean need_wakeup_now = false;
     static int tox_thread_starting_up = 0;
@@ -1145,6 +1149,12 @@ public class TrifaToxService extends Service
                     if (global_self_connection_status != TOX_CONNECTION_NONE.value)
                     {
                         start_queued_filetransfers();
+                    }
+
+                    if ((last_check_battery_percent_ms + (CHECK_BATTERY_PERCENT_DELTA_SECS * 1000L)) < System.currentTimeMillis())
+                    {
+                        last_check_battery_percent_ms = System.currentTimeMillis();
+                        global_battery_percent = get_battery_percent();
                     }
                 }
                 // ------- MAIN TOX LOOP ---------------------------------------------------------------

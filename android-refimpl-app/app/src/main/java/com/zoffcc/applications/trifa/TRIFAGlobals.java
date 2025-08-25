@@ -69,8 +69,10 @@ public class TRIFAGlobals
     static int BATTERY_OPTIMIZATION_LAST_SLEEP2 = -1;
     static int BATTERY_OPTIMIZATION_LAST_SLEEP3 = -1;
 
-    static int RESEND_MSGS_DELTA_SECS = 60 * 10; // 10 minutes;
-    static int RESEND_FILETRANSFERS_DELTA_SECS = 5 * 10; // 5 minutes;
+    final static int RESEND_MSGS_DELTA_SECS = 60 * 10; // 10 minutes;
+    final static int RESEND_FILETRANSFERS_DELTA_SECS = 5 * 10; // 5 minutes;
+    final static int CHECK_BATTERY_PERCENT_DELTA_SECS = 60 * 2; // 2 minutes;
+    final static float BATTERY_PERCENT_OFFLINE_THRESHOLD = 20; // if lower than 20% battery then add more sleeps in tox loop
 
     static int AUTO_ACCEPT_FT_MAX_IMAGE_SIZE_IN_MB = 200;
     static int AUTO_ACCEPT_FT_MAX_VIDEO_SIZE_IN_MB = 20 * 1024;
