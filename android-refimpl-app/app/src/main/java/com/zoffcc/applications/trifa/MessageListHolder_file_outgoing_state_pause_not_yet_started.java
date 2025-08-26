@@ -39,11 +39,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.luseen.autolinklibrary.AutoLinkMode;
 import com.luseen.autolinklibrary.EmojiTextViewLinks;
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.zoffcc.applications.sorm.Message;
-import com.zoffcc.applications.trifa.R;
 
 import java.net.URLConnection;
 
@@ -57,12 +55,10 @@ import static com.zoffcc.applications.trifa.HelperFiletransfer.remove_ft_from_ca
 import static com.zoffcc.applications.trifa.HelperFiletransfer.set_filetransfer_state_from_id;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_by_public_key__wrapper;
 import static com.zoffcc.applications.trifa.HelperGeneric.dp2px;
-import static com.zoffcc.applications.trifa.HelperGeneric.get_vfs_image_filename_own_avatar;
 import static com.zoffcc.applications.trifa.HelperGeneric.long_date_time_format;
 import static com.zoffcc.applications.trifa.HelperMessage.set_message_queueing_from_id;
 import static com.zoffcc.applications.trifa.HelperMessage.set_message_state_from_id;
 import static com.zoffcc.applications.trifa.HelperMessage.update_single_message_from_messge_id;
-import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;
 import static com.zoffcc.applications.trifa.MainActivity.tox_file_control;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_FILE_CONTROL.TOX_FILE_CONTROL_CANCEL;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_FILE_KIND.TOX_FILE_KIND_FTV2;
