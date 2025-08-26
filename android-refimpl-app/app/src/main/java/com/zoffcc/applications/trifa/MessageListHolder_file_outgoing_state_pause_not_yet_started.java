@@ -222,7 +222,7 @@ public class MessageListHolder_file_outgoing_state_pause_not_yet_started extends
 
         if (message.ft_outgoing_queued)
         {
-            textView.setAutoLinkText("" + message.text + "\n\nqueued ...");
+            textView.setAutoLinkText("" + message.text.replace("\n", " ") + " queued ...");
         }
         else
         {

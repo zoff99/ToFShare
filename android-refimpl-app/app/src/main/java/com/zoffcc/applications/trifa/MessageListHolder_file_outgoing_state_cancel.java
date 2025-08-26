@@ -43,7 +43,6 @@ import com.luseen.autolinklibrary.EmojiTextViewLinks;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.zoffcc.applications.sorm.Message;
-import com.zoffcc.applications.trifa.R;
 
 import java.net.URLConnection;
 
@@ -231,7 +230,7 @@ public class MessageListHolder_file_outgoing_state_cancel extends RecyclerView.V
 
         final Message message = m;
 
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MESSAGE_TEXT_SIZE[PREF__global_font_size]);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MESSAGE_TEXT_SIZE[1]);
 
         if (message.filedb_id == -1) // transfer was canceled somewhere
         {
