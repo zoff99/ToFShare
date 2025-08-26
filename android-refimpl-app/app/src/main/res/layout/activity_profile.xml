@@ -44,7 +44,7 @@
                     android:layout_marginTop="25dp"
                     app:civ_border_color="#40000000"
                     app:civ_border_width="2dp"
-                    tools:src="@mipmap/ic_launcher_round" />
+                    tools:src="@mipmap/ic_launcher" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/profile_icon_edit"
@@ -284,7 +284,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/ic_launcher_round" />
+                android:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -309,7 +309,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/ic_launcher_round" />
+                android:src="@mipmap/ic_launcher" />
 
             <Button
                 android:id="@+id/load_network_connections_button"

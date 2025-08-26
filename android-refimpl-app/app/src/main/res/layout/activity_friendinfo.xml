@@ -34,7 +34,7 @@
                 android:layout_marginBottom="20dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"
-                android:src="@mipmap/ic_launcher_round"
+                android:src="@mipmap/ic_launcher"
                 app:civ_border_color="#40000000"
                 app:civ_border_width="2dp" />
 
