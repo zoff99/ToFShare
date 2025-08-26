@@ -22,6 +22,8 @@ package com.zoffcc.applications.trifa;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.ClipData;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,9 +32,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import static com.zoffcc.applications.trifa.HelperFriend.get_set_is_default_ft_contact;
 import static com.zoffcc.applications.trifa.HelperFriend.tox_friend_by_public_key__wrapper;
 import static com.zoffcc.applications.trifa.HelperGeneric.filter_out_non_hex_chars;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__allow_file_sharing_to_trifa_via_intent;
@@ -89,32 +93,64 @@ public class ShareActivity extends AppCompatActivity
             {
                 if (("text/plain".equals(type)) && (intent.getStringExtra(Intent.EXTRA_TEXT) != null))
                 {
-                    Intent intent_friend_selection = new Intent(this, FriendSelectSingleActivity.class);
-                    intent_friend_selection.putExtra("offline", 1);
-                    startActivityForResult(intent_friend_selection, SelectFriendSingleActivity_ID);
+                    final String default_friend_pubkey = get_set_is_default_ft_contact(null, false);
+                    if (default_friend_pubkey != null)
+                    {
+                        showDialog_send_to_default_friend(this);
+                    }
+                    else
+                    {
+                        Intent intent_friend_selection = new Intent(this, FriendSelectSingleActivity.class);
+                        intent_friend_selection.putExtra("offline", 1);
+                        startActivityForResult(intent_friend_selection, SelectFriendSingleActivity_ID);
+                    }
                 }
                 else
                 {
-                    Intent intent_friend_selection = new Intent(this, FriendSelectSingleActivity.class);
-                    intent_friend_selection.putExtra("offline", 1);
-                    intent_friend_selection.putExtra("ngc_groups", 1);
-                    startActivityForResult(intent_friend_selection, SelectFriendSingleActivity_ID);
+                    final String default_friend_pubkey = get_set_is_default_ft_contact(null, false);
+                    if (default_friend_pubkey != null)
+                    {
+                        showDialog_send_to_default_friend(this);
+                    }
+                    else
+                    {
+                        Intent intent_friend_selection = new Intent(this, FriendSelectSingleActivity.class);
+                        intent_friend_selection.putExtra("offline", 1);
+                        intent_friend_selection.putExtra("ngc_groups", 1);
+                        startActivityForResult(intent_friend_selection, SelectFriendSingleActivity_ID);
+                    }
                 }
             }
             else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null)
             {
                 if ("text/plain".equals(type))
                 {
-                    Intent intent_friend_selection = new Intent(this, FriendSelectSingleActivity.class);
-                    intent_friend_selection.putExtra("offline", 1);
-                    startActivityForResult(intent_friend_selection, SelectFriendSingleActivity_ID);
+                    final String default_friend_pubkey = get_set_is_default_ft_contact(null, false);
+                    if (default_friend_pubkey != null)
+                    {
+                        showDialog_send_to_default_friend(this);
+                    }
+                    else
+                    {
+                        Intent intent_friend_selection = new Intent(this, FriendSelectSingleActivity.class);
+                        intent_friend_selection.putExtra("offline", 1);
+                        startActivityForResult(intent_friend_selection, SelectFriendSingleActivity_ID);
+                    }
                 }
                 else
                 {
-                    Intent intent_friend_selection = new Intent(this, FriendSelectSingleActivity.class);
-                    intent_friend_selection.putExtra("offline", 1);
-                    intent_friend_selection.putExtra("ngc_groups", 1);
-                    startActivityForResult(intent_friend_selection, SelectFriendSingleActivity_ID);
+                    final String default_friend_pubkey = get_set_is_default_ft_contact(null, false);
+                    if (default_friend_pubkey != null)
+                    {
+                        showDialog_send_to_default_friend(this);
+                    }
+                    else
+                    {
+                        Intent intent_friend_selection = new Intent(this, FriendSelectSingleActivity.class);
+                        intent_friend_selection.putExtra("offline", 1);
+                        intent_friend_selection.putExtra("ngc_groups", 1);
+                        startActivityForResult(intent_friend_selection, SelectFriendSingleActivity_ID);
+                    }
                 }
             }
             else if (Intent.ACTION_VIEW.equals(action))
@@ -216,9 +252,9 @@ public class ShareActivity extends AppCompatActivity
                         int item_type = Integer.parseInt(result_friend_pubkey.substring(0, 1));
                         String item_id = result_friend_pubkey.substring(2);
 
-                        // Log.i(TAG, "type="+ type + " action=" + action + " item_type=" + item_type + " item_id="+item_id.length()+ " "+item_id);
-                        // Log.i(TAG, "onActivityResult:intent:" + intent);
-                        // Log.i(TAG, "onActivityResult:Intent.EXTRA_TEXT:" + intent.getStringExtra(Intent.EXTRA_TEXT));
+                        Log.i(TAG, "type="+ type + " action=" + action + " item_type=" + item_type + " item_id="+item_id.length()+ " "+item_id);
+                        Log.i(TAG, "onActivityResult:intent:" + intent);
+                        Log.i(TAG, "onActivityResult:Intent.EXTRA_TEXT:" + intent.getStringExtra(Intent.EXTRA_TEXT));
 
                         if ((item_id.length() == TOX_PUBLIC_KEY_SIZE * 2) && (item_type == 0))
                         {
@@ -323,7 +359,7 @@ public class ShareActivity extends AppCompatActivity
             if (type == 0)
             {
                 // Intent { dat=content://com.android.providers.media.documents/document/image:12345 flg=0x43 }
-                add_attachment(this, intent_fixup, intent, tox_friend_by_public_key__wrapper(id), false);
+                add_attachment(this, intent_fixup, intent, tox_friend_by_public_key__wrapper(id), false, true);
                 MessageListActivity.show_messagelist_for_friend(this, id, null);
             }
             else if (type == 2)
@@ -345,7 +381,7 @@ public class ShareActivity extends AppCompatActivity
                 intent_fixup.setData(imageUri);
                 if (type == 0)
                 {
-                    add_attachment(this, intent_fixup, intent, tox_friend_by_public_key__wrapper(id), false);
+                    add_attachment(this, intent_fixup, intent, tox_friend_by_public_key__wrapper(id), false, true);
                 }
                 else if (type == 2)
                 {
@@ -362,5 +398,39 @@ public class ShareActivity extends AppCompatActivity
             // close this share activity
             this.finish();
         }
+    }
+
+    void showDialog_send_to_default_friend(final Context c)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setMessage("Do you really want to send these files to your default contact?").setTitle("Send to Default Friend").
+                setCancelable(false).
+                setPositiveButton("Yes", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int id)
+            {
+                try
+                {
+                    Intent data = new Intent();
+                    String return_friend_pubkey = "0:" + get_set_is_default_ft_contact(null, false);
+                    data.setData(Uri.parse(return_friend_pubkey));
+                    // we abuse the function "onActivityResult"
+                    onActivityResult(SelectFriendSingleActivity_ID,RESULT_OK, data);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+            }
+        }).setNegativeButton("No", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int id)
+            {
+            }
+        });
+
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 }

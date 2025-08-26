@@ -125,6 +125,7 @@ import static com.zoffcc.applications.trifa.TrifaToxService.wakeup_tox_thread;
 
 // import com.vanniktech.emoji.listeners.OnEmojiClickedListener;
 
+/** @noinspection ConstantValue*/
 public class MessageListActivity extends AppCompatActivity
 {
     private static final String TAG = "trifa.MsgListActivity";
@@ -782,7 +783,7 @@ public class MessageListActivity extends AppCompatActivity
                                 File f2 = new File(audio_rec_filename_final);
                                 add_outgoing_file(v.getContext(), MainActivity.message_list_activity.get_current_friendnum(),
                                                   f2.getParent(), f2.getName(), null, f2.length(),
-                                                  false, true, true);
+                                                  false, true, true, false);
                             }
                         }
 
@@ -1492,7 +1493,7 @@ public class MessageListActivity extends AppCompatActivity
         // Log.i(TAG,"send_message_onclick:---end");
     }
 
-    static void add_attachment(Context c, Intent data, Intent orig_intent, long friendnum_local, boolean activity_friend_num)
+    static void add_attachment(Context c, Intent data, Intent orig_intent, long friendnum_local, boolean activity_friend_num, boolean auto_start)
     {
         Log.i(TAG, "add_attachment:001");
 
@@ -1631,7 +1632,7 @@ public class MessageListActivity extends AppCompatActivity
 
                             add_outgoing_file(c, MainActivity.message_list_activity.get_current_friendnum(),
                                               data.getData().toString(), fileName_, data.getData(), 0, false,
-                                              activity_friend_num, false);
+                                              activity_friend_num, false, auto_start);
                         }
                     };
                     t.start();
@@ -1639,7 +1640,7 @@ public class MessageListActivity extends AppCompatActivity
                 else
                 {
                     add_outgoing_file(c, friendnum_local, data.getData().toString(), fileName_, data.getData(), 0, false,
-                                      activity_friend_num, false);
+                                      activity_friend_num, false, auto_start);
                 }
             }
         }
@@ -1669,7 +1670,7 @@ public class MessageListActivity extends AppCompatActivity
             }
             else
             {
-                add_attachment(this, data, data, -1, true);
+                add_attachment(this, data, data, -1, true, false);
             }
             // InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
             //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
@@ -1683,7 +1684,7 @@ public class MessageListActivity extends AppCompatActivity
         long file_size_wrapped = -1;
     }
 
-    static void add_outgoing_file(Context c, long friendnum, String filepath, String filename, Uri uri, long file_size_manual, boolean real_file_path, boolean update_message_view, boolean use_file_size_manual)
+    static void add_outgoing_file(Context c, long friendnum, String filepath, String filename, Uri uri, long file_size_manual, boolean real_file_path, boolean update_message_view, boolean use_file_size_manual, boolean auto_start)
     {
         // Log.i(TAG, "add_outgoing_file:001");
 
@@ -1779,7 +1780,14 @@ public class MessageListActivity extends AppCompatActivity
             m.state = TOX_FILE_CONTROL_PAUSE.value;
             m.ft_accepted = false;
             m.ft_outgoing_started = false;
-            m.ft_outgoing_queued = false;
+            if (auto_start)
+            {
+                m.ft_outgoing_queued = true;
+            }
+            else
+            {
+                m.ft_outgoing_queued = false;
+            }
             m.filename_fullpath = new java.io.File(ofw.filepath_wrapped + "/" + ofw.filename_wrapped).getAbsolutePath();
             m.sent_timestamp = System.currentTimeMillis();
             m.text = ofw.filename_wrapped + "\n" + ofw.file_size_wrapped + " bytes";
