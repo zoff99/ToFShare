@@ -19,6 +19,7 @@
 
 package com.zoffcc.applications.trifa;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.Intent;
@@ -26,8 +27,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-
-import com.zoffcc.applications.trifa.R;
 
 import java.util.ArrayList;
 
@@ -43,6 +42,7 @@ import static com.zoffcc.applications.trifa.ToxVars.TOX_ADDRESS_SIZE;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_GROUP_CHAT_ID_SIZE;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_PUBLIC_KEY_SIZE;
 
+/** @noinspection RedundantCast, unused , deprecation , DataFlowIssue , ConstantValue , StatementWithEmptyBody , CatchMayIgnoreException , CallToPrintStackTrace , UnnecessaryReturnStatement , CommentedOutCode */
 public class ShareActivity extends AppCompatActivity
 {
     private static final String TAG = "trifa.ShareActivity";
@@ -52,6 +52,7 @@ public class ShareActivity extends AppCompatActivity
     String action;
     String type;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
