@@ -59,6 +59,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.screenshot.ViewInteractionCapture.captureToBitmap;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.runner.lifecycle.Stage.RESUMED;
+import static com.zoffcc.applications.trifa.HelperFriend.get_set_is_default_ft_contact;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__window_security;
 import static com.zoffcc.applications.trifa.TrifaToxService.orma;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -203,6 +204,10 @@ public class JavaFriendTester
             }
             count_friends = orma.selectFromFriendList().count();
         }
+
+        // set first friend as default contact
+        wait_(2);
+        get_set_is_default_ft_contact(orma.selectFromFriendList().get(0).tox_public_key_string, true);
 
         screenshot("004a");
         wait_(12);
