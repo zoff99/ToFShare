@@ -61,6 +61,12 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static androidx.test.runner.lifecycle.Stage.RESUMED;
 import static com.zoffcc.applications.trifa.HelperFriend.get_set_is_default_ft_contact;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__window_security;
+import static com.zoffcc.applications.trifa.MainActivity.load_main_gallery_images;
+import static com.zoffcc.applications.trifa.MainActivity.main_gallery_adapter;
+import static com.zoffcc.applications.trifa.MainActivity.main_gallery_container;
+import static com.zoffcc.applications.trifa.MainActivity.main_gallery_manager;
+import static com.zoffcc.applications.trifa.MainActivity.main_gallery_recycler;
+import static com.zoffcc.applications.trifa.MainActivity.waiting_container;
 import static com.zoffcc.applications.trifa.TrifaToxService.orma;
 import static org.hamcrest.CoreMatchers.allOf;
 
@@ -166,6 +172,20 @@ public class JavaFriendTester
         wait_(4);
         // switch to gallery mode by setting the switch to "OFF"
         onView(withId(R.id.switch_gallery_main_view)).check(matches(isChecked())).perform(click()).check(matches(isNotChecked()));
+        try
+        {
+            // HINT: the above does not trigger the setOnCheckedChangeListener listener
+            waiting_container.setVisibility(View.GONE);
+            main_gallery_container.setVisibility(View.VISIBLE);
+            main_gallery_recycler.setAdapter(main_gallery_adapter);
+            main_gallery_recycler.setLayoutManager(main_gallery_manager);
+            main_gallery_container.bringToFront();
+            load_main_gallery_images();
+        }
+        catch(Exception e)
+        {
+            Log.i(TAG, "EE:setOnCheckedChangeListener");
+        }
 
         screenshot("006");
         wait_(2);
