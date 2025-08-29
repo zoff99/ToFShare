@@ -68,6 +68,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RemoteViews;
@@ -118,7 +119,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import info.guardianproject.iocipher.FileInputStream;
 import info.guardianproject.iocipher.FileOutputStream;
@@ -136,8 +139,12 @@ import static com.zoffcc.applications.trifa.HelperFiletransfer.flush_and_close_v
 import static com.zoffcc.applications.trifa.HelperFiletransfer.get_incoming_filetransfer_local_filename;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.remove_ft_from_cache;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.remove_vfs_ft_from_cache;
+import static com.zoffcc.applications.trifa.HelperFiletransfer.start_outgoing_ft;
+import static com.zoffcc.applications.trifa.HelperFriend.friend_call_push_url;
 import static com.zoffcc.applications.trifa.HelperFriend.get_friend_avatar_saved_hash_hex;
 import static com.zoffcc.applications.trifa.HelperFriend.get_friend_msgv3_capability;
+import static com.zoffcc.applications.trifa.HelperFriend.get_set_is_default_ft_contact;
+import static com.zoffcc.applications.trifa.HelperFriend.is_friend_online_real;
 import static com.zoffcc.applications.trifa.HelperFriend.main_get_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.send_friend_msg_receipt_v2_wrapper;
 import static com.zoffcc.applications.trifa.HelperFriend.send_pushurl_to_friend;
@@ -284,6 +291,13 @@ public class MainActivity extends AppCompatActivity
     static AudioManager audio_manager_s = null;
     static Resources resources = null;
     static DisplayMetrics metrics = null;
+    static SwitchCompat switch_gallery_main_view = null;
+    static ViewGroup waiting_container = null;
+    static ViewGroup main_gallery_container = null;
+    static MainGalleryAdapter main_gallery_adapter = null;
+    static RecyclerView main_gallery_recycler = null;
+    static GridLayoutManager main_gallery_manager = null;
+    static ArrayList<String> main_gallery_images = null;
     static int AudioMode_old;
     static int RingerMode_old;
     static boolean isSpeakerPhoneOn_old;
@@ -405,6 +419,7 @@ public class MainActivity extends AppCompatActivity
     static boolean PREF__use_native_audio_play = true;
     static boolean PREF__tox_set_do_not_sync_av = false;
     static boolean PREF__use_audio_rec_effects = false;
+    static boolean PREF__gallery_main_view = true;
     static boolean PREF__window_security = true;
     public static int PREF__X_eac_delay_ms = 80;
     static boolean PREF__force_udp_only = false;
@@ -541,6 +556,14 @@ public class MainActivity extends AppCompatActivity
         Log.i(TAG, "M:STARTUP:setContentView start");
         setContentView(R.layout.activity_main);
         Log.i(TAG, "M:STARTUP:setContentView end");
+
+        main_gallery_recycler = findViewById(R.id.main_gallery_recycler);
+        main_gallery_images = new ArrayList<>();
+        main_gallery_adapter = new MainGalleryAdapter(this, main_gallery_images);
+        main_gallery_manager = new GridLayoutManager(this, 3);
+        switch_gallery_main_view = this.findViewById(R.id.switch_gallery_main_view);
+        waiting_container = this.findViewById(R.id.waiting_container);
+        main_gallery_container = this.findViewById(R.id.main_gallery_container);
 
         mt = (TextView) this.findViewById(R.id.main_maintext);
         mt.setText("...");
@@ -1656,6 +1679,47 @@ public class MainActivity extends AppCompatActivity
         */
 
         register_for_push(this);
+
+
+
+        PREF__gallery_main_view = settings.getBoolean("gallery_main_view", true);
+        switch_gallery_main_view.setChecked(PREF__gallery_main_view);
+
+        switch_gallery_main_view.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @SuppressLint("ApplySharedPref")
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                Log.i(TAG, "switch_gallery_main_view:" + isChecked);
+                PREF__gallery_main_view = isChecked;
+                settings.edit().putBoolean("gallery_main_view", isChecked).commit();
+
+                if (PREF__gallery_main_view) {
+                    waiting_container.setVisibility(View.GONE);
+                    main_gallery_container.setVisibility(View.VISIBLE);
+                    main_gallery_recycler.setAdapter(main_gallery_adapter);
+                    main_gallery_recycler.setLayoutManager(main_gallery_manager);
+                    main_gallery_container.bringToFront();
+                    load_main_gallery_images();
+                } else {
+                    waiting_container.setVisibility(View.VISIBLE);
+                    main_gallery_container.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        if (PREF__gallery_main_view) {
+            waiting_container.setVisibility(View.GONE);
+            main_gallery_container.setVisibility(View.VISIBLE);
+            main_gallery_recycler.setAdapter(main_gallery_adapter);
+            main_gallery_recycler.setLayoutManager(main_gallery_manager);
+            main_gallery_container.bringToFront();
+            load_main_gallery_images();
+        } else {
+            waiting_container.setVisibility(View.VISIBLE);
+            main_gallery_container.setVisibility(View.GONE);
+        }
 
         Log.i(TAG, "M:STARTUP:-- DONE --");
     }
@@ -3350,7 +3414,8 @@ public class MainActivity extends AppCompatActivity
         PREF__use_native_audio_play = settings.getBoolean("X_use_native_audio_play", true);
         PREF__tox_set_do_not_sync_av = settings.getBoolean("X_tox_set_do_not_sync_av", false);
 
-        // reset trigger for throttled saving
+
+    // reset trigger for throttled saving
         update_savedata_file_wrapper_throttled_last_trigger_ts = 0;
 
         remove_all_progressDialogs();
@@ -6235,6 +6300,36 @@ public class MainActivity extends AppCompatActivity
 
                 // remove FT from DB
                 HelperFiletransfer.delete_filetransfers_from_friendnum_and_filenum(friend_number, file_number);
+
+                try
+                {
+                    if (PREF__gallery_main_view)
+                    {
+                        Runnable myRunnable = new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                try
+                                {
+                                    // TODO: only add 1 image to adapter
+                                    //       but its good enough for now
+                                    load_main_gallery_images();
+                                }
+                                catch (Exception e)
+                                {
+                                }
+                            }
+                        };
+                        if (main_handler_s != null)
+                        {
+                            main_handler_s.post(myRunnable);
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                }
             }
             catch (Exception e2)
             {
@@ -7113,6 +7208,55 @@ public class MainActivity extends AppCompatActivity
             }
         });
         img.startAnimation(fadeOut);
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    static void load_main_gallery_images()
+    {
+        try
+        {
+            final String default_friend_pubkey = get_set_is_default_ft_contact(null, false);
+            if (default_friend_pubkey != null)
+            {
+                List<com.zoffcc.applications.sorm.Message> incoming_files = orma.selectFromMessage().
+                        tox_friendpubkeyEq(default_friend_pubkey).
+                        directionEq(TRIFA_FT_DIRECTION_INCOMING.value).
+                        TRIFA_MESSAGE_TYPEEq(TRIFA_MSG_FILE.value).
+                        stateEq(TOX_FILE_CONTROL_CANCEL.value).
+                        orderBySent_timestampAsc().
+                        toList();
+
+                //noinspection SizeReplaceableByIsEmpty
+                if ((incoming_files != null) && (incoming_files.size() > 0))
+                {
+                    main_gallery_images.clear();
+                    Iterator<com.zoffcc.applications.sorm.Message> ifile = incoming_files.iterator();
+                    while (ifile.hasNext())
+                    {
+                        Message m_ifile = (Message) ifile.next();
+                        if ((m_ifile.filename_fullpath != null) && (m_ifile.filename_fullpath.length() > 2))
+                        {
+                            Log.i(TAG, "load_main_gallery_images:" + m_ifile.filename_fullpath);
+                            main_gallery_images.add(m_ifile.filename_fullpath);
+                        }
+                    }
+                }
+
+            }
+        }
+        catch(Exception e)
+        {
+        }
+
+
+        try
+        {
+            main_gallery_recycler.getAdapter().notifyDataSetChanged();
+        }
+        catch(Exception e)
+        {
+        }
     }
 
     // --------- make app crash ---------
