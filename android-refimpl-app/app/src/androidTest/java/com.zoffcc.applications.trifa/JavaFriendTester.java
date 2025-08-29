@@ -208,6 +208,9 @@ public class JavaFriendTester
         wait_(12);
         screenshot("004b");
 
+        wait_(3);
+        screenshot("005");
+
         wait_(1);
         Espresso.closeSoftKeyboard();
 
