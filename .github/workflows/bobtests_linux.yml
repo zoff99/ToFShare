@@ -61,9 +61,9 @@ jobs:
              curl -L https://github.com/zoff99/java_tox_tester/archive/refs/heads/master.zip -o master.zip
              unzip master.zip
              ls -al java_tox_tester-master/
-             sed -i -e 's#/storage/emulated/0/Android/data/com.zoffcc.applications.trifa#/storage/emulated/0/Android/data/com.zoffcc.applications.tofshare#g' do_wait_for_app.sh
+             sed -i -e 's#/storage/emulated/0/Android/data/com.zoffcc.applications.trifa#/storage/emulated/0/Android/data/com.zoffcc.applications.tofshare#g' java_tox_tester-master/do_wait_for_app.sh
              echo "------------------------"
-             cat do_wait_for_app.sh
+             cat java_tox_tester-master/do_wait_for_app.sh
              echo "------------------------"
              java -version
              javac -version
