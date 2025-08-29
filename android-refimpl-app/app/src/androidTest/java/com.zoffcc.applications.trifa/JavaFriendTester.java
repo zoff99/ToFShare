@@ -2,6 +2,7 @@ package com.zoffcc.applications.trifa;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -60,7 +61,16 @@ import static androidx.test.espresso.screenshot.ViewInteractionCapture.captureTo
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.runner.lifecycle.Stage.RESUMED;
 import static com.zoffcc.applications.trifa.HelperFriend.get_set_is_default_ft_contact;
+import static com.zoffcc.applications.trifa.MainActivity.Notification_new_message_ID;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__window_security;
+import static com.zoffcc.applications.trifa.MainActivity.context_s;
+import static com.zoffcc.applications.trifa.MainActivity.load_main_gallery_images;
+import static com.zoffcc.applications.trifa.MainActivity.main_gallery_adapter;
+import static com.zoffcc.applications.trifa.MainActivity.main_gallery_container;
+import static com.zoffcc.applications.trifa.MainActivity.main_gallery_manager;
+import static com.zoffcc.applications.trifa.MainActivity.main_gallery_recycler;
+import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
+import static com.zoffcc.applications.trifa.MainActivity.waiting_container;
 import static com.zoffcc.applications.trifa.TrifaToxService.orma;
 import static org.hamcrest.CoreMatchers.allOf;
 
@@ -165,7 +175,43 @@ public class JavaFriendTester
 
         wait_(4);
         // switch to gallery mode by setting the switch to "OFF"
-        onView(withId(R.id.switch_gallery_main_view)).check(matches(isChecked())).perform(click()).check(matches(isNotChecked()));
+        onView(withId(R.id.switch_gallery_main_view)).check(matches(isChecked())).perform(click()).check(
+                matches(isNotChecked()));
+
+        Runnable myRunnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    // the above does not trigger the "setOnCheckedChangeListener" for some reason
+                    waiting_container.setVisibility(View.GONE);
+                    main_gallery_container.setVisibility(View.VISIBLE);
+                    main_gallery_recycler.setAdapter(main_gallery_adapter);
+                    main_gallery_recycler.setLayoutManager(main_gallery_manager);
+                    main_gallery_container.bringToFront();
+                    load_main_gallery_images();
+                    Log.i(TAG, "trigger setOnCheckedChangeListener");
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Log.i(TAG, "EE:002:" + e.getMessage());
+                }
+            }
+        };
+
+        try
+        {
+            if (main_handler_s != null)
+            {
+                main_handler_s.post(myRunnable);
+            }
+        }
+        catch (Exception e)
+        {
+        }
 
         screenshot("006");
         wait_(2);
