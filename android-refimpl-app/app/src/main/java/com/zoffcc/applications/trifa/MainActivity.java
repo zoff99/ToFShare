@@ -139,9 +139,12 @@ import static com.zoffcc.applications.trifa.HelperFiletransfer.flush_and_close_v
 import static com.zoffcc.applications.trifa.HelperFiletransfer.get_incoming_filetransfer_local_filename;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.remove_ft_from_cache;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.remove_vfs_ft_from_cache;
+import static com.zoffcc.applications.trifa.HelperFiletransfer.start_outgoing_ft;
+import static com.zoffcc.applications.trifa.HelperFriend.friend_call_push_url;
 import static com.zoffcc.applications.trifa.HelperFriend.get_friend_avatar_saved_hash_hex;
 import static com.zoffcc.applications.trifa.HelperFriend.get_friend_msgv3_capability;
 import static com.zoffcc.applications.trifa.HelperFriend.get_set_is_default_ft_contact;
+import static com.zoffcc.applications.trifa.HelperFriend.is_friend_online_real;
 import static com.zoffcc.applications.trifa.HelperFriend.main_get_friend;
 import static com.zoffcc.applications.trifa.HelperFriend.send_friend_msg_receipt_v2_wrapper;
 import static com.zoffcc.applications.trifa.HelperFriend.send_pushurl_to_friend;
