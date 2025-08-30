@@ -170,7 +170,7 @@ jobs:
           path: |
             /home/runner/work/ToFShare/ToFShare/android-refimpl-app/logcat.txt
       - name: Rename artifact for nightly upload
-        if: github.event_name == 'push' && github.ref == 'refs/heads/zoff99/dev003'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           pwd
           cp -av /home/runner/work/ToFShare/ToFShare/test_outputfiles/test_004b.png screen_shot_android_${{ matrix.api-level }}_02.png
@@ -178,7 +178,7 @@ jobs:
           cp -av /home/runner/work/ToFShare/ToFShare/test_outputfiles/test_099.png screen_shot_android_${{ matrix.api-level }}_11.png
       - name: Upload to nightly release
         uses: ncipollo/release-action@v1
-        if: github.event_name == 'push' && github.ref == 'refs/heads/zoff99/dev003'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         with:
           allowUpdates: true
           tag: nightly
