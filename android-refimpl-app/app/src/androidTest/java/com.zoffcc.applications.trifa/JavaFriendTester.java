@@ -2,15 +2,11 @@ package com.zoffcc.applications.trifa;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Checkable;
 import android.widget.TextView;
 
 import com.zoffcc.applications.sorm.Message;
@@ -24,7 +20,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -45,41 +40,30 @@ import androidx.test.runner.screenshot.Screenshot;
 import static androidx.test.InstrumentationRegistry.getTargetContext;
 import static androidx.test.core.graphics.BitmapStorage.writeToTestStorage;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.screenshot.ViewInteractionCapture.captureToBitmap;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.runner.lifecycle.Stage.RESUMED;
 import static com.zoffcc.applications.trifa.HelperFriend.get_set_is_default_ft_contact;
-import static com.zoffcc.applications.trifa.MainActivity.Notification_new_message_ID;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__window_security;
-import static com.zoffcc.applications.trifa.MainActivity.context_s;
 import static com.zoffcc.applications.trifa.MainActivity.load_main_gallery_images;
 import static com.zoffcc.applications.trifa.MainActivity.main_gallery_adapter;
 import static com.zoffcc.applications.trifa.MainActivity.main_gallery_container;
 import static com.zoffcc.applications.trifa.MainActivity.main_gallery_manager;
 import static com.zoffcc.applications.trifa.MainActivity.main_gallery_recycler;
 import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
-import static com.zoffcc.applications.trifa.MainActivity.switch_gallery_main_view;
 import static com.zoffcc.applications.trifa.MainActivity.waiting_container;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_FT_DIRECTION.TRIFA_FT_DIRECTION_INCOMING;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_MSG_TYPE.TRIFA_MSG_FILE;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_FILE_CONTROL.TOX_FILE_CONTROL_CANCEL;
 import static com.zoffcc.applications.trifa.TrifaToxService.orma;
-import static org.hamcrest.CoreMatchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -306,7 +290,7 @@ public class JavaFriendTester
         }
 
         wait_(2);
-        load_main_gallery_images();
+        // load_main_gallery_images();
         screenshot_full("007");
 
         wait_(10);
