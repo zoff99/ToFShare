@@ -6311,6 +6311,7 @@ public class MainActivity extends AppCompatActivity
                                 {
                                     // TODO: only add 1 image to adapter
                                     //       but its good enough for now
+                                    Log.i(TAG, "FT:done:calling load_main_gallery_images()");
                                     load_main_gallery_images();
                                 }
                                 catch (Exception e)
@@ -7211,9 +7212,11 @@ public class MainActivity extends AppCompatActivity
     @SuppressLint("NotifyDataSetChanged")
     static void load_main_gallery_images()
     {
+        Log.i(TAG, "load_main_gallery_images:start");
         try
         {
             final String default_friend_pubkey = get_set_is_default_ft_contact(null, false);
+            Log.i(TAG, "load_main_gallery_images:default_friend_pubkey:" + default_friend_pubkey);
             if (default_friend_pubkey != null)
             {
                 List<com.zoffcc.applications.sorm.Message> incoming_files = orma.selectFromMessage().

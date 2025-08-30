@@ -1551,6 +1551,7 @@ public class HelperFriend
         catch(Exception e)
         {
             e.printStackTrace();
+            Log.i(TAG, "get_set_is_default_ft_contact:EE01:" + e.getMessage());
         }
         return null;
     }

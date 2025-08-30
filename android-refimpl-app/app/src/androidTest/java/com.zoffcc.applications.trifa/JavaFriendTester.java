@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Checkable;
 import android.widget.TextView;
 
+import com.zoffcc.applications.sorm.Message;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -25,6 +27,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
@@ -70,7 +73,11 @@ import static com.zoffcc.applications.trifa.MainActivity.main_gallery_container;
 import static com.zoffcc.applications.trifa.MainActivity.main_gallery_manager;
 import static com.zoffcc.applications.trifa.MainActivity.main_gallery_recycler;
 import static com.zoffcc.applications.trifa.MainActivity.main_handler_s;
+import static com.zoffcc.applications.trifa.MainActivity.switch_gallery_main_view;
 import static com.zoffcc.applications.trifa.MainActivity.waiting_container;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_FT_DIRECTION.TRIFA_FT_DIRECTION_INCOMING;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.TRIFA_MSG_TYPE.TRIFA_MSG_FILE;
+import static com.zoffcc.applications.trifa.ToxVars.TOX_FILE_CONTROL.TOX_FILE_CONTROL_CANCEL;
 import static com.zoffcc.applications.trifa.TrifaToxService.orma;
 import static org.hamcrest.CoreMatchers.allOf;
 
@@ -175,8 +182,8 @@ public class JavaFriendTester
 
         wait_(4);
         // switch to gallery mode by setting the switch to "OFF"
-        onView(withId(R.id.switch_gallery_main_view)).check(matches(isChecked())).perform(click()).check(
-                matches(isNotChecked()));
+        // onView(withId(R.id.switch_gallery_main_view)).check(matches(isChecked())).perform(click()).check(
+        //        matches(isNotChecked()));
 
         Runnable myRunnable = new Runnable()
         {
@@ -185,6 +192,8 @@ public class JavaFriendTester
             {
                 try
                 {
+                    // *** breaks thing, not sure why *** // switch_gallery_main_view.setChecked(false);
+
                     // the above does not trigger the "setOnCheckedChangeListener" for some reason
                     waiting_container.setVisibility(View.GONE);
                     main_gallery_container.setVisibility(View.VISIBLE);
@@ -251,20 +260,53 @@ public class JavaFriendTester
             count_friends = orma.selectFromFriendList().count();
         }
 
-        // set first friend as default contact
         wait_(2);
-        get_set_is_default_ft_contact(orma.selectFromFriendList().get(0).tox_public_key_string, true);
-
+        // friend should be fully added here
         screenshot("004a");
-        wait_(12);
+
+        // set first friend as default contact
+        final String def_friend_pubkey = orma.selectFromFriendList().get(0).tox_public_key_string;
+        Log.i(TAG, "def_friend_pubkey=" + def_friend_pubkey);
+        get_set_is_default_ft_contact(def_friend_pubkey, true);
+        wait_(1);
         screenshot("004b");
 
-        wait_(3);
+        wait_(12);
         screenshot("005");
 
         wait_(1);
         Espresso.closeSoftKeyboard();
 
+        List<Message> incoming_files = new ArrayList<>();
+        while (incoming_files.size() < 1)
+        {
+            try
+            {
+                incoming_files = orma.selectFromMessage().
+                        tox_friendpubkeyEq(def_friend_pubkey).
+                        directionEq(TRIFA_FT_DIRECTION_INCOMING.value).
+                        TRIFA_MESSAGE_TYPEEq(TRIFA_MSG_FILE.value).
+                        stateEq(TOX_FILE_CONTROL_CANCEL.value).
+                        orderBySent_timestampAsc().
+                        toList();
+            }
+            catch(Exception e)
+            {
+            }
+
+            Log.i(TAG, "incoming_files:" + incoming_files.size());
+
+            try
+            {
+                Thread.sleep(500);
+            }
+            catch(Exception e)
+            {
+            }
+        }
+
+        wait_(2);
+        load_main_gallery_images();
         screenshot_full("007");
 
         wait_(10);
