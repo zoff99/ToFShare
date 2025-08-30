@@ -6159,6 +6159,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /** @noinspection ExtractMethodRecommender*/
     static void android_tox_callback_file_recv_chunk_cb_method(long friend_number, long file_number, long position, byte[] data, long length)
     {
         //if (PREF__X_battery_saving_mode)
@@ -6244,6 +6245,7 @@ public class MainActivity extends AppCompatActivity
 
                 // Log.i(TAG, "file_recv_chunk:kind=" + f.kind);
 
+                String fullfilename_path = null;
                 if (f.kind == TOX_FILE_KIND_AVATAR.value)
                 {
                     ByteBuffer file_id_buffer = ByteBuffer.allocateDirect(TOX_FILE_ID_LENGTH);
@@ -6264,13 +6266,9 @@ public class MainActivity extends AppCompatActivity
                     // Log.i(TAG, "file_recv_chunk:file_READY:001:f.id=" + f.id);
                     long msg_id = HelperMessage.get_message_id_from_filetransfer_id_and_friendnum(f.id, friend_number);
                     // Log.i(TAG, "file_recv_chunk:file_READY:001a:msg_id=" + msg_id);
+                    fullfilename_path = VFS_PREFIX + VFS_FILE_DIR + "/" + f.tox_public_key_string + "/" + f.file_name;
                     HelperMessage.update_message_in_db_filename_fullpath_friendnum_and_filenum(friend_number,
-                                                                                               file_number, VFS_PREFIX +
-                                                                                                            VFS_FILE_DIR +
-                                                                                                            "/" +
-                                                                                                            f.tox_public_key_string +
-                                                                                                            "/" +
-                                                                                                            f.file_name);
+                                                                                               file_number, fullfilename_path);
                     HelperMessage.set_message_state_from_friendnum_and_filenum(friend_number, file_number,
                                                                                TOX_FILE_CONTROL_CANCEL.value);
                     HelperMessage.set_message_filedb_from_friendnum_and_filenum(friend_number, file_number, filedb_id);
@@ -6300,28 +6298,34 @@ public class MainActivity extends AppCompatActivity
 
                 try
                 {
-                    if (PREF__gallery_main_view)
+                    if ((f.kind == TOX_FILE_KIND_DATA.value) || (f.kind == TOX_FILE_KIND_FTV2.value))
                     {
-                        Runnable myRunnable = new Runnable()
+                        if (PREF__gallery_main_view)
                         {
-                            @Override
-                            public void run()
+                            String finalFullfilename_path = fullfilename_path;
+                            Runnable myRunnable = new Runnable()
                             {
-                                try
+                                @Override
+                                public void run()
                                 {
-                                    // TODO: only add 1 image to adapter
-                                    //       but its good enough for now
-                                    Log.i(TAG, "FT:done:calling load_main_gallery_images()");
-                                    load_main_gallery_images();
+                                    try
+                                    {
+                                        if (finalFullfilename_path != null)
+                                        {
+                                            // Log.i(TAG, "FT:done:calling append_new_item_main_gallery_images():" +
+                                            //            finalFullfilename_path);
+                                            append_new_item_main_gallery_images(finalFullfilename_path);
+                                        }
+                                    }
+                                    catch (Exception e)
+                                    {
+                                    }
                                 }
-                                catch (Exception e)
-                                {
-                                }
+                            };
+                            if (main_handler_s != null)
+                            {
+                                main_handler_s.post(myRunnable);
                             }
-                        };
-                        if (main_handler_s != null)
-                        {
-                            main_handler_s.post(myRunnable);
                         }
                     }
                 }
@@ -7212,11 +7216,9 @@ public class MainActivity extends AppCompatActivity
     @SuppressLint("NotifyDataSetChanged")
     static void load_main_gallery_images()
     {
-        Log.i(TAG, "load_main_gallery_images:start");
         try
         {
             final String default_friend_pubkey = get_set_is_default_ft_contact(null, false);
-            Log.i(TAG, "load_main_gallery_images:default_friend_pubkey:" + default_friend_pubkey);
             if (default_friend_pubkey != null)
             {
                 List<com.zoffcc.applications.sorm.Message> incoming_files = orma.selectFromMessage().
@@ -7237,7 +7239,7 @@ public class MainActivity extends AppCompatActivity
                         Message m_ifile = (Message) ifile.next();
                         if ((m_ifile.filename_fullpath != null) && (m_ifile.filename_fullpath.length() > 2))
                         {
-                            Log.i(TAG, "load_main_gallery_images:" + m_ifile.filename_fullpath);
+                            // Log.i(TAG, "load_main_gallery_images:" + m_ifile.filename_fullpath);
                             main_gallery_images.add(m_ifile.filename_fullpath);
                         }
                     }
@@ -7253,6 +7255,33 @@ public class MainActivity extends AppCompatActivity
         try
         {
             main_gallery_recycler.getAdapter().notifyDataSetChanged();
+        }
+        catch(Exception e)
+        {
+        }
+    }
+
+    static void append_new_item_main_gallery_images(final String filename_fullpath)
+    {
+        try
+        {
+            final String default_friend_pubkey = get_set_is_default_ft_contact(null, false);
+            if (default_friend_pubkey != null)
+            {
+                if ((filename_fullpath != null) && (filename_fullpath.length() > 2))
+                {
+                    if (main_gallery_images.add(filename_fullpath))
+                    {
+                        try
+                        {
+                            main_gallery_recycler.getAdapter().notifyItemInserted(main_gallery_images.size());
+                        }
+                        catch(Exception e)
+                        {
+                        }
+                    }
+                }
+            }
         }
         catch(Exception e)
         {
