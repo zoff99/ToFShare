@@ -1,6 +1,6 @@
 /**
  * [TRIfA], Java part of Tox Reference Implementation for Android
- * Copyright (C) 2017 Zoff <zoff@zoff.cc>
+ * Copyright (C) 2017-2025 Zoff <zoff@zoff.cc>
  * <p>
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,21 +19,28 @@
 
 package com.zoffcc.applications.trifa;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.zoffcc.applications.trifa.R;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;
+import static com.zoffcc.applications.trifa.MainGalleryAdapter.maingallery_images_list;
 
+/** @noinspection CallToPrintStackTrace, ResultOfMethodCallIgnored */
 public class ImageviewerActivity extends AppCompatActivity
 {
     private static final String TAG = "trifa.ImageviewerActy";
+    static int current_image_postiton_in_list = -1;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -46,51 +53,67 @@ public class ImageviewerActivity extends AppCompatActivity
         try
         {
             image_filename = getIntent().getStringExtra("image_filename");
-            // Log.i(TAG, "onCreate:image_filename=" + image_filename);
         }
         catch (Exception e)
         {
             e.getMessage();
         }
 
-        //        final Drawable d3 = new IconicsDrawable(this).
-        //                icon(GoogleMaterial.Icon.gmd_photo).
-        //                backgroundColor(Color.TRANSPARENT).
-        //                color(Color.parseColor("#AA000000")).sizeDp(200);
-
-        //        final Drawable d1 = new IconicsDrawable(ImageviewerActivity.this).
-        //                icon(GoogleMaterial.Icon.gmd_insert_photo).
-        //                color(ImageviewerActivity.this.getResources().getColor(R.color.colorPrimaryDark)).
-        //                sizeDp(200);
-
-        final PhotoView photoView = (PhotoView) findViewById(R.id.big_image);
+        final PhotoView photoView = findViewById(R.id.big_image);
         photoView.setImageResource(R.drawable.round_loading_animation);
 
-        final Handler imageviewer_handler = new Handler(getMainLooper());
+        photoView.setOnTouchListener(new OnSwipeTouchListener(photoView.getContext()) {
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                // Toast.makeText(photoView.getContext(), "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
+                current_image_postiton_in_list++;
+                try
+                {
+                    String try_to_get_position = maingallery_images_list.get(current_image_postiton_in_list);
+                    load_current_image(try_to_get_position, photoView);
+                }
+                catch(Exception e)
+                {
+                    current_image_postiton_in_list--;
+                }
+            }
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                // Toast.makeText(photoView.getContext(), "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
+                boolean did_decrease = false;
+                if (current_image_postiton_in_list > 0)
+                {
+                    current_image_postiton_in_list--;
+                    did_decrease = true;
+                }
+                try
+                {
+                    String try_to_get_position = maingallery_images_list.get(current_image_postiton_in_list);
+                    load_current_image(try_to_get_position, photoView);
+                }
+                catch(Exception e)
+                {
+                    if (did_decrease)
+                    {
+                        current_image_postiton_in_list++;
+                    }
+                }
+            }
+        });
 
+        load_current_image(image_filename, photoView);
+    }
+
+    private void load_current_image(final String image_filename, PhotoView photoView)
+    {
         if (VFS_ENCRYPT)
         {
-            final String image_filename_ = image_filename;
-
-            //final Thread t_image_loader = new Thread()
-            //{
-            //   @Override
-            //  public void run()
-            // {
-
-            info.guardianproject.iocipher.File f2 = new info.guardianproject.iocipher.File(image_filename_);
-            // final String temp_file_name = copy_vfs_file_to_real_file(f2.getParent(), f2.getName(), SD_CARD_TMP_DIR, "_1");
-            // Log.i(TAG, "loadData:temp_file_name=" + temp_file_name);
-
-            // final Runnable myRunnable = new Runnable()
-            //{
-            //  @Override
-            // public void run()
-            //{
+            info.guardianproject.iocipher.File f2 = new info.guardianproject.iocipher.File(image_filename);
             try
             {
-                RequestOptions req_options = new RequestOptions(); //.onlyRetrieveFromCache(true);
-
+                RequestOptions req_options = new RequestOptions();
                 GlideApp.
                         with(this).
                         load(f2).
@@ -104,12 +127,13 @@ public class ImageviewerActivity extends AppCompatActivity
             {
                 e.printStackTrace();
             }
-            // }
-            //};
-            //imageviewer_handler.post(myRunnable);
-            // }
-            //};
-            // t_image_loader.start();
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        current_image_postiton_in_list = -1;
     }
 }

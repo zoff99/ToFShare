@@ -34,11 +34,14 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import info.guardianproject.iocipher.File;
+
+import static com.zoffcc.applications.trifa.ImageviewerActivity.current_image_postiton_in_list;
 
 public class MainGalleryAdapter extends RecyclerView.Adapter<MainGalleryAdapter.ViewHolder> {
 
         private final Context context;
-        private final ArrayList<String> images_list;
+        static ArrayList<String> maingallery_images_list = new ArrayList<>();
 
         @NonNull
         @Override
@@ -49,7 +52,7 @@ public class MainGalleryAdapter extends RecyclerView.Adapter<MainGalleryAdapter.
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            final String filename_fullpath = images_list.get(position);
+            final String filename_fullpath = maingallery_images_list.get(holder.getBindingAdapterPosition());
             holder.itemView.setOnTouchListener(new View.OnTouchListener()
             {
                 @Override
@@ -61,6 +64,7 @@ public class MainGalleryAdapter extends RecyclerView.Adapter<MainGalleryAdapter.
                         {
                             Intent intent = new Intent(v.getContext(), ImageviewerActivity.class);
                             intent.putExtra("image_filename", filename_fullpath);
+                            current_image_postiton_in_list = holder.getBindingAdapterPosition();
                             v.getContext().startActivity(intent);
                         }
                         catch (Exception e)
@@ -75,8 +79,7 @@ public class MainGalleryAdapter extends RecyclerView.Adapter<MainGalleryAdapter.
                 }
             });
 
-
-            info.guardianproject.iocipher.File f2 = new info.guardianproject.iocipher.File(filename_fullpath);
+            File f2 = new File(filename_fullpath);
             try
             {
                 // final RequestOptions glide_options = new RequestOptions().fitCenter().optionalTransform(
@@ -103,12 +106,12 @@ public class MainGalleryAdapter extends RecyclerView.Adapter<MainGalleryAdapter.
 
         @Override
         public int getItemCount() {
-            return images_list.size();
+            return maingallery_images_list.size();
         }
 
         public MainGalleryAdapter(Context context, ArrayList<String> images_list) {
             this.context = context;
-            this.images_list = images_list;
+            maingallery_images_list = images_list;
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {

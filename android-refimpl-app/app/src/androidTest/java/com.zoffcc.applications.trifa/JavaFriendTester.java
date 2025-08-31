@@ -166,7 +166,7 @@ public class JavaFriendTester
 
         wait_(4);
         // switch to gallery mode by setting the switch to "OFF"
-        // onView(withId(R.id.switch_gallery_main_view)).check(matches(isChecked())).perform(click()).check(
+        // onView(withId(R.id.switch_normal_main_view)).check(matches(isChecked())).perform(click()).check(
         //        matches(isNotChecked()));
 
         Runnable myRunnable = new Runnable()
@@ -176,7 +176,7 @@ public class JavaFriendTester
             {
                 try
                 {
-                    // *** breaks thing, not sure why *** // switch_gallery_main_view.setChecked(false);
+                    // *** breaks thing, not sure why *** // switch_normal_main_view.setChecked(false);
 
                     // the above does not trigger the "setOnCheckedChangeListener" for some reason
                     waiting_container.setVisibility(View.GONE);

@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity
     static AudioManager audio_manager_s = null;
     static Resources resources = null;
     static DisplayMetrics metrics = null;
-    static SwitchCompat switch_gallery_main_view = null;
+    static SwitchCompat switch_normal_main_view = null;
     static ViewGroup waiting_container = null;
     static ViewGroup main_gallery_container = null;
     static MainGalleryAdapter main_gallery_adapter = null;
@@ -416,7 +416,7 @@ public class MainActivity extends AppCompatActivity
     static boolean PREF__use_native_audio_play = true;
     static boolean PREF__tox_set_do_not_sync_av = false;
     static boolean PREF__use_audio_rec_effects = false;
-    static boolean PREF__gallery_main_view = true;
+    static boolean PREF__normal_main_view = true;
     static boolean PREF__window_security = true;
     public static int PREF__X_eac_delay_ms = 80;
     static boolean PREF__force_udp_only = false;
@@ -558,7 +558,7 @@ public class MainActivity extends AppCompatActivity
         main_gallery_images = new ArrayList<>();
         main_gallery_adapter = new MainGalleryAdapter(this, main_gallery_images);
         main_gallery_manager = new GridLayoutManager(this, 3);
-        switch_gallery_main_view = this.findViewById(R.id.switch_gallery_main_view);
+        switch_normal_main_view = this.findViewById(R.id.switch_normal_main_view);
         waiting_container = this.findViewById(R.id.waiting_container);
         main_gallery_container = this.findViewById(R.id.main_gallery_container);
 
@@ -1679,20 +1679,20 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        PREF__gallery_main_view = settings.getBoolean("gallery_main_view", true);
-        switch_gallery_main_view.setChecked(PREF__gallery_main_view);
+        PREF__normal_main_view = settings.getBoolean("normal_main_view", true);
+        switch_normal_main_view.setChecked(PREF__normal_main_view);
 
-        switch_gallery_main_view.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        switch_normal_main_view.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @SuppressLint("ApplySharedPref")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
-                Log.i(TAG, "switch_gallery_main_view:" + isChecked);
-                PREF__gallery_main_view = isChecked;
-                settings.edit().putBoolean("gallery_main_view", isChecked).commit();
+                Log.i(TAG, "switch_normal_main_view:" + isChecked);
+                PREF__normal_main_view = isChecked;
+                settings.edit().putBoolean("normal_main_view", isChecked).commit();
 
-                if (PREF__gallery_main_view) {
+                if (!PREF__normal_main_view) {
                     waiting_container.setVisibility(View.GONE);
                     main_gallery_container.setVisibility(View.VISIBLE);
                     main_gallery_recycler.setAdapter(main_gallery_adapter);
@@ -1706,7 +1706,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        if (PREF__gallery_main_view) {
+        if (!PREF__normal_main_view) {
             waiting_container.setVisibility(View.GONE);
             main_gallery_container.setVisibility(View.VISIBLE);
             main_gallery_recycler.setAdapter(main_gallery_adapter);
@@ -6300,7 +6300,7 @@ public class MainActivity extends AppCompatActivity
                 {
                     if ((f.kind == TOX_FILE_KIND_DATA.value) || (f.kind == TOX_FILE_KIND_FTV2.value))
                     {
-                        if (PREF__gallery_main_view)
+                        if (PREF__normal_main_view)
                         {
                             String finalFullfilename_path = fullfilename_path;
                             Runnable myRunnable = new Runnable()
