@@ -6300,7 +6300,7 @@ public class MainActivity extends AppCompatActivity
                 {
                     if ((f.kind == TOX_FILE_KIND_DATA.value) || (f.kind == TOX_FILE_KIND_FTV2.value))
                     {
-                        if (PREF__normal_main_view)
+                        if (!PREF__normal_main_view)
                         {
                             String finalFullfilename_path = fullfilename_path;
                             Runnable myRunnable = new Runnable()
@@ -6331,6 +6331,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 catch(Exception e)
                 {
+                    e.printStackTrace();
                 }
             }
             catch (Exception e2)
