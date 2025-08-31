@@ -38,7 +38,7 @@ import static com.zoffcc.applications.trifa.MainGalleryAdapter.maingallery_image
 public class ImageviewerActivity extends AppCompatActivity
 {
     private static final String TAG = "trifa.ImageviewerActy";
-    static int current_image_postiton_in_list = -1;
+    public static int current_image_postiton_in_list = -1;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -62,6 +62,7 @@ public class ImageviewerActivity extends AppCompatActivity
         final PhotoView photoView = findViewById(R.id.big_image);
         photoView.setImageResource(R.drawable.round_loading_animation);
 
+        /*
         photoView.setOnTouchListener(new OnSwipeTouchListener(photoView.getContext()) {
             @Override
             public void onSwipeLeft() {
@@ -102,11 +103,12 @@ public class ImageviewerActivity extends AppCompatActivity
                 }
             }
         });
+        */
 
         load_current_image(image_filename, photoView);
     }
 
-    private void load_current_image(final String image_filename, PhotoView photoView)
+    public static void load_current_image(final String image_filename, PhotoView photoView)
     {
         if (VFS_ENCRYPT)
         {
@@ -115,7 +117,7 @@ public class ImageviewerActivity extends AppCompatActivity
             {
                 RequestOptions req_options = new RequestOptions();
                 GlideApp.
-                        with(this).
+                        with(photoView).
                         load(f2).
                         diskCacheStrategy(DiskCacheStrategy.RESOURCE).
                         skipMemoryCache(false).

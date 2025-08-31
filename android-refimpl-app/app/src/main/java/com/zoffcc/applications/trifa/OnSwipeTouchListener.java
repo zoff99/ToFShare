@@ -8,9 +8,9 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-class OnSwipeTouchListener implements View.OnTouchListener {
+public class OnSwipeTouchListener implements View.OnTouchListener {
     private final GestureDetector gestureDetector;
-    OnSwipeTouchListener(Context c) {
+    public OnSwipeTouchListener(Context c) {
         gestureDetector = new GestureDetector(c, new GestureListener());
     }
     @SuppressLint("ClickableViewAccessibility")

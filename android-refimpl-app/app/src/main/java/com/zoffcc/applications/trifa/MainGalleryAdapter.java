@@ -41,7 +41,7 @@ import static com.zoffcc.applications.trifa.ImageviewerActivity.current_image_po
 public class MainGalleryAdapter extends RecyclerView.Adapter<MainGalleryAdapter.ViewHolder> {
 
         private final Context context;
-        static ArrayList<String> maingallery_images_list = new ArrayList<>();
+        public static ArrayList<String> maingallery_images_list = new ArrayList<>();
 
         @NonNull
         @Override
