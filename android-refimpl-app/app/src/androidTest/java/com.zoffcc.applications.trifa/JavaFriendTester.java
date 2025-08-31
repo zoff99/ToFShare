@@ -178,6 +178,10 @@ public class JavaFriendTester
                 {
                     // *** breaks thing, not sure why *** // switch_normal_main_view.setChecked(false);
 
+                    MainActivity.PREF__normal_main_view = false;
+                    //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+                    //settings.edit().putBoolean("normal_main_view", false).commit();
+
                     // the above does not trigger the "setOnCheckedChangeListener" for some reason
                     waiting_container.setVisibility(View.GONE);
                     main_gallery_container.setVisibility(View.VISIBLE);
