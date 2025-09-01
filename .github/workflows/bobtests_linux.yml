@@ -147,10 +147,10 @@ jobs:
               cd /home/runner/work/ToFShare/ToFShare/test_outputfiles/
               ls -al
               d="$(date '+%Y-%m-%d %H:%M:%S')"
-              convert test_004b.png -gravity SouthEast -pointsize 62 -fill white -annotate +30+30 "$d ($c)" test_004b_time.png
-              convert test_005.png -gravity SouthEast -pointsize 62 -fill white -annotate +30+30 "$d ($c)" test_005_time.png
-              convert test_007.png -gravity SouthEast -pointsize 62 -fill white -annotate +30+30 "$d ($c)" test_007_time.png
-              convert test_099.png -gravity SouthEast -pointsize 62 -fill white -annotate +30+30 "$d ($c)" test_099_time.png
+              convert test_004b.png -gravity SouthEast -pointsize 62 -stroke navy -strokewidth 2 -fill white -annotate +30+30 "$d ($c)" test_004b_time.png
+              convert test_005.png -gravity SouthEast -pointsize 62 -stroke navy -strokewidth 2 -fill white -annotate +30+30 "$d ($c)" test_005_time.png
+              convert test_007.png -gravity SouthEast -pointsize 62 -undercolor Black -fill white -annotate +30+30 "$d ($c)" test_007_time.png
+              convert test_099.png -gravity SouthEast -pointsize 62 -undercolor Black -fill white -annotate +30+30 "$d ($c)" test_099_time.png
               mv test_004b_time.png test_004b.png
               mv test_005_time.png test_005.png
               mv test_007_time.png test_007.png
