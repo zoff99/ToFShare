@@ -3377,7 +3377,6 @@ public class MainActivity extends AppCompatActivity
         Log.i(TAG, "onResume");
         super.onResume();
         global_showing_mainview = true;
-        wakeup_tox_thread();
 
         /*
          // **************************************
