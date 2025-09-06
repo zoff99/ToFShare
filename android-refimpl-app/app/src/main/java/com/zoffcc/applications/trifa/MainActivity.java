@@ -1697,6 +1697,7 @@ public class MainActivity extends AppCompatActivity
                     main_gallery_container.setVisibility(View.VISIBLE);
                     main_gallery_recycler.setAdapter(main_gallery_adapter);
                     main_gallery_recycler.setLayoutManager(main_gallery_manager);
+                    // TODO: this hides the main drawer. how to fix?
                     main_gallery_container.bringToFront();
                     load_main_gallery_images();
                 } else {
@@ -1711,6 +1712,7 @@ public class MainActivity extends AppCompatActivity
             main_gallery_container.setVisibility(View.VISIBLE);
             main_gallery_recycler.setAdapter(main_gallery_adapter);
             main_gallery_recycler.setLayoutManager(main_gallery_manager);
+            // TODO: this hides the main drawer. how to fix?
             main_gallery_container.bringToFront();
             load_main_gallery_images();
         } else {
