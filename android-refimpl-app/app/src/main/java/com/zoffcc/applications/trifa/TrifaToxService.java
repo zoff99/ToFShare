@@ -1047,7 +1047,7 @@ public class TrifaToxService extends Service
 
                                 for (int ii = 0; ii < sleep_in_sec; ii++)
                                 {
-                                    if ((global_showing_messageview) || (global_showing_mainview))
+                                    if (global_showing_messageview)
                                     {
                                         // if the user opens the message view, or any group view -> go online, to be able to send messages
                                         trigger_proper_wakeup_from_tox_service_thread();

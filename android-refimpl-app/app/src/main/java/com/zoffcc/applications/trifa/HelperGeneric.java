@@ -3051,7 +3051,7 @@ public class HelperGeneric
             // @formatter:on
         }
 
-        if ((!global_showing_messageview) && (!global_showing_mainview))
+        if (!global_showing_messageview)
         {
             if (global_battery_percent < BATTERY_PERCENT_OFFLINE_THRESHOLD)
             {
