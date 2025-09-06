@@ -63,6 +63,7 @@ import static com.zoffcc.applications.trifa.HelperFiletransfer.open_local_file;
 import static com.zoffcc.applications.trifa.HelperFiletransfer.share_local_file;
 import static com.zoffcc.applications.trifa.HelperGeneric.dp2px;
 import static com.zoffcc.applications.trifa.HelperGeneric.long_date_time_format;
+import static com.zoffcc.applications.trifa.ImageviewerActivity.current_image_postiton_in_list;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__allow_open_encrypted_file_via_intent;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__compact_chatlist;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__global_font_size;
@@ -365,8 +366,17 @@ public class MessageListHolder_file_incoming_state_cancel extends RecyclerView.V
                             {
                                 try
                                 {
+                                    // HINT: clear any other images list for swipe action
                                     Intent intent = new Intent(v.getContext(), ImageviewerActivity.class);
                                     intent.putExtra("image_filename", message2.filename_fullpath);
+                                    try
+                                    {
+                                        com.zoffcc.applications.trifa.MainGalleryAdapter.maingallery_images_list.clear();
+                                    }
+                                    catch(Exception ignored)
+                                    {
+                                    }
+                                    current_image_postiton_in_list = -1;
                                     v.getContext().startActivity(intent);
                                 }
                                 catch (Exception e)

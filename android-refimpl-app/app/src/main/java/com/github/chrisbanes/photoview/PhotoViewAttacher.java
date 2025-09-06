@@ -32,7 +32,6 @@ import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.OverScroller;
-import android.widget.Toast;
 
 import com.zoffcc.applications.trifa.OnSwipeTouchListener;
 
@@ -47,7 +46,7 @@ import static com.zoffcc.applications.trifa.MainGalleryAdapter.maingallery_image
 public class PhotoViewAttacher implements View.OnTouchListener,
     View.OnLayoutChangeListener {
 
-    private static float DEFAULT_MAX_SCALE = 3.0f;
+    private static float DEFAULT_MAX_SCALE = 20.0f;
     private static float DEFAULT_MID_SCALE = 1.75f;
     private static float DEFAULT_MIN_SCALE = 1.0f;
     private static int DEFAULT_ZOOM_DURATION = 200;
@@ -61,6 +60,10 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     private static final int VERTICAL_EDGE_BOTTOM = 1;
     private static final int VERTICAL_EDGE_BOTH = 2;
     private static int SINGLE_TOUCH = 1;
+
+    private static final float SCALE_THRESHOLD_FOR_SWIPE = 1.2f;
+    public static boolean can_swipe_left = false;
+    public static boolean can_swipe_right = false;
 
     private Interpolator mInterpolator = new AccelerateDecelerateInterpolator();
     private int mZoomDuration = DEFAULT_ZOOM_DURATION;
@@ -177,40 +180,55 @@ public class PhotoViewAttacher implements View.OnTouchListener,
             @Override
             public void onSwipeLeft() {
                 super.onSwipeLeft();
-                // Toast.makeText(imageView.getContext(), "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
-                current_image_postiton_in_list++;
-                try
+                // Log.i("swipe::", "onSwipeLeft[[]]:scale=" + getScale());
+                if ((current_image_postiton_in_list != -1))
                 {
-                    String try_to_get_position = maingallery_images_list.get(current_image_postiton_in_list);
-                    com.zoffcc.applications.trifa.ImageviewerActivity.load_current_image(try_to_get_position,
-                                                                                         (PhotoView) imageView);
-                }
-                catch(Exception e)
-                {
-                    current_image_postiton_in_list--;
+                    if ((getScale() < SCALE_THRESHOLD_FOR_SWIPE) || (can_swipe_left))
+                    {
+                        // Toast.makeText(imageView.getContext(), "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
+                        current_image_postiton_in_list++;
+                        try
+                        {
+                            String try_to_get_position = maingallery_images_list.get(current_image_postiton_in_list);
+                            com.zoffcc.applications.trifa.ImageviewerActivity.load_current_image(try_to_get_position,
+                                                                                                 (PhotoView) imageView);
+                        }
+                        catch (Exception e)
+                        {
+                            current_image_postiton_in_list--;
+                        }
+                    }
                 }
             }
+
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                // Toast.makeText(imageView.getContext(), "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
-                boolean did_decrease = false;
-                if (current_image_postiton_in_list > 0)
+                // Log.i("swipe::", "onSwipeRight[[]]:scale=" + getScale());
+                if ((current_image_postiton_in_list != -1))
                 {
-                    current_image_postiton_in_list--;
-                    did_decrease = true;
-                }
-                try
-                {
-                    String try_to_get_position = maingallery_images_list.get(current_image_postiton_in_list);
-                    com.zoffcc.applications.trifa.ImageviewerActivity.load_current_image(try_to_get_position,
-                                                                                         (PhotoView) imageView);
-                }
-                catch(Exception e)
-                {
-                    if (did_decrease)
+                    if ((getScale() < SCALE_THRESHOLD_FOR_SWIPE) || (can_swipe_right))
                     {
-                        current_image_postiton_in_list++;
+                        // Toast.makeText(imageView.getContext(), "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
+                        boolean did_decrease = false;
+                        if (current_image_postiton_in_list > 0)
+                        {
+                            current_image_postiton_in_list--;
+                            did_decrease = true;
+                        }
+                        try
+                        {
+                            String try_to_get_position = maingallery_images_list.get(current_image_postiton_in_list);
+                            com.zoffcc.applications.trifa.ImageviewerActivity.load_current_image(try_to_get_position,
+                                                                                                 (PhotoView) imageView);
+                        }
+                        catch (Exception e)
+                        {
+                            if (did_decrease)
+                            {
+                                current_image_postiton_in_list++;
+                            }
+                        }
                     }
                 }
             }
@@ -395,8 +413,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
         // check if swipe was detected:
         if (result)
         {
-            Log.i("XXXXXXXX", "swipe detected");
-            return true;
+            // Log.i("swipe::", "swipe detected");
         }
 
         boolean handled = false;
@@ -758,15 +775,39 @@ public class PhotoViewAttacher implements View.OnTouchListener,
                     break;
             }
             mHorizontalScrollEdge = HORIZONTAL_EDGE_BOTH;
+            // Log.i("swipe::", "HORIZONTAL_EDGE_BOTH:"+rect.left);
         } else if (rect.left > 0) {
             mHorizontalScrollEdge = HORIZONTAL_EDGE_LEFT;
+            // Log.i("swipe::", "HORIZONTAL_EDGE_LEFT:"+rect.left);
             deltaX = -rect.left;
         } else if (rect.right < viewWidth) {
             deltaX = viewWidth - rect.right;
             mHorizontalScrollEdge = HORIZONTAL_EDGE_RIGHT;
+            // Log.i("swipe::", "HORIZONTAL_EDGE_RIGHT:"+rect.left);
         } else {
             mHorizontalScrollEdge = HORIZONTAL_EDGE_NONE;
+            // Log.i("swipe::", "HORIZONTAL_EDGE_NONE:"+rect.left);
         }
+
+        if (rect.left > 0)
+        {
+            // Log.i("swipe::", "HORIZONTAL_EDGE_LEFT:"+rect.left);
+            can_swipe_left = false;
+            can_swipe_right = true;
+        }
+        else if (rect.right < viewWidth)
+        {
+            // Log.i("swipe::", "HORIZONTAL_EDGE_RIGHT:"+rect.left);
+            can_swipe_left = true;
+            can_swipe_right = false;
+        }
+        else
+        {
+            // Log.i("swipe::", "HORIZONTAL_EDGE_NONE:"+rect.left);
+            can_swipe_left = false;
+            can_swipe_right = false;
+        }
+
         // Finally actually translate the matrix
         mSuppMatrix.postTranslate(deltaX, deltaY);
         return true;

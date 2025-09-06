@@ -61,50 +61,6 @@ public class ImageviewerActivity extends AppCompatActivity
 
         final PhotoView photoView = findViewById(R.id.big_image);
         photoView.setImageResource(R.drawable.round_loading_animation);
-
-        /*
-        photoView.setOnTouchListener(new OnSwipeTouchListener(photoView.getContext()) {
-            @Override
-            public void onSwipeLeft() {
-                super.onSwipeLeft();
-                // Toast.makeText(photoView.getContext(), "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
-                current_image_postiton_in_list++;
-                try
-                {
-                    String try_to_get_position = maingallery_images_list.get(current_image_postiton_in_list);
-                    load_current_image(try_to_get_position, photoView);
-                }
-                catch(Exception e)
-                {
-                    current_image_postiton_in_list--;
-                }
-            }
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                // Toast.makeText(photoView.getContext(), "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
-                boolean did_decrease = false;
-                if (current_image_postiton_in_list > 0)
-                {
-                    current_image_postiton_in_list--;
-                    did_decrease = true;
-                }
-                try
-                {
-                    String try_to_get_position = maingallery_images_list.get(current_image_postiton_in_list);
-                    load_current_image(try_to_get_position, photoView);
-                }
-                catch(Exception e)
-                {
-                    if (did_decrease)
-                    {
-                        current_image_postiton_in_list++;
-                    }
-                }
-            }
-        });
-        */
-
         load_current_image(image_filename, photoView);
     }
 
