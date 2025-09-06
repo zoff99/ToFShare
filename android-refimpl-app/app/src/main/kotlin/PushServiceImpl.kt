@@ -217,17 +217,24 @@ class PushServiceImpl : PushService() {
                     e.printStackTrace()
                 }
 
+                val current_push_token = HelperGeneric.get_g_opts(TRIFAGlobals.NOTIFICATION_TOKEN_DB_KEY)
+                // Log.i(TAG, "MyTokenReceiver:" + "current_push_token:" + current_push_token)
+                // Log.i(TAG, "MyTokenReceiver:" + "tokenReceived:" + tokenReceived)
                 try {
-                    Log.i(TAG, "MyTokenReceiver:" + "onReceive")
-
                     if (TrifaToxService.trifa_service_thread != null) {
-                        HelperGeneric.trigger_proper_wakeup_outside_tox_service_thread()
+                        if (
+                            (current_push_token.isNullOrEmpty())
+                            ||
+                            ((!tokenReceived.isNullOrEmpty()) && (current_push_token.compareTo(tokenReceived!!) != 0))
+                            ) {
+                            Log.i(TAG, "MyTokenReceiver:" + "onReceive")
+                            HelperGeneric.trigger_proper_wakeup_outside_tox_service_thread()
+                        }
                     }
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
 
-                val current_push_token = HelperGeneric.get_g_opts(TRIFAGlobals.NOTIFICATION_TOKEN_DB_KEY)
                 if (!current_push_token.isNullOrEmpty()) {
                     if (current_push_token == tokenReceived) {
                         // push token has changed
