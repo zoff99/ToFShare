@@ -1061,6 +1061,51 @@ public class HelperGeneric
         }
     }
 
+    static void export_vfs_file_to_real_file_2(String src_path_name_including_src_file_name, String dst_path_name, String dst_file_name)
+    {
+        try
+        {
+            if (MainActivity.VFS_ENCRYPT)
+            {
+                info.guardianproject.iocipher.File f_real = new info.guardianproject.iocipher.File(
+                        src_path_name_including_src_file_name);
+                File f2 = new File(dst_path_name + "/" + dst_file_name);
+                File dst_dir = new File(dst_path_name + "/");
+                dst_dir.mkdirs();
+                info.guardianproject.iocipher.FileInputStream is = null;
+                java.io.FileOutputStream os = null;
+
+                if (!f_real.exists())
+                {
+                    return;
+                }
+
+                try
+                {
+                    is = new info.guardianproject.iocipher.FileInputStream(f_real);
+                    os = new java.io.FileOutputStream(f2);
+                    byte[] buffer = new byte[8192];
+                    int length;
+
+                    while ((length = is.read(buffer)) > 0)
+                    {
+                        os.write(buffer, 0, length);
+                    }
+                }
+                finally
+                {
+                    is.close();
+                    os.close();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Log.i(TAG, "export_vfs_file_to_real_file:EE:" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     static String get_vfs_image_filename_own_avatar()
     {
         return get_g_opts("VFS_OWN_AVATAR_FNAME");
