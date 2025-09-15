@@ -56,144 +56,155 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar">
 
-        <FrameLayout
-            android:id="@+id/waiting_container"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/md_white_1000"
-            android:visibility="visible">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/waiting_view"
+            <FrameLayout
+                android:id="@+id/waiting_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="40dp"
-                android:background="@color/md_white_1000"
-                android:gravity="center"
-                android:text="@string/layout___waiting_for_orbot"
-                android:textSize="20sp"
-                android:visibility="gone" />
-
-            <ProgressBar
-                android:id="@+id/waiting_image"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:indeterminate="true"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/normal_container"
-                android:layout_width="match_parent"
+                android:layout_weight="5"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="visible"
-                tools:context="com.zoffcc.applications.trifa.MainActivity">
+                android:background="@color/md_white_1000"
+                android:visibility="visible">
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/waiting_view"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="40dp"
+                    android:background="@color/md_white_1000"
+                    android:gravity="center"
+                    android:text="@string/layout___waiting_for_orbot"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
 
-                    <LinearLayout
-                        android:id="@+id/icon_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                <ProgressBar
+                    android:id="@+id/waiting_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:indeterminate="true"
+                    android:visibility="gone" />
 
-                        <TextView
-                            android:id="@+id/main_maintext"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:text="..."
-                            android:textColor="@color/md_black_1000"
-                            android:textSize="12sp"
-                            android:visibility="visible"
-                            tools:ignore="HardcodedText" />
-
-                        <ImageView
-                            android:id="@+id/main_maintopimage"
-                            android:layout_width="70dp"
-                            android:layout_height="match_parent"
-                            android:layout_margin="0dp"
-                            android:paddingLeft="5dp"
-                            android:paddingTop="0dp"
-                            android:paddingRight="5dp"
-                            android:paddingBottom="0dp"
-                            android:scaleType="fitStart"
-                            android:src="@null"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/main_maintopimage2"
-                            android:layout_width="70dp"
-                            android:layout_height="match_parent"
-                            android:layout_margin="0dp"
-                            android:paddingLeft="5dp"
-                            android:paddingTop="0dp"
-                            android:paddingRight="5dp"
-                            android:paddingBottom="0dp"
-                            android:scaleType="fitStart"
-                            android:src="@null"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/main_maintopimage3"
-                            android:layout_width="70dp"
-                            android:layout_height="match_parent"
-                            android:layout_margin="0dp"
-                            android:paddingLeft="5dp"
-                            android:paddingTop="0dp"
-                            android:paddingRight="5dp"
-                            android:paddingBottom="0dp"
-                            android:scaleType="fitStart"
-                            android:src="@drawable/about_icon_github"
-                            android:visibility="visible" />
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <fragment
-                    android:id="@+id/fl_fragment"
-                    android:name="com.zoffcc.applications.trifa.FriendListFragment"
+                <LinearLayout
+                    android:id="@+id/normal_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:layout="@layout/friend_list_layout" />
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    tools:context="com.zoffcc.applications.trifa.MainActivity">
 
-            </LinearLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-        </FrameLayout>
+                        <LinearLayout
+                            android:id="@+id/icon_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
-        <FrameLayout
-            android:id="@+id/main_gallery_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                            <TextView
+                                android:id="@+id/main_maintext"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:text="..."
+                                android:textColor="@color/md_black_1000"
+                                android:textSize="12sp"
+                                android:visibility="visible"
+                                tools:ignore="HardcodedText" />
 
-            <!--<androidx.recyclerview.widget.RecyclerView-->
-            <com.l4digital.fastscroll.FastScrollRecyclerView
-                android:id="@+id/main_gallery_recycler"
-                android:layout_marginRight="25dp"
-                android:paddingRight="10dp"
-                android:divider="@null"
-                android:dividerHeight="2dp"
-                app:bubbleColor="@color/fast_scroller_color"
-                app:bubbleSize="normal"
-                app:bubbleTextColor="#ffffff"
-                app:bubbleTextSize="20sp"
-                app:handleColor="@color/fast_scroller_color"
-                app:hideScrollbar="true"
-                app:showTrack="false"
-                app:trackColor="@color/fast_scroller_color"
+                            <ImageView
+                                android:id="@+id/main_maintopimage"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="0dp"
+                                android:paddingLeft="5dp"
+                                android:paddingTop="0dp"
+                                android:paddingRight="5dp"
+                                android:paddingBottom="0dp"
+                                android:scaleType="fitStart"
+                                android:src="@null"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/main_maintopimage2"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="0dp"
+                                android:paddingLeft="5dp"
+                                android:paddingTop="0dp"
+                                android:paddingRight="5dp"
+                                android:paddingBottom="0dp"
+                                android:scaleType="fitStart"
+                                android:src="@null"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/main_maintopimage3"
+                                android:layout_width="70dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="0dp"
+                                android:paddingLeft="5dp"
+                                android:paddingTop="0dp"
+                                android:paddingRight="5dp"
+                                android:paddingBottom="0dp"
+                                android:scaleType="fitStart"
+                                android:src="@drawable/about_icon_github"
+                                android:visibility="visible" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <fragment
+                        android:id="@+id/fl_fragment"
+                        android:name="com.zoffcc.applications.trifa.FriendListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:layout="@layout/friend_list_layout" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/main_gallery_container"
+                android:layout_weight="5"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </FrameLayout>
+                android:layout_height="match_parent">
+
+                <!--<androidx.recyclerview.widget.RecyclerView-->
+                <com.l4digital.fastscroll.FastScrollRecyclerView
+                    android:id="@+id/main_gallery_recycler"
+                    android:layout_marginRight="25dp"
+                    android:paddingRight="10dp"
+                    android:divider="@null"
+                    android:dividerHeight="2dp"
+                    app:bubbleColor="@color/fast_scroller_color"
+                    app:bubbleSize="normal"
+                    app:bubbleTextColor="#ffffff"
+                    app:bubbleTextSize="20sp"
+                    app:handleColor="@color/fast_scroller_color"
+                    app:hideScrollbar="true"
+                    app:showTrack="false"
+                    app:trackColor="@color/fast_scroller_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+
 
     </FrameLayout>
 
