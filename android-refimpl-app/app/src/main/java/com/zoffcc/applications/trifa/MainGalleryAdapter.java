@@ -128,10 +128,6 @@ public class MainGalleryAdapter extends RecyclerView.Adapter<MainGalleryAdapter.
         {
             e.printStackTrace();
         }
-
-        //if (image_file.exists()) {
-        //    Glide.with(context).load(image_file).into(holder.image);
-        //}
     }
 
     @Override
