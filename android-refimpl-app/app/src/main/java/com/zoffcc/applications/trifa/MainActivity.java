@@ -111,6 +111,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -131,6 +132,7 @@ import info.guardianproject.netcipher.proxy.StatusCallback;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 import static com.zoffcc.applications.sorm.OrmaDatabase.run_multi_sql;
 import static com.zoffcc.applications.sorm.OrmaDatabase.set_schema_upgrade_callback;
 import static com.zoffcc.applications.trifa.FriendListFragment.fl_loading_progressbar;
@@ -235,7 +237,6 @@ import static com.zoffcc.applications.trifa.TrifaToxService.orma;
 import static com.zoffcc.applications.trifa.TrifaToxService.resend_old_messages;
 import static com.zoffcc.applications.trifa.TrifaToxService.resend_v3_messages;
 import static com.zoffcc.applications.trifa.TrifaToxService.vfs;
-import static com.zoffcc.applications.trifa.TrifaToxService.wakeup_tox_thread;
 
 /*
 
@@ -293,6 +294,7 @@ public class MainActivity extends AppCompatActivity
     static ViewGroup main_gallery_container = null;
     static MainGalleryAdapter main_gallery_adapter = null;
     static RecyclerView main_gallery_recycler = null;
+    static int main_gallery_lastScrollPosition = 0;
     static GridLayoutManager main_gallery_manager = null;
     static ArrayList<String> main_gallery_images = null;
     static int AudioMode_old;
@@ -1696,6 +1698,24 @@ public class MainActivity extends AppCompatActivity
                     waiting_container.setVisibility(View.GONE);
                     main_gallery_container.setVisibility(View.VISIBLE);
                     main_gallery_recycler.setAdapter(main_gallery_adapter);
+                    main_gallery_recycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+                            if (newState == SCROLL_STATE_IDLE)
+                            {
+                                GridLayoutManager layoutManager = ((GridLayoutManager)main_gallery_recycler.getLayoutManager());
+                                main_gallery_lastScrollPosition = layoutManager.findFirstVisibleItemPosition();
+                            }
+                        }
+
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy)
+                        {
+                            GridLayoutManager layoutManager = ((GridLayoutManager)main_gallery_recycler.getLayoutManager());
+                            main_gallery_lastScrollPosition = layoutManager.findFirstVisibleItemPosition();
+                        }
+                    });
                     main_gallery_recycler.setLayoutManager(main_gallery_manager);
                     // TODO: this hides the main drawer. how to fix?
                     main_gallery_container.bringToFront();
@@ -1711,6 +1731,25 @@ public class MainActivity extends AppCompatActivity
             waiting_container.setVisibility(View.GONE);
             main_gallery_container.setVisibility(View.VISIBLE);
             main_gallery_recycler.setAdapter(main_gallery_adapter);
+            // zzzzzzzzzzzzzzz
+            main_gallery_recycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (newState == SCROLL_STATE_IDLE)
+                    {
+                        GridLayoutManager layoutManager = ((GridLayoutManager)main_gallery_recycler.getLayoutManager());
+                        main_gallery_lastScrollPosition = layoutManager.findFirstVisibleItemPosition();
+                    }
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy)
+                {
+                    GridLayoutManager layoutManager = ((GridLayoutManager)main_gallery_recycler.getLayoutManager());
+                    main_gallery_lastScrollPosition = layoutManager.findFirstVisibleItemPosition();
+                }
+            });
             main_gallery_recycler.setLayoutManager(main_gallery_manager);
             // TODO: this hides the main drawer. how to fix?
             main_gallery_container.bringToFront();
@@ -7235,10 +7274,10 @@ public class MainActivity extends AppCompatActivity
                 if ((incoming_files != null) && (incoming_files.size() > 0))
                 {
                     main_gallery_images.clear();
-                    Iterator<com.zoffcc.applications.sorm.Message> ifile = incoming_files.iterator();
-                    while (ifile.hasNext())
+                    ListIterator<Message> ifile = incoming_files.listIterator(incoming_files.size());
+                    while (ifile.hasPrevious())
                     {
-                        Message m_ifile = (Message) ifile.next();
+                        Message m_ifile = (Message) ifile.previous();
                         if ((m_ifile.filename_fullpath != null) && (m_ifile.filename_fullpath.length() > 2))
                         {
                             // Log.i(TAG, "load_main_gallery_images:" + m_ifile.filename_fullpath);
@@ -7272,15 +7311,19 @@ public class MainActivity extends AppCompatActivity
             {
                 if ((filename_fullpath != null) && (filename_fullpath.length() > 2))
                 {
-                    if (main_gallery_images.add(filename_fullpath))
+                    try
                     {
-                        try
+                        main_gallery_images.add(0, filename_fullpath);
+                        // zzzzzzzzzzzzzzz
+                        main_gallery_recycler.getAdapter().notifyItemInserted(0);
+                        if (main_gallery_lastScrollPosition == 0)
                         {
-                            main_gallery_recycler.getAdapter().notifyItemInserted(main_gallery_images.size());
+                            // HINT: only scroll to first item, if we where at the TOP before already
+                            main_gallery_recycler.scrollToPosition(0);
                         }
-                        catch(Exception e)
-                        {
-                        }
+                    }
+                    catch(Exception e)
+                    {
                     }
                 }
             }
