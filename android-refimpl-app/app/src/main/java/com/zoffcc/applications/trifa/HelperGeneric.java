@@ -106,6 +106,7 @@ import static com.zoffcc.applications.trifa.MainActivity.PREF__DB_secrect_key;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__X_battery_saving_mode;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__compact_chatlist;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__global_font_size;
+import static com.zoffcc.applications.trifa.MainActivity.PREF__normal_main_view;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_CUSTOM_WRITE_CACHE;
 import static com.zoffcc.applications.trifa.MainActivity.VFS_ENCRYPT;
 import static com.zoffcc.applications.trifa.MainActivity.context_s;
@@ -2440,6 +2441,11 @@ public class HelperGeneric
                     do_badge_update = false;
                 }
             }
+            if ((!PREF__normal_main_view) && (global_showing_mainview))
+            {
+                do_notification = false;
+                do_badge_update = false;
+            }
 
             Message m = new Message();
 
@@ -2563,6 +2569,11 @@ public class HelperGeneric
                     do_notification = false;
                     do_badge_update = false;
                 }
+            }
+            if ((!PREF__normal_main_view) && (global_showing_mainview))
+            {
+                do_notification = false;
+                do_badge_update = false;
             }
 
             ByteBuffer raw_message_buf = ByteBuffer.allocateDirect((int) raw_message_length);
@@ -2702,6 +2713,11 @@ public class HelperGeneric
                     do_notification = false;
                     do_badge_update = false;
                 }
+            }
+            if ((!PREF__normal_main_view) && (global_showing_mainview))
+            {
+                do_notification = false;
+                do_badge_update = false;
             }
 
             ByteBuffer raw_message_buf = ByteBuffer.allocateDirect((int) raw_message_length);

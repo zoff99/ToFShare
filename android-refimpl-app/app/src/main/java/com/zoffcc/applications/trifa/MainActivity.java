@@ -187,6 +187,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.MAX_ALLOWED_INCOMING_FI
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NGC_AUDIO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NORMAL_GLOBAL_AUDIO_BITRATE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_EDIT_ACTION.NOTIFICATION_EDIT_ACTION_ADD;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_EDIT_ACTION.NOTIFICATION_EDIT_ACTION_REMOVE;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_PROVIDER_DB_KEY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.ORBOT_PROXY_HOST;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.ORBOT_PROXY_PORT;
@@ -1731,7 +1732,6 @@ public class MainActivity extends AppCompatActivity
             waiting_container.setVisibility(View.GONE);
             main_gallery_container.setVisibility(View.VISIBLE);
             main_gallery_recycler.setAdapter(main_gallery_adapter);
-            // zzzzzzzzzzzzzzz
             main_gallery_recycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -3994,6 +3994,23 @@ public class MainActivity extends AppCompatActivity
         {
             e.printStackTrace();
         }
+
+
+        if (!PREF__normal_main_view)
+        {
+            try
+            {
+                final String default_friend_pubkey = get_set_is_default_ft_contact(null, false);
+                if (default_friend_pubkey != null)
+                {
+                    change_msg_notification(NOTIFICATION_EDIT_ACTION_REMOVE.value,
+                                            default_friend_pubkey, null, null);
+                }
+            }
+            catch(Exception e)
+            {
+            }
+        }
     }
 
     @Override
@@ -5888,6 +5905,13 @@ public class MainActivity extends AppCompatActivity
                     do_badge_update = false;
                 }
             }
+
+            if ((!PREF__normal_main_view) && (global_showing_mainview))
+            {
+                do_notification = false;
+                do_badge_update = false;
+            }
+
             // --- notification ---
             // --- notification ---
             // --- notification ---
@@ -6055,6 +6079,11 @@ public class MainActivity extends AppCompatActivity
                     do_notification = false;
                     do_badge_update = false;
                 }
+            }
+            if ((!PREF__normal_main_view) && (global_showing_mainview))
+            {
+                do_notification = false;
+                do_badge_update = false;
             }
             // --- notification ---
             // --- notification ---
@@ -7314,7 +7343,6 @@ public class MainActivity extends AppCompatActivity
                     try
                     {
                         main_gallery_images.add(0, filename_fullpath);
-                        // zzzzzzzzzzzzzzz
                         main_gallery_recycler.getAdapter().notifyItemInserted(0);
                         if (main_gallery_lastScrollPosition == 0)
                         {
