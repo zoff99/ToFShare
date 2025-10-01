@@ -169,6 +169,49 @@ public class JavaFriendTester
         // onView(withId(R.id.switch_normal_main_view)).check(matches(isChecked())).perform(click()).check(
         //        matches(isNotChecked()));
 
+        screenshot("006");
+        wait_(2);
+
+        boolean tox_online = false;
+        while (!tox_online)
+        {
+            tox_online = MainActivity.tox_self_get_connection_status() != 0;
+            // HINT: wait for tox to get online
+            wait_(1, "for tox to get online");
+        }
+
+        setSharedPrefs();
+        PREF__window_security = false;
+        Log.i(TAG, "PREF__window_security:001=" + PREF__window_security);
+
+        // HINT: after we are online give it another 5 seconds
+        wait_(5);
+
+        // HINT: we are online here ----------------------
+        final String mytoxid = MainActivity.get_my_toxid();
+        Log.i(TAG, "my_toxid:" + mytoxid);
+        testwrite("001", mytoxid);
+
+        long loops = 0;
+        final long max_loops = 120;
+        int count_friends = orma.selectFromFriendList().count();
+        while (count_friends < 1)
+        {
+            wait_(2);
+            loops++;
+            if (loops > max_loops)
+            {
+                Log.i(TAG, "ERROR: waiting too long for friend");
+                break;
+            }
+            count_friends = orma.selectFromFriendList().count();
+        }
+
+        // set first friend as default contact
+        final String def_friend_pubkey = orma.selectFromFriendList().get(0).tox_public_key_string;
+        Log.i(TAG, "def_friend_pubkey=" + def_friend_pubkey);
+        get_set_is_default_ft_contact(def_friend_pubkey, true);
+
         Runnable myRunnable = new Runnable()
         {
             @Override
@@ -210,52 +253,10 @@ public class JavaFriendTester
         {
         }
 
-        screenshot("006");
-        wait_(2);
-
-        boolean tox_online = false;
-        while (!tox_online)
-        {
-            tox_online = MainActivity.tox_self_get_connection_status() != 0;
-            // HINT: wait for tox to get online
-            wait_(1, "for tox to get online");
-        }
-
-        setSharedPrefs();
-        PREF__window_security = false;
-        Log.i(TAG, "PREF__window_security:001=" + PREF__window_security);
-
-        // HINT: after we are online give it another 5 seconds
-        wait_(5);
-
-        // HINT: we are online here ----------------------
-        final String mytoxid = MainActivity.get_my_toxid();
-        Log.i(TAG, "my_toxid:" + mytoxid);
-        testwrite("001", mytoxid);
-
-        long loops = 0;
-        final long max_loops = 120;
-        int count_friends = orma.selectFromFriendList().count();
-        while (count_friends < 1)
-        {
-            wait_(2);
-            loops++;
-            if (loops > max_loops)
-            {
-                Log.i(TAG, "ERROR: waiting too long for friend");
-                break;
-            }
-            count_friends = orma.selectFromFriendList().count();
-        }
-
         wait_(2);
         // friend should be fully added here
         screenshot("004a");
 
-        // set first friend as default contact
-        final String def_friend_pubkey = orma.selectFromFriendList().get(0).tox_public_key_string;
-        Log.i(TAG, "def_friend_pubkey=" + def_friend_pubkey);
-        get_set_is_default_ft_contact(def_friend_pubkey, true);
         wait_(1);
         screenshot("004b");
 
