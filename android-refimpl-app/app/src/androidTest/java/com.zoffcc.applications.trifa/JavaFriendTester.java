@@ -297,7 +297,7 @@ public class JavaFriendTester
         // load_main_gallery_images();
         screenshot_full("007");
 
-        wait_(10);
+        wait_(60);
         Log.i(TAG, "taking last screenshot ...");
         screenshot_full("099");
         Log.i(TAG, "taking last screenshot ... DONE");
