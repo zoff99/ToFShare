@@ -3,6 +3,9 @@
 This is a simplified version of [TRIfA](https://github.com/zoff99/ToxAndroidRefImpl) (the Tox Message Application for Android) that focuses on stable file exchange.
 This is a work in progress, feel free to help out.
 
+<a href="https://f-droid.org/app/com.zoffcc.applications.tofshare"><img src="https://raw.githubusercontent.com/zoff99/ToFShare/master/images/f-droid.png" width="200"></a>
+
+
 Status
 =
 [![Android CI](https://github.com/zoff99/ToFShare/actions/workflows/app_startup.yml/badge.svg?branch=master)](https://github.com/zoff99/ToFShare/actions/workflows/app_startup.yml)
