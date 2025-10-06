@@ -140,7 +140,7 @@ dependencyVerification {
         'com.google.code.findbugs:jsr305:3.0.2:jsr305-3.0.2.jar:766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7',
         'com.google.code.gson:gson:2.10.1:gson-2.10.1.jar:4241c14a7727c34feea6507ec801318a3d4a90f070e4525681079fb94ee4c593',
         'com.google.code.gson:gson:2.11.0:gson-2.11.0.jar:57928d6e5a6edeb2abd3770a8f95ba44dce45f3b23b7a9dc2b309c581552a78b',
-        'com.google.crypto.tink:tink:1.17.0:tink-1.17.0.jar:1f5e1f52e1295b4c35d2257c3cd14d715f81872e928f5bfb1c39cfb89585411d',
+        'com.google.crypto.tink:tink:1.18.0:tink-1.18.0.jar:30df12a1f59045637213477656e01f6fbcc02616c20da1696cbd4643ada668ef',
         'com.google.crypto.tink:tink:1.7.0:tink-1.7.0.jar:88970a456a08ba4c66b01b23e5846ca1095cc14e54cb48363e5d2e15a1307308',
         'com.google.errorprone:error_prone_annotation:2.19.1:error_prone_annotation-2.19.1.jar:38c45cdaf993a7df6697703ca6ee00acbe376d3dade8d44daac3e33f039ca516',
         'com.google.errorprone:error_prone_annotations:2.11.0:error_prone_annotations-2.11.0.jar:721cb91842b46fa056847d104d5225c8b8e1e8b62263b993051e1e5a0137b7ec',
@@ -252,6 +252,7 @@ dependencyVerification {
         'org.jetbrains.kotlin:kotlin-stdlib:1.9.20:kotlin-stdlib-1.9.20.jar:28a35bcdff46d864f80f346a617e486284b208d17378c41900dfb1de95a90e6c',
         'org.jetbrains.kotlin:kotlin-stdlib:2.1.20:kotlin-stdlib-2.1.20-all.jar:81e07de34e84b29e14f3fdef902f4bc4cf1d5da959b867df683fbe1cc54ce1e1',
         'org.jetbrains.kotlin:kotlin-stdlib:2.1.20:kotlin-stdlib-2.1.20.jar:1bcc74e8ce84e2c25eaafde10f1248349cce3062b6e36978cbeec610db1e930a',
+        'org.jetbrains.kotlin:kotlin-stdlib:2.2.20:kotlin-stdlib-2.2.20.jar:8836ccffd3585fadda9901244b20d42901d2f3cd581058d8434e2ffabcf3a3e7',
         'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4:kotlinx-coroutines-android-1.6.4.jar:3fdc0eed5bc4b83ee9622774520a2db25470370eacd1581cac1e37704f095b00',
         'org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4:kotlinx-coroutines-core-jvm-1.6.4.jar:c24c8bb27bb320c4a93871501a7e5e0c61607638907b197aef675513d4c820be',
         'org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0:kotlinx-coroutines-core-jvm-1.8.0.jar:9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5',
@@ -279,6 +280,6 @@ dependencyVerification {
         'org.robolectric:utils-reflector:4.12.2:utils-reflector-4.12.2.jar:7e8a926d88d473a05af7cbef07941e03ddf676e987d70f40096193dba0cf5621',
         'org.robolectric:utils:4.12.2:utils-4.12.2.jar:80f49b35125981818d73b3a8df7324c08fe86a8ce4ca94b5fea324efecb034a9',
         'org.unifiedpush.android:connector-ui:1.1.0:connector-ui-1.1.0.aar:154c8346344277a9ecd49ea7821a400f621a32f1099c94ca961c6eb8b611b093',
-        'org.unifiedpush.android:connector:3.0.10:connector-3.0.10.aar:8c72adba1bfb230bc823b19badbafe21d18a5db3c5f4e6da5b5305b4ec815717',
+        'org.unifiedpush.android:connector:3.1.0:connector-3.1.0.aar:1654804bc55bbf8596fd17b57039238a7fdb23d2622b30106db788728103f0fc',
     ]
 }
