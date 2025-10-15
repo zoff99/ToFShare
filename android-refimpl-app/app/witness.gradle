@@ -280,6 +280,6 @@ dependencyVerification {
         'org.robolectric:utils-reflector:4.12.2:utils-reflector-4.12.2.jar:7e8a926d88d473a05af7cbef07941e03ddf676e987d70f40096193dba0cf5621',
         'org.robolectric:utils:4.12.2:utils-4.12.2.jar:80f49b35125981818d73b3a8df7324c08fe86a8ce4ca94b5fea324efecb034a9',
         'org.unifiedpush.android:connector-ui:1.1.0:connector-ui-1.1.0.aar:154c8346344277a9ecd49ea7821a400f621a32f1099c94ca961c6eb8b611b093',
-        'org.unifiedpush.android:connector:3.1.0:connector-3.1.0.aar:1654804bc55bbf8596fd17b57039238a7fdb23d2622b30106db788728103f0fc',
+        'org.unifiedpush.android:connector:3.1.2:connector-3.1.2.aar:34db54024874bd2db86ef0df9709ac9366232db0780e0109781f21f6eabc57e7',
     ]
 }
