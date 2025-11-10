@@ -280,7 +280,7 @@ dependencies {
         transitive = true
     }
     //
-    implementation 'com.github.zoff99:pkgs_zoffccAndroidJDBC:1.0.16'
+    implementation 'com.github.zoff99:pkgs_zoffccAndroidJDBC:1.0.17'
     //
     implementation('com.github.zoff99:pkgs_hotchemiPermissionsdispatcher:3.2.0') {
         exclude group: 'com.android.support'
@@ -307,7 +307,7 @@ dependencies {
     //
     //
     //
-    implementation 'com.github.zoff99:pkgs_ToxAndroidRefImpl:1.0.165'
+    implementation 'com.github.zoff99:pkgs_ToxAndroidRefImpl:1.0.175'
     //
     //
     //
