@@ -13,7 +13,7 @@ Status
 Latest Automated Screenshots
 =
 
-<img src="https://github.com/zoff99/ToFShare/releases/download/nightly/screen_shot_android_29_11.png" width="150">
+<img src="https://github.com/zoff99/ToFShare/releases/download/nightly/screen_shot_android_29_11.png" width="150">&nbsp;<img src="https://github.com/zoff99/ToFShare/releases/download/nightly/screen_shot_info_29_02.png" width="150">
 <br>
 
 <img src="https://github.com/zoff99/ToFShare/releases/download/nightly/android_screen01_21.png" width="120">&nbsp;<img src="https://github.com/zoff99/ToFShare/releases/download/nightly/android_screen01_29.png" width="120">&nbsp;<img src="https://github.com/zoff99/ToFShare/releases/download/nightly/android_screen01_33.png" width="120">&nbsp;<img src="https://github.com/zoff99/ToFShare/releases/download/nightly/android_screen01_35.png" width="120">
