@@ -1,5 +1,6 @@
 #! /bin/sh
 url_start_screen='https://github.com/zoff99/ToFShare/releases/download/nightly/screen_shot_android_29_11.png'
+url_info_screen='https://github.com/zoff99/ToFShare/releases/download/nightly/screen_shot_info_29_02.png'
 
 _HOME2_=$(dirname $0)
 export _HOME2_
@@ -10,3 +11,4 @@ basedir="$_HOME_""/../"
 
 cd "$basedir"
 wget "$url_start_screen" -O ./fastlane/metadata/android/en-US/images/phoneScreenshots/101.png
+wget "$url_info_screen" -O ./fastlane/metadata/android/en-US/images/phoneScreenshots/111.png
