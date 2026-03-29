@@ -1,6 +1,14 @@
 # Tox File Share (for Android)
 
 This is a simplified version of [TRIfA](https://github.com/zoff99/ToxAndroidRefImpl) (the Tox Message Application for Android) that focuses on stable file exchange.
+
+Secure decentralized file sharing for Android. Share any file type with end-to-end encryption through peer-to-peer transfers, no cloud storage required.
+
+### Key Features
+* <b>Encrypted Storage:</b><br>All received files are stored in an encrypted VFS
+* <b>Smart Auto-Accept:</b><br>Configurable auto-accept rules for images, videos, and general files based on size limits
+* <b>Seamless Integration:</b><br>ShareActivity captures share intents from any Android app and routes them through the secure ToFShare transfer system
+
 This is a work in progress, feel free to help out.
 
 <a href="https://f-droid.org/app/com.zoffcc.applications.tofshare"><img src="https://raw.githubusercontent.com/zoff99/ToFShare/master/images/f-droid.png" width="200"></a>
