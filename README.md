@@ -2,7 +2,8 @@
 
 This is a simplified version of [TRIfA](https://github.com/zoff99/ToxAndroidRefImpl) (the Tox Message Application for Android) that focuses on stable file exchange.
 
-Secure decentralized file sharing for Android. Share any file type with end-to-end encryption through peer-to-peer transfers, no cloud storage required.
+Secure decentralized file sharing for Android.<br>
+Share any file type with end-to-end encryption through peer-to-peer transfers, no cloud storage required.
 
 ### Key Features
 * <b>Encrypted Storage:</b><br>All received files are stored in an encrypted VFS
