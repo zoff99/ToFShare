@@ -35,6 +35,7 @@ import static com.zoffcc.applications.trifa.HelperGeneric.del_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.get_g_opts;
 import static com.zoffcc.applications.trifa.HelperGeneric.update_savedata_file_wrapper;
 import static com.zoffcc.applications.trifa.MainActivity.PREF__allow_push_server_ntfy;
+import static com.zoffcc.applications.trifa.MainActivity.PREF__allow_push_server_sunup;
 import static com.zoffcc.applications.trifa.MainActivity.tox_conference_invite;
 import static com.zoffcc.applications.trifa.MainActivity.tox_friend_send_lossless_packet;
 import static com.zoffcc.applications.trifa.MainActivity.tox_group_invite_friend;
@@ -46,6 +47,7 @@ import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_FCM_PUSH_U
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_FCM_PUSH_URL_PREFIX_OLD;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_NTFY_PUSH_URL_PREFIX;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_PROVIDER_DB_KEY;
+import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_SUNUP_PUSH_URL_PREFIX;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_TOKEN_DB_KEY;
 import static com.zoffcc.applications.trifa.TRIFAGlobals.NOTIFICATION_UP_PUSH_URL_PREFIX;
 import static com.zoffcc.applications.trifa.ToxVars.TOX_GROUP_CHAT_ID_SIZE;
@@ -223,6 +225,18 @@ public class HelperRelay
             if (push_url.length() > NOTIFICATION_NTFY_PUSH_URL_PREFIX.length())
             {
                 if (push_url.startsWith(NOTIFICATION_NTFY_PUSH_URL_PREFIX))
+                {
+                    return true;
+                }
+            }
+        }
+
+        // whitelist mozilla sunup server
+        if (PREF__allow_push_server_sunup)
+        {
+            if (push_url.length() > NOTIFICATION_SUNUP_PUSH_URL_PREFIX.length())
+            {
+                if (push_url.startsWith(NOTIFICATION_SUNUP_PUSH_URL_PREFIX))
                 {
                     return true;
                 }

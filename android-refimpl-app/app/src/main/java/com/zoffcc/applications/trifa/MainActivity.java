@@ -457,6 +457,7 @@ public class MainActivity extends AppCompatActivity
     static boolean PREF__show_friendnumber_on_friendlist = false;
     static int PREF__dark_mode_pref = 1;
     static boolean PREF__allow_push_server_ntfy = true;
+    static boolean PREF__allow_push_server_sunup = true;
     static boolean PREF__messageview_paging = true;
     static int PREF__message_paging_num_msgs_per_page = 50;
     static int PREF__ngc_video_bitrate = LOWER_NGC_VIDEO_BITRATE; // ~600 kbits/s -> ~60 kbytes/s
@@ -1181,6 +1182,16 @@ public class MainActivity extends AppCompatActivity
         {
             e.printStackTrace();
             PREF__allow_push_server_ntfy = true;
+        }
+
+        try
+        {
+            PREF__allow_push_server_sunup = settings.getBoolean("allow_push_server_sunup", true);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            PREF__allow_push_server_sunup = true;
         }
 
         try
@@ -3855,6 +3866,16 @@ public class MainActivity extends AppCompatActivity
         {
             e.printStackTrace();
             PREF__allow_push_server_ntfy = true;
+        }
+
+        try
+        {
+            PREF__allow_push_server_sunup = settings.getBoolean("allow_push_server_sunup", true);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            PREF__allow_push_server_sunup = true;
         }
 
         try
