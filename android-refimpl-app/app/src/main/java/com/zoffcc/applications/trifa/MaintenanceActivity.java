@@ -20,6 +20,8 @@
 package com.zoffcc.applications.trifa;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.app.ApplicationExitInfo;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -52,8 +54,11 @@ import com.zoffcc.applications.trifa.R;
 
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
@@ -857,6 +862,17 @@ public class MaintenanceActivity extends AppCompatActivity implements StrongBuil
         debug_output_append("c-toxcore_commit=" + MainActivity.getNativeLibTOXGITHASH());
         //
         debug_output_append("");
+        debug_output_append("--- Last App Exit ---");
+        try
+        {
+            debug_output_append(getLastExitReasonMessage());
+        }
+        catch(Exception e)
+        {
+            debug_output_append("error getting info");
+        }
+        //
+        debug_output_append("");
         debug_output_append("--- other info ---");
         debug_output_append("audio_pkt_incoming=" + debug__audio_pkt_incoming);
         debug_output_append("audio_frame_played=" + debug__audio_frame_played);
@@ -971,6 +987,154 @@ public class MaintenanceActivity extends AppCompatActivity implements StrongBuil
             int id = msg.what;
         }
     };
+
+    private String getLastExitReasonMessage() {
+        // This API requires Android 11 (API 30) or higher
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            return "Exit diagnosis requires Android 11 or higher.";
+        }
+
+        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (am == null) {
+            return "System service unavailable.";
+        }
+
+        // Retrieve only the single most recent exit reason
+        List<ApplicationExitInfo> exitList = am.getHistoricalProcessExitReasons(null, 0, 1);
+
+        if (exitList == null || exitList.isEmpty()) {
+            return "No previous exit history found.";
+        }
+
+        ApplicationExitInfo lastExit = exitList.get(0);
+        int reason = lastExit.getReason();
+        int status = lastExit.getStatus();
+        int importance = lastExit.getImportance();
+        String systemDescription = lastExit.getDescription();
+
+        StringBuilder message = new StringBuilder();
+
+        // 1. Map all official Main Reason Codes
+        switch (reason) {
+            case ApplicationExitInfo.REASON_UNKNOWN:
+                message.append("Status: Unknown Reason\n");
+                message.append("The process died or was killed for an unmapped or unknown reason.\n");
+                break;
+            case ApplicationExitInfo.REASON_EXIT_SELF:
+                message.append("Status: Intentional Shutdown\n");
+                message.append("The app code explicitly requested to close itself (e.g., System.exit()).\n");
+                break;
+            case ApplicationExitInfo.REASON_CRASH:
+                message.append("Status: Application Crash (Java/Kotlin)\n");
+                message.append("An unhandled exception in the runtime environment caused the app to close.\n");
+                break;
+            case ApplicationExitInfo.REASON_CRASH_NATIVE:
+                message.append("Status: Native Code Crash\n");
+                message.append("The process died because of a crash within native C/C++ libraries.\n");
+                break;
+            case ApplicationExitInfo.REASON_ANR:
+                message.append("Status: Application Not Responding (ANR)\n");
+                message.append("The system terminated the app because the main UI thread froze for too long.\n");
+                break;
+            case ApplicationExitInfo.REASON_INITIALIZATION_FAILURE:
+                message.append("Status: Initialization Failure\n");
+                message.append("The process failed to initialize properly or timed out while attaching to the system.\n");
+                break;
+            case ApplicationExitInfo.REASON_LOW_MEMORY:
+                message.append("Status: Killed by System (Low Memory)\n");
+                message.append("The LMKD (Low Memory Killer Daemon) reclaimed the app to free up device RAM.\n");
+                break;
+            case ApplicationExitInfo.REASON_EXCESSIVE_RESOURCE_USAGE:
+                message.append("Status: Excessive Resource Usage\n");
+                message.append("The system terminated the app for consuming too much CPU, battery, or memory background resources.\n");
+                break;
+            case ApplicationExitInfo.REASON_USER_REQUESTED:
+                message.append("Status: Closed by User\n");
+                message.append("The app was closed because you swiped it away from recents or forced it to stop.\n");
+                break;
+            case ApplicationExitInfo.REASON_USER_STOPPED:
+                message.append("Status: User Stopped\n");
+                message.append("The process was terminated because the user was switched or stopped via system management.\n");
+                break;
+            case ApplicationExitInfo.REASON_SIGNALED:
+                message.append("Status: Terminated by System Signal\n");
+                message.append("The process was forcefully terminated via a low-level OS command.\n");
+                // Decode specific common Linux signals
+                if (status == 9) {
+                    message.append("Detail: Process was forced killed via SIGKILL (Signal 9).\n");
+                } else if (status == 11) {
+                    message.append("Detail: Native Segmentation Fault (SIGSEGV - Signal 11).\n");
+                } else {
+                    message.append("Detail: Linux OS Signal Code: ").append(status).append("\n");
+                }
+                break;
+            case ApplicationExitInfo.REASON_DEPENDENCY_DIED:
+                message.append("Status: Dependency Died\n");
+                message.append("The process was killed because an external subsystem or ContentProvider it relied on died.\n");
+                break;
+            case ApplicationExitInfo.REASON_OTHER:
+                message.append("Status: Other Reason\n");
+                message.append("The process was killed by the system for specific internal runtime or maintenance optimization rules.\n");
+                break;
+            case ApplicationExitInfo.REASON_FREEZER:
+                message.append("Status: Killed by App Freezer\n");
+                message.append("The app received unexpected sync binder transactions or ran amok while in a frozen state.\n");
+                break;
+            case ApplicationExitInfo.REASON_PACKAGE_STATE_CHANGE:
+                message.append("Status: Package State Changed\n");
+                message.append("The app process was cleared because the application component was updated, disabled, or changed.\n");
+                break;
+            case ApplicationExitInfo.REASON_PACKAGE_UPDATED:
+                message.append("Status: Package Updated\n");
+                message.append("The application process was stopped because a new version of the APK was being installed.\n");
+                break;
+            default:
+                message.append("Status: Unrecognized System Code (").append(reason).append(")\n");
+                message.append("Detail: Process ended with status ").append(status).append(".\n");
+                break;
+        }
+
+        // 2. Add App Process State at time of death
+        message.append("\nApp Visibility State: ");
+        if (importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+            message.append("Foreground (Active on screen)\n");
+        } else if (importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
+            message.append("Background (Running hidden)\n");
+        } else if (importance >= ActivityManager.RunningAppProcessInfo.IMPORTANCE_CACHED) {
+            message.append("Cached (Suspended memory state)\n");
+        } else {
+            message.append("Code ").append(importance).append("\n");
+        }
+
+        // 3. Append raw truncated System Description if it exists
+        if (systemDescription != null && !systemDescription.isEmpty()) {
+            message.append("\nSystem Note: ").append(systemDescription).append("\n");
+        }
+
+        // 4. Safely pull full untruncated system logs/traces if applicable
+        if (reason == ApplicationExitInfo.REASON_ANR ||
+            reason == ApplicationExitInfo.REASON_CRASH ||
+            reason == ApplicationExitInfo.REASON_CRASH_NATIVE) {
+
+            try (InputStream inputStream = lastExit.getTraceInputStream()) {
+                if (inputStream != null) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder traceBuilder = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        traceBuilder.append(line).append("\n");
+                    }
+                    if (traceBuilder.length() > 0) {
+                        message.append("\n--- Untruncated Trace Log ---\n").append(traceBuilder.toString());
+                    }
+                }
+            } catch (Exception e) {
+                message.append("\n[Could not parse deeper trace logs: ").append(e.getMessage()).append("]");
+            }
+        }
+
+        return message.toString();
+    }
 
     void debug_output_clear()
     {
